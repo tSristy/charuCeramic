@@ -1,0 +1,10 @@
+/* Force the canvas inside the page to stretch */
+.react-pdf__Page__canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure the wrapper doesn't have fixed width */
+.react-pdf__Page {
+    min-width: 100%;
+}
