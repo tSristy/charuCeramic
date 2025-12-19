@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../dbconfig');
 
-// Get all  items +pagination
+// ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
     const sql = `SELECT 
@@ -21,7 +21,26 @@ router.post('/list', (req, res) => {
     });
 });
 
-// Add a new item
+
+
+//-------------------------- Get item details by id -----------------------------
+router.get('/:id', (req, res) => {
+    const itemId = req.params.id;
+    
+    const sql = 'SELECT * FROM product_category WHERE is_active = 1 AND id = ?';
+    db.query(sql, [itemId], (err, result) => {
+        if (err) {
+            console.error('Error updating category item:', err);
+            return;
+        }
+        res.json(result[0]);
+    });
+});
+
+
+
+
+//-------------------------- Add a new item ---------------------------------
 router.post('/add', (req, res) => {
     const { name, slug, description } = req.body;
     const sql = 'INSERT INTO product_category (name, slug, description) VALUES (?, ?, ?)';
@@ -36,7 +55,9 @@ router.post('/add', (req, res) => {
     );
 });
 
-// Update item details
+
+
+//-------------------------- Update item details ---------------------------------
 router.put('/update/:id', (req, res) => {
     const itemId = req.params.id;
     const { name, slug, description } = req.body;
@@ -51,21 +72,9 @@ router.put('/update/:id', (req, res) => {
     });
 });
 
-//  item id details
-router.get('/:id', (req, res) => {
-    const itemId = req.params.id;
-    
-    const sql = 'SELECT * FROM product_category WHERE is_active = 1 AND id = ?';
-    db.query(sql, [itemId], (err, result) => {
-        if (err) {
-            console.error('Error updating category item:', err);
-            return;
-        }
-        res.json(result[0]);
-    });
-});
 
-//delete item
+
+//-------------------------- Delete item (soft delete) ---------------------------------
 router.delete('/delete/:id', (req, res) => {
     const itemId = req.params.id;
 

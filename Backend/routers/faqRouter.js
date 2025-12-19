@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../dbconfig');
 
-//get all faq +pagination
+// ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
     const sql = `SELECT 
@@ -21,7 +21,9 @@ router.post('/list', (req, res) => {
     });
 });
 
-// Add a new faq
+
+
+// --------------------------- Add a new faq ---------------------------------
 router.post('/add', (req, res) => {
     const { question, answer } = req.body;
     const sql = 'INSERT INTO faq (question, answer) VALUES (?, ?)';
@@ -36,7 +38,10 @@ router.post('/add', (req, res) => {
     );
 });
 
-// Update faq details
+
+
+
+// -------------------------- Update faq details ---------------------------------
 router.put('/update/:id', (req, res) => {
     const faqId = req.params.id;
     const { question, answer } = req.body;
@@ -51,7 +56,10 @@ router.put('/update/:id', (req, res) => {
     });
 });
 
-//  faq id details
+
+
+
+// -------------------------- Get faq details by id -----------------------------
 router.get('/:id', (req, res) => {
     const faqId = req.params.id;
     
@@ -65,5 +73,20 @@ router.get('/:id', (req, res) => {
     });
 });
 
+
+
+// ------------------------- Delete faq (soft delete) ---------------------------------
+router.delete('/delete/:id', (req, res) => {
+    const faqId = req.params.id;
+    const sql = 'UPDATE faq SET is_active = 0, modified_at = NOW() WHERE id = ?';
+    db.query(sql, [faqId], (err, result) => {
+        if (err) {
+            console.error('Error deleting faq:', err);
+            res.status(500).json({ error: 'Failed to delete faq' });
+            return;
+        }
+        res.json({ message: 'faq deleted successfully' });
+    });
+});
 
 module.exports = router;

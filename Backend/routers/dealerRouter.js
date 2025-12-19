@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../dbconfig');
 
-// Get all dealers +pagination
+// ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
     const sql = `SELECT 
@@ -22,7 +22,24 @@ router.post('/list', (req, res) => {
 });
 
 
-// Add a new dealer
+// -------------------------- Get dealer details by id -----------------------------
+router.get('/:id', (req, res) => {
+    const dealerId = req.params.id;
+
+    const sql = 'SELECT * FROM dealer_details WHERE is_active = 1 AND id = ?';
+    db.query(sql, [dealerId], (err, result) => {
+        if (err) {
+            console.error('Error updating dealer:', err);
+            return;
+        }
+        res.json(result[0]);
+    });
+});
+
+
+
+
+// --------------------------- Add a new dealer ---------------------------------
 router.post('/add', (req, res) => {
     const { name, address, phone, division, district, thana } = req.body;
     const sql = 'INSERT INTO dealer_details (name, address, phone, division, district, thana) VALUES (?, ?, ?, ?, ?, ?)';
@@ -37,7 +54,9 @@ router.post('/add', (req, res) => {
     );
 });
 
-// Update dealer details
+
+
+// -------------------------- Update dealer details ---------------------------------
 router.put('/update/:id', (req, res) => {
     const dealerId = req.params.id;
     const { name, address, phone, division, district, thana } = req.body;
@@ -52,20 +71,9 @@ router.put('/update/:id', (req, res) => {
     });
 });
 
-//  dealer id details
-router.get('/:id', (req, res) => {
-    const dealerId = req.params.id;
-    
-    const sql = 'SELECT * FROM dealer_details WHERE is_active = 1 AND id = ?';
-    db.query(sql, [dealerId], (err, result) => {
-        if (err) {
-            console.error('Error updating dealer:', err);
-            return;
-        }
-        res.json(result[0]);
-    });
-});
-//delete dealer
+
+
+// ------------------------- Delete dealer (soft delete) ---------------------------------
 router.delete('/delete/:id', (req, res) => {
     const dealerId = req.params.id;
 
@@ -81,6 +89,4 @@ router.delete('/delete/:id', (req, res) => {
 });
 
 
-
-// Soft delete a dealer
 module.exports = router;
