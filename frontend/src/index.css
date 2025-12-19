@@ -31,3 +31,20 @@ body {
   font-family: "Poppins", sans-serif!important;
   color: #9c9c9c !important;
 }
+
+
+.MuiTableHead-root .MuiTableCell-root {
+  font-family: "Poppins", sans-serif!important;
+  font-weight: 600;
+  font-size: .7rem;
+  padding: 14px;
+  color: #727c86;
+  text-transform: uppercase;
+}
+
+.MuiTableBody-root .MuiTableCell-root {
+  font-family: "Poppins", sans-serif!important;
+  font-size: .75rem;
+  color: #444;
+  padding: 10px;
+}

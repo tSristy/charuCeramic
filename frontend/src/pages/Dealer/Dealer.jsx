@@ -10,10 +10,10 @@ const Dealer = () => {
     const [ dealerList, setDealerList] = useState([]);
     
     useEffect(()=>{
-         ServerApi(`/dealers`, 'GET', null, null)
+         ServerApi(`/dealers/list`, 'GET', null, null)
             .then(res => res.json())
             .then(res=>{
-                setDealerList(res)
+                setDealerList(res.items)
             })
     },[]);
 

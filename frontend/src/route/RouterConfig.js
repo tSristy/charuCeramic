@@ -16,6 +16,10 @@ import NewsArticle from "../pages/News&Article/NewsArticle";
 import BuyingGuide from "../pages/BuyingGuide/BuyingGuide";
 import TandC from "../pages/FAQ/TandC";
 import CreateDealer from "../pages/Dealer/CreateDealer";
+import AdminLayout from "../pages/Layout/AdminLayout";
+import DealerList from "../pages/Dealer/DealerList";
+import CategoryList from "../pages/Product/CategoryList";
+import CreateCategory from "../pages/Product/CreateCategory";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -40,10 +44,17 @@ export const RouterConfig = createBrowserRouter([
             { path: "privacy-policy", Component: Policy},
             { path: "terms-conditions", Component: TandC},
 
+        ],
+    },
+    {
+        path: "/",
+        Component: AdminLayout,
+        children: [
+            { path: "dealer-panel", Component: CreateDealer},
+            { path: "dealer-list", Component: DealerList},
 
-
-            //admin
-            { path: "admin-dealer", Component: CreateDealer},
+            { path: "category-panel", Component: CreateCategory},
+            { path: "category-list", Component: CategoryList},
         ],
     }
 ]);

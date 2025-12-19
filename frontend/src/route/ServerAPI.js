@@ -1,5 +1,5 @@
 // export const urlAPI = "http://192.168.0.102:5555";
-export const urlAPI = "http://192.168.0.107:5174";
+export const urlAPI = "http://192.168.0.110:5174";
 // export const urlAPI = "http://localhost:2000/api";
 
 export const ServerApi = (urlPath, method, userToken = null, bodySection = null, imgSender = false) => {
