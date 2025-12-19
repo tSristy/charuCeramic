@@ -23,7 +23,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../img/charu_logo.png';
 import { tempMenuList } from '../../Data.jsx';
 import { useNavigate } from 'react-router-dom';
-import BtnUrlChange from '../Button/BtnUrlChange.jsx';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -168,9 +167,9 @@ const Header = () => {
                             position: "absolute",
                             top: 64,
                             left: 0,
-                            width: {md: "1024px", lg:"1440px"},
+                            width: "100%",
                             zIndex: 25,
-                            px:5,
+                            // px:5,
                             // py:3,
                             borderRadius: '0 0 8px 8px',
                             borderTop: '1px solid #c3c3c3ff',

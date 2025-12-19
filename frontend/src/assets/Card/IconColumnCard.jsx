@@ -21,7 +21,7 @@ const IconColumnCard = ({ item }) => {
         // }
         >
             <Typography sx={{
-                color: '#ff0000ff'
+                color: '#ED1C24'
                 // color: hoverVar ? 'white' : myTheme.palette.yellow
             }}>
                 {item.icon}

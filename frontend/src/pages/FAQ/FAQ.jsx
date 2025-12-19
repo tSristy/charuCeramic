@@ -12,7 +12,7 @@ const FAQ = () => {
         <Box>
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ff0000ff",
+                borderColor: "#ED1C24",
                 display: 'block',
                 width: "100%",
                 height: "350px",

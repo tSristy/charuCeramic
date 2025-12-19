@@ -6,7 +6,7 @@ const Career = () => {
         <>
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ff0000ff",
+                borderColor: "#ED1C24",
                 display: 'block',
                 width: "100%",
                 height: "350px",
@@ -60,7 +60,7 @@ const Career = () => {
                         </Grid>
 
                         {/* <Grid size={{ xs: 12, md: 5 }}>
-                            <Button variant="contained" component="label" sx={{ bgcolor: '#ff0000ff', textTransform: 'none', minWidth: '200px', py: 1, mt: 2, '&:hover': { bgcolor: '#e60000ff' } }}
+                            <Button variant="contained" component="label" sx={{ bgcolor: '#ED1C24', textTransform: 'none', minWidth: '200px', py: 1, mt: 2, '&:hover': { bgcolor: '#e60000ff' } }}
                                 >
                                 Upload
                                 <input
@@ -73,7 +73,7 @@ const Career = () => {
                         </Grid> */}
 
                         <Grid size={{ xs: 12, md: 10 }}>
-                             <Typography variant='uoverline' sx={{ mb: 2, color: "#ff0000ff" }}>There are no job postings at this time. Please check back later.</Typography>
+                             <Typography variant='uoverline' sx={{ mb: 2, color: "#ED1C24" }}>There are no job postings at this time. Please check back later.</Typography>
                                                         
                         </Grid>
 

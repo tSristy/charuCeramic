@@ -19,7 +19,7 @@ const Product = () => {
 
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ff0000ff",
+                borderColor: "#ED1C24",
                 display: 'block',
                 width: "100%",
                 height: "350px",
@@ -83,7 +83,7 @@ const Product = () => {
                                                                     border: '1px solid #eee',
                                                                     cursor: 'pointer',
                                                                     '&:hover .hoverEffect': {
-                                                                        borderBottom: '5px solid  #ff0000ff',
+                                                                        borderBottom: '5px solid  #ED1C24',
                                                                         filter: 'grayscale(0%)',
                                                                     }
                                                                 }}>

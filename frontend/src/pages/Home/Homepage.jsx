@@ -105,7 +105,7 @@ const Homepage = () => {
                                     border: '1px solid #eee',
                                     cursor: 'pointer',
                                     '&:hover .hoverEffect': {
-                                        borderBottom: '5px solid  #ff0000ff',
+                                        borderBottom: '5px solid  #ED1C24',
                                         filter: 'grayscale(0%)',
                                         transform: 'scale(1.02)',
                                     }
@@ -131,7 +131,7 @@ const Homepage = () => {
             <Box sx={{ py: 10 }}>
                 {/* <Container> */}
                 <Stack sx={{ alignItems: 'stratch', justifyContent: 'center' }} direction={{ sm: 'column', md: 'row' }}>
-                    <Box sx={{ bgcolor: '#ff0000ff', py: 10, px: 5 }}>
+                    <Box sx={{ bgcolor: '#ED1C24', py: 10, px: 5 }}>
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left', color: 'white' }}>
                             Our Technology
                         </Typography>
@@ -140,21 +140,21 @@ const Homepage = () => {
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
                         <Box sx={{ bgcolor: '#000000ff', pt: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
-                                Our Technology
+                               Rimless Design 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            </Typography>
+                                Rimless design delivers superior hygiene, efficient flushing, and effortless maintenance through a seamless bowl structure free of dirt-trapping edges.
+                                </Typography>
                             <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
 
                         <Box sx={{ bgcolor: '#2b2b2b', pt: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
-                                Our Technology
+                               Rimless Siphon Jet Flush 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            </Typography>
+                               Rimless Siphon Jet Flush ensures powerful cleaning, enhanced hygiene, and efficient water flow with a seamless, edge-free bowl design.
+                               </Typography>
                             <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
                     </Stack>
@@ -162,10 +162,10 @@ const Homepage = () => {
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
                         <Box sx={{ bgcolor: '#4a4a4a', pt: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
-                                Our Technology
+                                Hygienic Glaze 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                Hygienic Glaze creates an ultra-smooth, antimicrobial surface that resists stains, prevents bacterial buildup, and ensures long-lasting cleanliness.
                             </Typography>
                             <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
@@ -173,10 +173,10 @@ const Homepage = () => {
 
                         <Box sx={{ bgcolor: '#676767', pt: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
-                                Our Technology
+                                Click Release Technology 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                Click Release Technology allows effortless seat and cover removal for deep cleaning, improved hygiene, and quick, tool-free maintenance. 
                             </Typography>
                             <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
@@ -283,7 +283,7 @@ const Homepage = () => {
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
                             Read About CHARU
                         </Typography>
-                        <Button variant="none" sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ff0000ff" }} />}>Explore All</Button>
+                        <Button variant="none" sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ED1C24" }} />}>Explore All</Button>
                     </Stack>
 
                     <Grid container spacing={4}>

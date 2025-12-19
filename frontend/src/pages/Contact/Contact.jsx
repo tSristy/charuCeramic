@@ -13,7 +13,7 @@ const Contact = () => {
         <>
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ff0000ff"
+                borderColor: "#ED1C24"
             }}>
                 <Box sx={{
                     display: 'block',
@@ -60,7 +60,7 @@ const Contact = () => {
 
                         <Grid size={{ xs: 12, sm: 6 }}>
                             <Box component="form" noValidate autoComplete="off" sx={{ m: 5 }}>
-                                <Typography variant='uoverline' sx={{ mb: 2, color: "#ff0000ff" }}>Please provide your full name</Typography>
+                                <Typography variant='uoverline' sx={{ mb: 2, color: "#ED1C24" }}>Please provide your full name</Typography>
                                 <TextField
                                     label="Name"
                                     variant="outlined"
@@ -104,7 +104,7 @@ const Contact = () => {
                                     sx={{ mt: 1 }}
                                 />
 
-                                <Button variant="contained" sx={{ bgcolor: '#ff0000ff', textTransform: 'none', minWidth: '200px', py: 1, mt: 2, '&:hover': { bgcolor: '#e60000ff' } }}
+                                <Button variant="contained" sx={{ bgcolor: '#ED1C24', textTransform: 'none', minWidth: '200px', py: 1, mt: 2, '&:hover': { bgcolor: '#e60000ff' } }}
                                 >
                                     Send
                                 </Button>

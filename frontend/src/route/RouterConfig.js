@@ -15,6 +15,7 @@ import Policy from "../pages/FAQ/Policy";
 import NewsArticle from "../pages/News&Article/NewsArticle";
 import BuyingGuide from "../pages/BuyingGuide/BuyingGuide";
 import TandC from "../pages/FAQ/TandC";
+import CreateDealer from "../pages/Dealer/CreateDealer";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -37,7 +38,12 @@ export const RouterConfig = createBrowserRouter([
             { path: "buying-guide", Component: BuyingGuide },
             { path: "faq", Component: FAQ },
             { path: "privacy-policy", Component: Policy},
-            { path: "terms-conditions", Component: TandC}
+            { path: "terms-conditions", Component: TandC},
+
+
+
+            //admin
+            { path: "admin-dealer", Component: CreateDealer},
         ],
     }
 ]);

@@ -18,12 +18,12 @@ export const tempMenuList = [
     { id: 15, title: 'Above Counter Basin', link: '/product', parentId: 8 },
     { id: 16, title: 'Counter Top Basin', link: '/product', parentId: 8 },
     { id: 17, title: 'Padestal Basins', link: '/product', parentId: 8 },
-    { id: 18, title: 'Half Padestal Basins', link: '/product', parentId: 8 },
-    { id: 19, title: 'Under Counter Wash Basins', link: '/product', parentId: 8 },
+    { id: 18, title: 'Half Padestal Basin', link: '/product', parentId: 8 },
+    { id: 19, title: 'Under Counter Basin', link: '/product', parentId: 8 },
     { id: 9, title: 'Public Area', link: '/product', parentId: 3 },
     { id: 20, title: 'Flush Valve Toilets', link: '/product', parentId: 9 },
     { id: 21, title: 'Wall Hung Toilets', link: '/product', parentId: 9 },
-    { id: 22, title: 'Urinals', link: '/product', parentId: 9 },
+    { id: 22, title: 'Urinal', link: '/product', parentId: 9 },
     { id: 23, title: 'Concealed Tanks', link: '/product', parentId: 9 },
     { id: 10, title: 'Bathware', link: '/product', parentId: 3 },
     { id: 24, title: 'Faucet', link: '/product', parentId: 10 },
@@ -119,33 +119,33 @@ export const homePageProductList = [
     {
         id: 4,
         imgSrc: productImg,
-        productName: 'SQUAT ASIAN PAN',
+        productName: 'Public Area',
         url: '',
     },
     {
         id: 5,
         imgSrc: productImg,
-        productName: 'Public Area',
+        productName: 'SQUAT ASIAN PAN',
         url: '',
     },
     {
         id: 6,
         imgSrc: productImg,
-        productName: 'Accessories',
+        productName: 'Faucet',
         url: '',
     },
     {
         id: 7,
         imgSrc: productImg,
-        productName: 'Faucet',
+        productName: 'Shower Mixer',
         url: '',
     },
     {
         id: 8,
         imgSrc: productImg,
-        productName: 'Shower',
+        productName: 'Accessories',
         url: '',
-    }
+    },
 ];
 
 

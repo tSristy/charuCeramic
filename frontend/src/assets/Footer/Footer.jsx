@@ -59,7 +59,7 @@ const Footer = () => {
                             <Stack direction="column" sx={{ alignItems: 'flex-start' }}>
                                 <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<FacebookIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Facebook</Button>
                                 <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<InstagramIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Instagram</Button>
-                                <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<TwitterIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Twitter</Button>
+                                {/* <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<TwitterIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Twitter</Button> */}
                                 <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<LinkedInIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>LinkedIn</Button>
                                 <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<YouTubeIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>YouTube</Button>
                                 <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<WhatsAppIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>WhatsApp</Button>
@@ -71,9 +71,8 @@ const Footer = () => {
                             <Stack direction="column" sx={{ alignItems: 'flex-start' }}>
                                 <Button onClick={(e)=>handleBtn("/company-information")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>About Us</Button>
                                 <Button onClick={(e)=>handleBtn("/project")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Project</Button>
-                                <Button onClick={(e)=>handleBtn("/certification")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Certifications</Button>
                                 <Button onClick={(e)=>handleBtn("/career")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Careers</Button>
-                                <Button onClick={(e)=>handleBtn("/company-information")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Who we are</Button>
+                                <Button onClick={(e)=>handleBtn("/certification")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Certifications</Button>
                             </Stack>
                         </Grid>
                         <Grid size={{ md: 2 }}>
