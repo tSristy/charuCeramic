@@ -5,11 +5,11 @@ import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
 import { ServerApi } from "../../route/ServerAPI";
-import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 
-const CategoryList = () => {
-    const [categoryList, setCategoryList] = useState([]);
+const FAQList = () => {
+    const [faqList, setFaqList] = useState([]);
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
         totalRows: 0,
@@ -17,14 +17,17 @@ const CategoryList = () => {
     });
     const [searchVariable, setSearchVariable] = useState(null);
 
+
     useEffect(() => {
         const body = {
-            pageNo: paginationDetails.pageNo
+            pageNo: paginationDetails.pageNo,
+            searchVariable: searchVariable
         };
-        ServerApi(`/category/list`, 'POST', null, body)
+
+        ServerApi(`/faq/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
-                setCategoryList(res.items);
+                setFaqList(res.items);
                 setPaginationDetails(previousState => {
                     return {
                         ...previousState,
@@ -33,44 +36,42 @@ const CategoryList = () => {
                     }
                 });
             })
-    }, [paginationDetails.pageNo]);
+    }, [searchVariable, paginationDetails.pageNo]);
 
     const HandleDelete = (id) => {
-        const tempArr = categoryList.filter(category => category.id !== id);
-        ServerApi(`/category/delete/${id}`, 'DELETE', null, null)
+        const tempArr = faqList.filter(faq => faq.id !== id);
+        ServerApi(`/faq/delete/${id}`, 'DELETE', null, null)
             .then(res => res.json())
             .then(res => {
-                setCategoryList(tempArr);
+                setFaqList(tempArr);
             })
     }
 
     return (
         <Box py={5}>
             <Container>
-                <Stack direction={{sm: "column", md: "row"}} justifyContent="space-between" alignItems="center">
+                {/* ------------------------Title and Description------------------------ */}
+                <Stack direction={{sm: "column", md: "row"}}  justifyContent="space-between" alignItems="center">
                     <Box mb={3}>
-                        <Typography variant="h5" fontWeight={600} mt={5} mb={1}>Records Explorer  <Chip label="Category" color="error" /></Typography>
+                        <Typography variant="h5" fontWeight={600} mt={5} mb={1}>Records Explorer <Chip label="FAQ" color="error" /></Typography>
                         <Typography variant="overline" color="text.secondary">System Database • {paginationDetails.totalRows} active entries</Typography>
                     </Box>
 
-                    <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
-                         <BtnAdminSearch
+                   <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
+                        <BtnAdminSearch
                             onChange={(e) => setSearchVariable(e.target.value)}
                         />
                         <BtnAdminSubmit text="Create" onClick={() => { }} />
                     </Box>
                 </Stack>
 
-
-
                 <TableContainer component={Paper}>
-                    <Table size="small" aria-label="a dense table">
+                    <Table size="small" aria-label="a dense table" sx={{ overflowX: "auto" }}>
                         <TableHead sx={{ bgcolor: "#000" }}>
                             <TableRow>
                                 <TableCell><SquareIcon fontSize="small" sx={{ color: "#ff0000" }} /></TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Url Path</TableCell>
-                                <TableCell>description</TableCell>
+                                <TableCell>Questions</TableCell>
+                                <TableCell>Answer</TableCell>
                                 <TableCell>Created</TableCell>
                                 <TableCell>Modified</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
@@ -78,22 +79,21 @@ const CategoryList = () => {
                         </TableHead>
 
                         <TableBody>
-                            {categoryList.map((item, index) => (
+                            {faqList.map((item, index) => (
                                 <TableRow key={item.id}>
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
-                                    <TableCell> {item.name} </TableCell>
-                                    <TableCell> {item.slug} </TableCell>
-                                    <TableCell> {item.description} </TableCell>
-                                    <TableCell>{item.created_at.slice(0, 10)}</TableCell>
-                                    <TableCell>{item.modified_at.slice(0, 10)}</TableCell>
+                                    <TableCell> {item.question} </TableCell>
+                                    <TableCell> {item.answer} </TableCell>
+                                    <TableCell> {item.created_at.slice(0, 10)} </TableCell>
+                                    <TableCell> {item.modified_at.slice(0, 10)} </TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
-                                    <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
+                                    <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000"} }}>
                                         <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                 </TableRow>
                             ))}
 
-                            {/* -----------------------------pagination row----------------------------- */}
+                            {/* -------------------------------------pagination row----------------------------- */}
                             <TableRow>
                                 <TableCell colSpan={3}>
                                     <Typography variant="overline" sx={{ fontWeight: 500, color: "#94a3b8" }}>
@@ -118,9 +118,8 @@ const CategoryList = () => {
                 </TableContainer>
 
             </Container>
-
         </Box>
     );
 };
 
-export default CategoryList;
+export default FAQList;

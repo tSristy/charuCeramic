@@ -20,6 +20,8 @@ import AdminLayout from "../pages/Layout/AdminLayout";
 import DealerList from "../pages/Dealer/DealerList";
 import CategoryList from "../pages/Product/CategoryList";
 import CreateCategory from "../pages/Product/CreateCategory";
+import CreateFAQ from "../pages/FAQ/CreateFAQ";
+import FAQList from "../pages/FAQ/FAQList";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -55,6 +57,9 @@ export const RouterConfig = createBrowserRouter([
 
             { path: "category-panel", Component: CreateCategory},
             { path: "category-list", Component: CategoryList},
+
+            { path: "faq-panel", Component: CreateFAQ},
+            { path: "faq-list", Component: FAQList}
         ],
     }
 ]);
