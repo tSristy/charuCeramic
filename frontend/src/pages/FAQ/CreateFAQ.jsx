@@ -89,17 +89,17 @@ const CreateFAQ = () => {
 
                             <Box p={3}>
                                 <Grid container spacing={2}>
-                                    <Grid size={{ xs: 12 }} item>
+                                    <Grid size={{ xs: 12 }}>
                                         <FormLabel text="Question" icon={<PsychologyAltIcon />} />
                                         <TextField size="small" multiline rows={2} fullWidth value={quesList.question} onChange={(e) => setQuesList(p => ({ ...p, question: e.target.value }))} />
                                     </Grid>
 
-                                    <Grid size={{ xs: 12 }} item>
+                                    <Grid size={{ xs: 12 }}>
                                         <FormLabel text="Answer" icon={<QuestionAnswerIcon />} />
                                         <TextField size="small" multiline rows={4} fullWidth value={quesList.answer} onChange={(e) => setQuesList(p => ({ ...p, answer: e.target.value }))} />
                                     </Grid>
 
-                                    <Grid size={{ xs: 12 }} item>
+                                    <Grid size={{ xs: 12 }}>
                                         <Stack direction="row" spacing={2} justifyContent="space-between">
                                             <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
                                             <BtnAdminSubmit onClick={handleSubmit} text={ID ? "Update" : "Create"} />

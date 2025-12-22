@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../dbconfig');
+const { upload } = require('./imgRoute');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
     const sql = `SELECT 
-        id, name, slug, description,
+        id, parent_id, name, slug, description, featured_image, add_menu, add_homepage,
         DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as created_at,
         DATE_FORMAT(modified_at, '%Y-%m-%d %H:%i:%s') as modified_at,
         is_active
-        FROM product_category WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
-    SELECT COUNT(*) AS totalRows FROM product_category WHERE is_active = 1;`;
+        FROM category_details WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
+    SELECT COUNT(*) AS totalRows FROM category_details WHERE is_active = 1;`;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Error fetching items:', err);
@@ -22,18 +23,45 @@ router.post('/list', (req, res) => {
 });
 
 
+//--------------------------- Get by menu or homepage -----------------------------
+router.get('/show', (req, res) => {
+    const displayVar = req.query.displayVar;
+    const sql = `SELECT * FROM category_details WHERE is_active = 1 AND ${displayVar} = 1`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching items by displayVar:', err);
+          }
+        res.json(results);
+    });
+});
+
+
+
+
+//--------------------------- Get Parent items -----------------------------
+router.get('/parent', (req, res) => {
+    const sql = 'SELECT id AS parent_id, name AS parent_name FROM category_details WHERE is_active = 1 AND (parent_id IS NULL OR parent_id = 0)';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching parent items:', err);
+            return res.status(500).json({ error: 'Failed to fetch parent items' });
+        }
+        res.json(results);
+    });
+});
+
+
 
 //-------------------------- Get item details by id -----------------------------
 router.get('/:id', (req, res) => {
     const itemId = req.params.id;
-    
-    const sql = 'SELECT * FROM product_category WHERE is_active = 1 AND id = ?';
+    const sql = 'SELECT c.*, p.name AS parent_name FROM category_details c LEFT JOIN category_details p ON c.parent_id = p.id where c.id = ? AND c.is_active = 1';
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error updating category item:', err);
             return;
         }
-        res.json(result[0]);
+        res.json({parentCategory: {parent_id: result[0].parent_id || null, parent_name: result[0].parent_name || null}, ...result[0]});
     });
 });
 
@@ -41,10 +69,11 @@ router.get('/:id', (req, res) => {
 
 
 //-------------------------- Add a new item ---------------------------------
-router.post('/add', (req, res) => {
-    const { name, slug, description } = req.body;
-    const sql = 'INSERT INTO product_category (name, slug, description) VALUES (?, ?, ?)';
-    db.query(sql, [name, slug, description ], (err, result) => {
+router.post('/add', upload.single('featured_image'), (req, res) => {
+    const { parent_id, name, slug, description, add_menu, add_homepage } = req.body;
+    const featured_image = req.file ? `images/${req.file.filename}` : null;
+    const sql = 'INSERT INTO category_details (parent_id, name, slug, description, featured_image, add_menu, add_homepage, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [parent_id||null, name, slug, description, featured_image, add_menu , add_homepage , 1], (err, result) => {
         if (err) {
             console.error('Error adding category item:', err);
             res.status(500).json({ error: 'Failed to add category item' });
@@ -58,11 +87,18 @@ router.post('/add', (req, res) => {
 
 
 //-------------------------- Update item details ---------------------------------
-router.put('/update/:id', (req, res) => {
+router.put('/update/:id', upload.single('featured_image'), (req, res) => {
     const itemId = req.params.id;
-    const { name, slug, description } = req.body;
-    const sql = 'UPDATE product_category SET name = ?, slug = ?, description = ?, modified_at = NOW() WHERE id = ?';
-    db.query(sql, [name, slug, description, itemId], (err, result) => {
+    const { parent_id, name, slug, description, add_menu, add_homepage } = req.body;
+    let sql = 'UPDATE category_details SET parent_id = ?, name = ?, slug = ?, description = ?, add_menu = ?, add_homepage = ?, modified_at = NOW()';
+    const params = [parent_id , name, slug, description, add_menu || 0, add_homepage || 0];
+    if (req.file) {
+        sql += ', featured_image = ?';
+        params.push(`images/${req.file.filename}`);
+    }
+    sql += ' WHERE id = ?';
+    params.push(itemId);
+    db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating category item:', err);
             res.status(500).json({ error: 'Failed to update category item' });
@@ -78,7 +114,7 @@ router.put('/update/:id', (req, res) => {
 router.delete('/delete/:id', (req, res) => {
     const itemId = req.params.id;
 
-    const sql = 'UPDATE product_category SET is_active = 0 WHERE id = ?';
+    const sql = 'UPDATE category_details SET is_active = 0 WHERE id = ?';
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error deleting category item:', err);

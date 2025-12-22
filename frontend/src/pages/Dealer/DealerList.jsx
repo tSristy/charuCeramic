@@ -24,7 +24,7 @@ const DealerList = () => {
             pageNo: paginationDetails.pageNo,
             searchVariable: searchVariable
         };
-        ServerApi(`/dealers/list`, 'POST', null, body)
+        ServerApi(`/dealer/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
                 setDealerList(res.items);
@@ -40,7 +40,7 @@ const DealerList = () => {
 
     const HandleDelete = (id) => {
         const tempArr = dealerList.filter(dealer => dealer.id !== id);
-        ServerApi(`/dealers/delete/${id}`, 'DELETE', null, null)
+        ServerApi(`/dealer/delete/${id}`, 'DELETE', null, null)
             .then(res => res.json())
             .then(res => {
                 setDealerList(tempArr);

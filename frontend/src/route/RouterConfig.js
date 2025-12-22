@@ -22,6 +22,10 @@ import CategoryList from "../pages/Product/CategoryList";
 import CreateCategory from "../pages/Product/CreateCategory";
 import CreateFAQ from "../pages/FAQ/CreateFAQ";
 import FAQList from "../pages/FAQ/FAQList";
+import CreateBlogs from "../pages/News&Article/CreateBlogs";
+import BlogList from "../pages/News&Article/BlogList";
+import CreateProject from "../pages/Project/CreateProject";
+import ProjectList from "../pages/Project/ProjectList";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -43,8 +47,8 @@ export const RouterConfig = createBrowserRouter([
             { path: "news-article", Component: NewsArticle },
             { path: "buying-guide", Component: BuyingGuide },
             { path: "faq", Component: FAQ },
-            { path: "privacy-policy", Component: Policy},
-            { path: "terms-conditions", Component: TandC},
+            { path: "privacy-policy", Component: Policy },
+            { path: "terms-conditions", Component: TandC },
 
         ],
     },
@@ -52,14 +56,20 @@ export const RouterConfig = createBrowserRouter([
         path: "/",
         Component: AdminLayout,
         children: [
-            { path: "dealer-panel", Component: CreateDealer},
-            { path: "dealer-list", Component: DealerList},
+            { path: "dealer-panel", Component: CreateDealer },
+            { path: "dealer-list", Component: DealerList },
 
-            { path: "category-panel", Component: CreateCategory},
-            { path: "category-list", Component: CategoryList},
+            { path: "category-panel", Component: CreateCategory },
+            { path: "category-list", Component: CategoryList },
 
-            { path: "faq-panel", Component: CreateFAQ},
-            { path: "faq-list", Component: FAQList}
+            { path: "faq-panel", Component: CreateFAQ },
+            { path: "faq-list", Component: FAQList },
+
+            { path: "blog-panel", Component: CreateBlogs },
+            { path: "blog-list", Component: BlogList },
+
+            { path: "project-panel", Component: CreateProject},
+            { path: "project-list", Component: ProjectList},
         ],
     }
 ]);

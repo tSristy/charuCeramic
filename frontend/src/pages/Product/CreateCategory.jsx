@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider } from "@mui/material";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
-import { ServerApi } from "../../route/ServerAPI";
+import { imageAPI, ServerApi } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -10,25 +10,59 @@ import SyncIcon from '@mui/icons-material/Sync';
 import CategoryIcon from '@mui/icons-material/Category';
 import LanguageIcon from '@mui/icons-material/Language';
 import DescriptionIcon from '@mui/icons-material/Description';
-
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import CloseIcon from '@mui/icons-material/Close';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const CreateCategory = () => {
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
-
+    const [parentCategory, setParentCategory] = useState([]);
     const [category, setCategory] = useState({
         name: "",
         slug: "",
-        description: ""
+        add_menu: 0,
+        add_homepage: 0,
+        featured_image: "",
+        description: "",
+        parent_id: null,
+        parentCategory: {
+            parent_id: null,
+            parent_name: ""
+        }
     });
 
+    const [previewSrc, setPreviewSrc] = useState("");
 
-    const handleSubmit = () => {
+    const handleImagePreview = (file) => {
+        if (typeof file === "string") {
+            setPreviewSrc(file);
+            return;
+        }
+        const url = URL.createObjectURL(file);
+        setPreviewSrc(url);
+        return () => {
+            URL.revokeObjectURL(url);
+        };
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
         if (ID) {
             handleUpdate();
             return;
         } else {
-            ServerApi(`/category/add`, "POST", null, category)
+            const formData = new FormData();
+            formData.append("name", category.name);
+            formData.append("slug", category.slug);
+            formData.append("add_menu", category.add_menu);
+            formData.append("add_homepage", category.add_homepage);
+            formData.append("description", category.description);
+            formData.append("parent_id", category.parentCategory ? category.parentCategory.parent_id : null);
+            formData.append("featured_image", category.featured_image);
+
+            ServerApi(`/category/add`, "POST", null, formData, true)
                 .then((res) => res.json())
                 .then((res) => {
                     console.log("create response:", res);
@@ -39,10 +73,17 @@ const CreateCategory = () => {
 
 
 
-
-
     const handleUpdate = () => {
-        ServerApi(`/category/update/` + ID, "PUT", null, category)
+        const formData = new FormData();
+        formData.append("name", category.name);
+        formData.append("slug", category.slug);
+        formData.append("add_menu", category.add_menu);
+        formData.append("add_homepage", category.add_homepage);
+        formData.append("description", category.description);
+        formData.append("parent_id", category.parentCategory ? category.parentCategory.parent_id : null);
+        formData.append("featured_image", category.featured_image);
+
+        ServerApi(`/category/update/` + ID, "PUT", null, formData, true)
             .then((res) => res.json())
             .then((res) => console.log("update response:", res))
             .catch((err) => console.error(err));
@@ -59,20 +100,25 @@ const CreateCategory = () => {
         }
     };
 
+    const getParentCategoryDetails = () => {
+        ServerApi(`/category/parent`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                setParentCategory(res);
+            });
+    };
+
     useEffect(() => {
+        getParentCategoryDetails();
         if (ID !== null) {
             ServerApi(`/category/${ID}`, "GET", null, null)
                 .then((res) => res.json())
                 .then((res) => {
-                    setCategory({
-                        id: res.id,
-                        name: res.name,
-                        slug: res.slug,
-                        description: res.description
-                    });
+                    setCategory(res);
                 });
         }
     }, [ID]);
+
 
     return (
         <Box bgcolor={"#f8fafc"} py={5}>
@@ -98,36 +144,120 @@ const CreateCategory = () => {
 
 
                             {/* ----------------------------Form Inputs------------------------- */}
+                            <form onSubmit={handleSubmit}>
+                                <Box p={3}>
+                                    <Grid container spacing={2}>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Category Name" icon={<CategoryIcon />} />
+                                            <TextField required fullWidth size="small" value={category.name} onChange={(e) => setCategory(p => ({ ...p, name: e.target.value, slug: '?category=' + e.target.value.toLowerCase().replace(/\s+/g, '-') }))} />
+                                        </Grid>
 
-                            <Box p={3}>
-                                <Grid container spacing={2}>
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="Category Name" icon={<CategoryIcon />} />
-                                        <TextField fullWidth size="small" value={category.name} onChange={(e) => setCategory(p => ({ ...p, name: e.target.value }))} />
-                                    </Grid>
 
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="Url Path" icon={<LanguageIcon />} />
-                                        <TextField fullWidth size="small" value={category.slug} onChange={(e) => setCategory(p => ({ ...p, slug: e.target.value }))} />
-                                    </Grid>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Parent Category" icon={<CategoryIcon />} />
+                                            <Autocomplete size="small"
+                                                options={parentCategory.filter((option => category.id ? option.parent_id !== category.id : option))}
+                                                getOptionLabel={(option) => option.parent_name || ""}
+                                                value={category.parentCategory || null}
+                                                onChange={(_, newVal) => setCategory(p => ({ ...p, parentCategory: newVal }))}
+                                                renderInput={(params) => <TextField {...params} />}
+                                                freeSolo
+                                            />
+                                        </Grid>
 
-                                    <Grid size={{ xs: 12 }} item>
-                                        <FormLabel text="Description" icon={<DescriptionIcon />} />
-                                        <TextField multiline rows={2} fullWidth size="small" value={category.description} onChange={(e) => setCategory(p => ({ ...p, description: e.target.value }))} />
-                                    </Grid>
 
-                                    <Grid size={{ xs: 12 }} item>
-                                        <Stack direction="row" spacing={2} justifyContent="space-between">
-                                            <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
-                                            <BtnAdminSubmit onClick={handleSubmit} text={ID ? "Update" : "Create"} />
-                                        </Stack>
+                                        <Grid size={{ xs: 12, sm: 8 }}>
+                                            <FormLabel text="Url Path" icon={<LanguageIcon />} />
+                                            <TextField fullWidth disabled size="small" value={category.slug} />
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12, sm: 4 }}>
+                                            <Tooltip title="If enabled, the Category will be displayed on the homepage.">
+                                                <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end" }}>
+                                                    <Stack direction="row" alignItems={"center"} spacing={1}>
+                                                        <Switch
+                                                            checked={category.add_homepage === 1}
+                                                            onChange={(e) => setCategory(p => ({ ...p, add_homepage: e.target.checked ? 1 : 0 }))}
+                                                            slotProps={{ input: { 'aria-label': 'controlled' } }}
+                                                        />
+                                                        <FormLabel text="Add to Homepage" />
+                                                    </Stack>
+                                                </Box>
+                                            </Tooltip>
+                                        </Grid>
+
+
+
+                                        <Grid size={{ xs: 12, sm: 8 }}>
+                                            <FormLabel text="Featured Image" icon={<AttachFileIcon />} />
+                                            <Stack direction="row">
+                                                <TextField fullWidth size="small" required={category.add_homepage === 1 ? true : false} placeholder={category.featured_image?.name || category.featured_image || null} readOnly slotProps={{
+                                                    input: {
+                                                        endAdornment: category.featured_image ? <InputAdornment position="end"><IconButton onClick={(e) => { setCategory(p => ({ ...p, featured_image: "" })); setPreviewSrc("") }}><CloseIcon /></IconButton></InputAdornment> : null,
+                                                    },
+                                                }} />
+                                                <input
+                                                    accept="image/*"
+                                                    style={{ display: 'none' }}
+                                                    id="featured-image-upload"
+                                                    type="file"
+                                                    onChange={(e) => { setCategory(p => ({ ...p, featured_image: e.target.files[0] })); handleImagePreview(e.target.files[0]); }}
+                                                />
+                                                <label htmlFor="featured-image-upload">
+                                                    <IconButton color="primary" component="span" aria-label="upload picture">
+                                                        <PhotoCamera color="disabled" />
+                                                    </IconButton>
+                                                </label>
+                                            </Stack>
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12, sm: 4 }}>
+                                            <Tooltip title="If enabled, the Category will be displayed on the menu.">
+                                                <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end" }}>
+                                                    <Stack direction="row" alignItems={"center"} spacing={1}>
+                                                        <Switch
+                                                            checked={category.add_menu === 1}
+                                                            onChange={(e) => setCategory(p => ({ ...p, add_menu: e.target.checked ? 1 : 0 }))}
+                                                            slotProps={{ input: { 'aria-label': 'controlled' } }}
+                                                        />
+                                                        <FormLabel text="Add to Mega Menu" />
+                                                    </Stack>
+                                                </Box>
+                                            </Tooltip>
+                                        </Grid>
+
+
+
+                                        <Grid size={{ xs: 12 }}>
+                                            <FormLabel text="Description" icon={<DescriptionIcon />} />
+                                            <TextField multiline rows={2} fullWidth size="small" value={category.description} onChange={(e) => setCategory(p => ({ ...p, description: e.target.value }))} />
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12 }}>
+                                            <Stack direction="row" spacing={2} justifyContent="space-between">
+                                                <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
+                                                <BtnAdminSubmit type={"submit"} text={ID ? "Update" : "Create"} />
+                                            </Stack>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Box>
+                                </Box>
+                            </form>
                         </Box>
                     </Grid>
 
                     <Grid item size={{ sm: 12, md: 4 }}>
+                        {/* --------------------------Image Preview------------------------- */}
+                        <Box>
+                            {previewSrc ? (
+                                <Box component="img" src={previewSrc} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                            ) : category.featured_image ? (
+                                <Box component="img" src={imageAPI + category.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                            ) : (
+                                <Box sx={{ mb: 3, width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
+                                    <Typography color="text.secondary">No image selected</Typography>
+                                </Box>
+                            )}
+                        </Box>
                         {/* --------------------------Info Section------------------------- */}
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>

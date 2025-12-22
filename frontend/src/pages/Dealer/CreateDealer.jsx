@@ -28,12 +28,13 @@ const CreateDealer = () => {
     });
 
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if (ID) {
             handleUpdate();
             return;
         } else {
-            ServerApi(`/dealers/add`, "POST", null, dealer)
+            ServerApi(`/dealer/add`, "POST", null, dealer)
                 .then((res) => res.json())
                 .then((res) => {
                     console.log("create response:", res);
@@ -43,26 +44,26 @@ const CreateDealer = () => {
     };
 
     const handleUpdate = () => {
-        ServerApi(`/dealers/update/` + ID, "PUT", null, dealer)
+        ServerApi(`/dealer/update/` + ID, "PUT", null, dealer)
             .then((res) => res.json())
             .then((res) => console.log("update response:", res))
             .catch((err) => console.error(err));
     };
 
     const handleDelete = () => {
-       if (ID === null) {
+        if (ID === null) {
 
         } else {
-            ServerApi(`/dealers/delete/` + ID, "DELETE", null, null)
-            .then((res) => res.json())
-            .then((res) => console.log("delete response:", res))
-            .catch((err) => console.error(err));
+            ServerApi(`/dealer/delete/` + ID, "DELETE", null, null)
+                .then((res) => res.json())
+                .then((res) => console.log("delete response:", res))
+                .catch((err) => console.error(err));
         }
     };
 
     useEffect(() => {
         if (ID !== null) {
-            ServerApi(`/dealers/${ID}`, "GET", null, null)
+            ServerApi(`/dealer/${ID}`, "GET", null, null)
                 .then((res) => res.json())
                 .then((res) => {
                     setDealer({
@@ -100,60 +101,63 @@ const CreateDealer = () => {
                             </Stack>
                             <Divider />
 
-                            <Box p={3}>
-                                <Grid container spacing={2}>
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="Dealer Name" icon={<PersonOutlineOutlinedIcon />} />
-                                        <TextField size="small" fullWidth value={dealer.name} onChange={(e) => setDealer(p => ({ ...p, name: e.target.value }))} />
-                                    </Grid>
 
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="Contact Number" icon={<PhoneOutlinedIcon />} />
-                                        <TextField size="small" fullWidth value={dealer.phone} onChange={(e) => setDealer(p => ({ ...p, phone: e.target.value }))} />
-                                    </Grid>
+                            <form onSubmit={handleSubmit}>
+                                <Box p={3}>
+                                    <Grid container spacing={2}>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Dealer Name" icon={<PersonOutlineOutlinedIcon />} />
+                                            <TextField size="small" required fullWidth value={dealer.name} onChange={(e) => setDealer(p => ({ ...p, name: e.target.value }))} />
+                                        </Grid>
+
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Contact Number" icon={<PhoneOutlinedIcon />} />
+                                            <TextField required size="small" fullWidth value={dealer.phone} onChange={(e) => setDealer(p => ({ ...p, phone: e.target.value }))} />
+                                        </Grid>
 
 
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="Division" icon={<LanguageIcon />} />
-                                        <Autocomplete size="small"
-                                            options={divisions}
-                                            value={dealer.division}
-                                            onChange={(_, newVal) => setDealer(p => ({ ...p, division: newVal }))}
-                                            renderInput={(params) => <TextField {...params} />}
-                                            freeSolo
-                                        />
-                                    </Grid>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Division" icon={<LanguageIcon />} />
+                                            <Autocomplete size="small" required
+                                                options={divisions}
+                                                value={dealer.division}
+                                                onChange={(_, newVal) => setDealer(p => ({ ...p, division: newVal }))}
+                                                renderInput={(params) => <TextField {...params} />}
+                                                freeSolo
+                                            />
+                                        </Grid>
 
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="District" icon={<ApartmentIcon />} />
-                                        <Autocomplete size="small"
-                                            options={dealer.division ? districtsByDivision[dealer.division] || [] : []}
-                                            value={dealer.district}
-                                            onChange={(_, newVal) => setDealer(p => ({ ...p, district: newVal }))}
-                                            renderInput={(params) => <TextField {...params} />}
-                                            freeSolo
-                                        />
-                                    </Grid>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="District" icon={<ApartmentIcon />} />
+                                            <Autocomplete size="small" required
+                                                options={dealer.division ? districtsByDivision[dealer.division] || [] : []}
+                                                value={dealer.district}
+                                                onChange={(_, newVal) => setDealer(p => ({ ...p, district: newVal }))}
+                                                renderInput={(params) => <TextField {...params} />}
+                                                freeSolo
+                                            />
+                                        </Grid>
 
-                                    <Grid size={{ xs: 12, sm: 6 }} item>
-                                        <FormLabel text="Thana" icon={<LocationOnOutlinedIcon />} />
-                                        <TextField fullWidth size="small" value={dealer.thana} onChange={(e) => setDealer(p => ({ ...p, thana: e.target.value }))} />
-                                    </Grid>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Thana" icon={<LocationOnOutlinedIcon />} />
+                                            <TextField fullWidth required size="small" value={dealer.thana} onChange={(e) => setDealer(p => ({ ...p, thana: e.target.value }))} />
+                                        </Grid>
 
-                                    <Grid size={{ xs: 12 }} item>
-                                        <FormLabel text="Address" />
-                                        <TextField fullWidth multiline
-                                            rows={2} size="small" value={dealer.address} onChange={(e) => setDealer(p => ({ ...p, address: e.target.value }))} />
-                                    </Grid>
+                                        <Grid size={{ xs: 12 }}>
+                                            <FormLabel text="Address" />
+                                            <TextField fullWidth multiline required
+                                                rows={2} size="small" value={dealer.address} onChange={(e) => setDealer(p => ({ ...p, address: e.target.value }))} />
+                                        </Grid>
 
-                                    <Grid size={{ xs: 12 }} item>
-                                        <Stack direction="row" spacing={2} justifyContent="space-between">
-                                            <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
-                                            <BtnAdminSubmit onClick={handleSubmit} text={ID ? "Update" : "Create"} />
-                                        </Stack>
+                                        <Grid size={{ xs: 12 }}>
+                                            <Stack direction="row" spacing={2} justifyContent="space-between">
+                                                <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
+                                                <BtnAdminSubmit type={"submit"} text={ID ? "Update" : "Create"} />
+                                            </Stack>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Box>
+                                </Box>
+                            </form>
                         </Box>
                     </Grid>
 

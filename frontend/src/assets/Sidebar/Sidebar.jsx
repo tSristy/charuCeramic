@@ -17,7 +17,8 @@ const Sidebar = () => {
         { title: "Dealers", url:"/dealer-list", icon: <CreditCardIcon /> },
         { title: "Categories", url:"/category-list", icon: <CategoryIcon /> },
         { title: "FAQs", url:"/faq-list", icon: <LiveHelpIcon /> },
-        { title: "Products", url:"/product-list", icon: <InboxIcon /> },
+        { title: "Blogs", url:"/blog-list", icon: <InboxIcon /> },
+        { title: "Projects", url:"/project-list", icon: <InboxIcon /> },
     ];
     const [open, setOpen] = useState(true);
     const navigate = useNavigate();

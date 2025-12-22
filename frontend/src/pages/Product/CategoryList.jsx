@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
-import { ServerApi } from "../../route/ServerAPI";
+import { ServerApi,imageAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -70,8 +70,12 @@ const CategoryList = () => {
                                 <TableCell><SquareIcon fontSize="small" sx={{ color: "#ff0000" }} /></TableCell>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Url Path</TableCell>
-                                <TableCell>description</TableCell>
-                                <TableCell>Created</TableCell>
+                                <TableCell>Image</TableCell>
+                                <TableCell>Add in Menu</TableCell>
+                                <TableCell>Display in Homepage</TableCell>
+                                {/* <TableCell>description</TableCell> */}
+                                <TableCell>Sub-Category</TableCell>
+                                {/* <TableCell>Created</TableCell> */}
                                 <TableCell>Modified</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
@@ -83,8 +87,12 @@ const CategoryList = () => {
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.name} </TableCell>
                                     <TableCell> {item.slug} </TableCell>
-                                    <TableCell> {item.description} </TableCell>
-                                    <TableCell>{item.created_at.slice(0, 10)}</TableCell>
+                                     <TableCell> <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
+                                   <TableCell> {item.add_menu == 1 ? "Yes" : "No"} </TableCell>
+                                    <TableCell> {item.add_homepage == 1 ? "Yes" : "No"} </TableCell>
+                                    {/* <TableCell> {item.description} </TableCell> */}
+                                    <TableCell> {item.parent_id ? item.parent_id : "N/A"} </TableCell>
+                                    {/* <TableCell>{item.created_at.slice(0, 10)}</TableCell> */}
                                     <TableCell>{item.modified_at.slice(0, 10)}</TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
@@ -116,9 +124,7 @@ const CategoryList = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-
             </Container>
-
         </Box>
     );
 };
