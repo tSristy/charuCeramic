@@ -1,12 +1,22 @@
 import { Box, Button, Container, Divider, Grid, Stack, Typography } from "@mui/material";
-import bannerVideo from '../../img/dummyVideo.mp4';
-import bannerImg from '../../img/bg1.jpg';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+
+import { homePageProductList, homePagePropsList } from "../../Data.jsx";
 import IconColumnCard from "../../assets/Card/IconColumnCard";
 import BtnUrlChange from "../../assets/Button/BtnUrlChange";
-import { homePageProductList, homePagePropsList } from "../../Data.jsx";
-import AddBoxIcon from '@mui/icons-material/AddBox';
 import CTA from "../../assets/Button/CTA.jsx";
 import Carousel from "../../assets/Slide/Carousel.jsx";
+
+import bannerVideo from '../../img/dummyVideo.mp4';
+import bannerImg from '../../img/bg1.jpg';
+import productImg2 from '../../img/prdct2.jpg';
+import productImg4 from '../../img/prdct4.jpg';
+import productImg8 from '../../img/prdct8.jpg';
+import imgOt1 from '../../img/ot1.jpg';
+import imgOt2 from '../../img/ot2.jpg';
+import imgOt3 from '../../img/ot3.jpg';
+import imgOt4 from '../../img/ot4.jpg';
+
 
 const Homepage = () => {
     return (
@@ -138,47 +148,47 @@ const Homepage = () => {
                     </Box>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#000000ff', pt: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#000000ff', p: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
                                Rimless Design 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                 Rimless design delivers superior hygiene, efficient flushing, and effortless maintenance through a seamless bowl structure free of dirt-trapping edges.
                                 </Typography>
-                            <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
+                            <Box component="img" src={imgOt1} alt="Tech Image" sx={{ filter: 'grayscale(100%)', width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
 
-                        <Box sx={{ bgcolor: '#2b2b2b', pt: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#2b2b2b', p: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
                                Rimless Siphon Jet Flush 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                Rimless Siphon Jet Flush ensures powerful cleaning, enhanced hygiene, and efficient water flow with a seamless, edge-free bowl design.
                                </Typography>
-                            <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
+                            <Box component="img" src={imgOt2} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#4a4a4a', pt: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#4a4a4a', p: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
                                 Hygienic Glaze 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                 Hygienic Glaze creates an ultra-smooth, antimicrobial surface that resists stains, prevents bacterial buildup, and ensures long-lasting cleanliness.
                             </Typography>
-                            <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
+                            <Box component="img" src={imgOt3} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
 
 
-                        <Box sx={{ bgcolor: '#676767', pt: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#676767', p: 5, px: 2 }}>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
                                 Click Release Technology 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                 Click Release Technology allows effortless seat and cover removal for deep cleaning, improved hygiene, and quick, tool-free maintenance. 
                             </Typography>
-                            <Box component="img" src={bannerImg} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
+                            <Box component="img" src={imgOt4} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
                     </Stack>
                 </Stack>
@@ -206,7 +216,7 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={bannerImg} />
+                                }} component="img" src={productImg4} />
 
                                 <Box sx={{
                                     position: 'absolute',
@@ -220,7 +230,7 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={bannerImg} />
+                                }} component="img" src={productImg2} />
 
                                 <Box sx={{
                                     position: 'absolute',
@@ -233,7 +243,7 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={bannerImg} />
+                                }} component="img" src={productImg8} />
                             </Box>
                         </Grid>
 

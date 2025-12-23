@@ -39,20 +39,20 @@ import StarIcon from '@mui/icons-material/Star';
 export const homePagePropsList = [{
     id: 1,
     icon: <StarIcon />,
-    title: "Exclusive 1",
-    details: "Pure water is the world's first \n and foremost medicine"
+    title: "Coating Technology",
+    details: "Advanced coating technology produces a super smooth surface to reduce strain forming in the space between surfaces and prevents germ accumulation."
 },
 {
     id: 2,
     icon: <StarIcon />,
-    title: "Exclusive 2",
-    details: "We believe in building long-term \n relationships with our customers"
+    title: "Green Innovation",
+    details: "Green innovation in toilets means using eco-friendly technology to save water and protect the environment. Charu is committed to promoting sustainability in Bangladesh through innovation."
 },
 {
     id: 3,
     icon: <StarIcon />,
-    title: "Exclusive 3",
-    details: "Customer satisfaction is our top priority"
+    title: "Clean Comfort",
+    details: "Easy Clean Technology helps make toilets easy to clean and maintain. Comfort Clean uses smooth surfaces, antibacterial coating, efficient flushing, and hidden trapways for better hygiene."
 }];
 
 
@@ -97,52 +97,60 @@ export const catalogyList = [
 
 
 import productImg from './img/productImg.jpg';
+import productImg1 from './img/prdct1.png';
+import productImg2 from './img/prdct2.jpg';
+import productImg3 from './img/prdct3.jpg';
+import productImg4 from './img/prdct4.jpg';
+import productImg5 from './img/prdct5.jpg';
+import productImg6 from './img/prdct6.png';
+import productImg7 from './img/prdct7.png';
+import productImg8 from './img/prdct8.jpg';
 export const homePageProductList = [
     {
         id: 1,
-        imgSrc: productImg,
+        imgSrc: productImg1,
         productName: 'Water Closet',
         url: '',
     },
     {
         id: 2,
-        imgSrc: productImg,
+        imgSrc: productImg2,
         productName: 'Wash Basin',
         url: '',
     },
     {
         id: 3,
-        imgSrc: productImg,
+        imgSrc: productImg3,
         productName: 'Urinal',
         url: '',
     },
     {
         id: 4,
-        imgSrc: productImg,
+        imgSrc: productImg4,
         productName: 'Public Area',
         url: '',
     },
     {
         id: 5,
-        imgSrc: productImg,
+        imgSrc: productImg5,
         productName: 'SQUAT ASIAN PAN',
         url: '',
     },
     {
         id: 6,
-        imgSrc: productImg,
+        imgSrc: productImg6,
         productName: 'Faucet',
         url: '',
     },
     {
         id: 7,
-        imgSrc: productImg,
+        imgSrc: productImg7,
         productName: 'Shower Mixer',
         url: '',
     },
     {
         id: 8,
-        imgSrc: productImg,
+        imgSrc: productImg8,
         productName: 'Accessories',
         url: '',
     },

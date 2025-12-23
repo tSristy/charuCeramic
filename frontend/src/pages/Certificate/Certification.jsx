@@ -45,12 +45,6 @@ const Certification = () => {
                                             <Typography sx={{ fontSize: ".9rem" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. </Typography>
                                         </Box>
                                     </Stack>
-                                    <Divider sx={{ py: 2 }} />
-                                    <Box component="img" src={certificateImg} sx={{
-                                        width: "100%",
-                                        objectFit: "cover"
-
-                                    }} />
                                 </Box>
                             </Grid>
 
@@ -75,12 +69,7 @@ const Certification = () => {
                                             <Typography sx={{ fontSize: ".9rem" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. </Typography>
                                         </Box>
                                     </Stack>
-                                    <Divider sx={{ py: 2 }} />
-                                    <Box component="img" src={certificateImg} sx={{
-                                        width: "100%",
-                                        objectFit: "cover"
-
-                                    }} />
+                                    
                                 </Box>
                             </Grid>
 
@@ -105,12 +94,12 @@ const Certification = () => {
                                             <Typography sx={{ fontSize: ".9rem" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. </Typography>
                                         </Box>
                                     </Stack>
-                                    <Divider sx={{ py: 2 }} />
+                                    {/* <Divider sx={{ py: 2 }} />
                                     <Box component="img" src={certificateImg} sx={{
                                         width: "100%",
                                         objectFit: "cover"
 
-                                    }} />
+                                    }} /> */}
                                 </Box>
                             </Grid>
                         </Grid>
