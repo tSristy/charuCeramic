@@ -6,6 +6,9 @@ import Link from '@mui/material/Link';
 import imgPro from '../../img/bg1.jpg';
 
 const SingleProduct = () => {
+//     const searchParam = useParams();
+//  console.log(searchParam);
+
     const [detailTab, setDetailTab] = useState({
         featureTab: true,
         specTab: false,

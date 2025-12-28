@@ -180,7 +180,7 @@ const Header = () => {
 
                             {subMenuList.map((child) => (
                                 <Box>
-                                    <Typography sx={{mt:2, fontWeight: 500, textTransform: "uppercase", fontSize: '.87rem'}}>
+                                    <Typography sx={{py:1.5, fontWeight: 500, textTransform: "uppercase", fontSize: '.87rem'}}>
                                     {child.title}
                                     </Typography>
                                     { child.children.map(item=>(

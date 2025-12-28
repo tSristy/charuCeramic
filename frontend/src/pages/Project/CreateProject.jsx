@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
@@ -26,6 +26,8 @@ const CreateProject = () => {
         featured_image: ""
     });
 
+    
+    const imgTriggerClick = useRef(null);
     const [previewSrc, setPreviewSrc] = useState("");
     const handleImagePreview = (file) => {
         if (typeof file === "string") {
@@ -134,26 +136,55 @@ const CreateProject = () => {
                                             <FormLabel text="Url Path" icon={<LanguageIcon />} />
                                             <TextField fullWidth size="small" value={projectDetails.slug} onChange={(e) => setProjectDetails(p => ({ ...p, slug: e.target.value }))} />
                                         </Grid>
-                                        <Grid size={{ xs: 12, sm: 6 }} item>
+                                        {/* Image Field */}
+                                        <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Featured Image" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
-                                                <TextField fullWidth size="small" placeholder={projectDetails.featured_image?.name || projectDetails.featured_image} readOnly slotProps={{
-                                                    input: {
-                                                        endAdornment: projectDetails.featured_image ? <InputAdornment position="end"><IconButton onClick={(e) => setProjectDetails(p => ({ ...p, featured_image: "" }))}><CloseIcon /></IconButton></InputAdornment> : null,
-                                                    },
-                                                }} />
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
+                                                    onClick={() => imgTriggerClick.current.click()}
+                                                    placeholder={projectDetails.featured_image?.name || null}
+                                                    readOnly
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: projectDetails.featured_image ? (
+                                                                <InputAdornment position="end">
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation(); 
+                                                                            setProjectDetails(p => ({ ...p, featured_image: "" }));
+                                                                            setPreviewSrc("");
+                                                                            if (imgTriggerClick.current) imgTriggerClick.current.value = "";
+                                                                        }}
+                                                                    >
+                                                                        <CloseIcon fontSize="small" />
+                                                                    </IconButton>
+                                                                </InputAdornment>
+                                                            ) : null,
+                                                        },
+                                                    }}
+                                                />
                                                 <input
+                                                    ref={imgTriggerClick}
                                                     accept="image/*"
                                                     style={{ display: 'none' }}
-                                                    id="project-featured-image-upload"
                                                     type="file"
-                                                    onChange={(e) => { setProjectDetails(p => ({ ...p, featured_image: e.target.files[0] })); handleImagePreview(e.target.files[0]); }}
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            setProjectDetails(p => ({ ...p, featured_image: file }));
+                                                            handleImagePreview(file);
+                                                        }
+                                                    }}
                                                 />
-                                                <label htmlFor="project-featured-image-upload">
-                                                    <IconButton color="primary" component="span" aria-label="upload picture">
-                                                        <PhotoCamera color="disabled" />
-                                                    </IconButton>
-                                                </label>
+                                                <IconButton
+                                                    color="primary"
+                                                    onClick={() => imgTriggerClick.current.click()}
+                                                >
+                                                    <PhotoCamera color={"disabled"} />
+                                                </IconButton>
                                             </Stack>
                                         </Grid>
 

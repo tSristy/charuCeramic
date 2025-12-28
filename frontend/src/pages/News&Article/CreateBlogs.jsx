@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Switch, Tooltip } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
@@ -29,6 +29,8 @@ const CreateBlogs = () => {
         featured_image: ""
     });
 
+
+    const imgTriggerClick = useRef(null);
     const [previewSrc, setPreviewSrc] = useState("");
 
     const handleImagePreview = (file) => {
@@ -147,7 +149,7 @@ const CreateBlogs = () => {
                                             <TextField fullWidth size="small" value={blogDetails.slug} onChange={(e) => setBlogDetails(p => ({ ...p, slug: e.target.value }))} />
                                         </Grid>
 
-                                        <Grid size={{ xs: 12, sm:4 }}>
+                                        <Grid size={{ xs: 12, sm: 4 }}>
                                             <FormLabel text="Publish Date" icon={<CalendarTodayIcon />} />
                                             <TextField type="date" fullWidth size="small" value={blogDetails.published_at} onChange={(e) => setBlogDetails(p => ({ ...p, published_at: e.target.value }))} />
                                         </Grid>
@@ -168,26 +170,56 @@ const CreateBlogs = () => {
                                         </Grid>
 
 
+                                        {/* Image Field */}
                                         <Grid size={{ xs: 12, sm: 4 }}>
                                             <FormLabel text="Featured Image" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
-                                                <TextField fullWidth size="small" placeholder={blogDetails.featured_image.name || blogDetails.featured_image} readOnly slotProps={{
-                                                    input: {
-                                                        endAdornment: blogDetails.featured_image ? <InputAdornment position="end"><IconButton onClick={(e) => { setBlogDetails(p => ({ ...p, featured_image: "" })); setPreviewSrc("") }}><CloseIcon /></IconButton></InputAdornment> : null,
-                                                    },
-                                                }} />
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
+                                                    // Opens picker when clicking anywhere on the bar
+                                                    onClick={() => imgTriggerClick.current.click()}
+                                                    placeholder={blogDetails.featured_image?.name || (typeof blogDetails.featured_image === 'string' ? blogDetails.featured_image : "No file selected")}
+                                                    readOnly
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: blogDetails.featured_image ? (
+                                                                <InputAdornment position="end">
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation(); // Prevents re-opening the file dialog
+                                                                            setBlogDetails(p => ({ ...p, featured_image: "" }));
+                                                                            setPreviewSrc("");
+                                                                            if (imgTriggerClick.current) imgTriggerClick.current.value = "";
+                                                                        }}
+                                                                    >
+                                                                        <CloseIcon fontSize="small" />
+                                                                    </IconButton>
+                                                                </InputAdornment>
+                                                            ) : null,
+                                                        },
+                                                    }}
+                                                />
                                                 <input
+                                                    ref={imgTriggerClick}
                                                     accept="image/*"
                                                     style={{ display: 'none' }}
-                                                    id="featured-image-upload"
                                                     type="file"
-                                                    onChange={(e) => { setBlogDetails(p => ({ ...p, featured_image: e.target.files[0] })); handleImagePreview(e.target.files[0]); }}
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            setBlogDetails(p => ({ ...p, featured_image: file }));
+                                                            handleImagePreview(file);
+                                                        }
+                                                    }}
                                                 />
-                                                <label htmlFor="featured-image-upload">
-                                                    <IconButton color="primary" component="span" aria-label="upload picture">
-                                                        <PhotoCamera color="disabled" />
-                                                    </IconButton>
-                                                </label>
+                                                <IconButton
+                                                    color="primary"
+                                                    onClick={() => imgTriggerClick.current.click()}
+                                                >
+                                                    <PhotoCamera color={"disabled"} />
+                                                </IconButton>
                                             </Stack>
                                         </Grid>
 

@@ -6,10 +6,7 @@ const db = require('../dbconfig');
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
     const sql = `SELECT 
-        id, question, answer,
-        DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as created_at,
-        DATE_FORMAT(modified_at, '%Y-%m-%d %H:%i:%s') as modified_at,
-        is_active
+        id, question, answer, is_active
         FROM faq WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
     SELECT COUNT(*) AS totalRows FROM faq WHERE is_active = 1;`;
     db.query(sql, (err, results) => {

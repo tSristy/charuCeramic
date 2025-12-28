@@ -29,7 +29,7 @@ const BlogList = () => {
                     return {
                         ...previousState,
                         totalRows: res.totalRows,
-                        totalPages: Math.round(res.totalRows / 10)
+                        totalPages: Math.ceil(res.totalRows / 10)
                     }
                 });
             })
@@ -75,8 +75,6 @@ const BlogList = () => {
                                 <TableCell>Content</TableCell>
                                 <TableCell>Displaying in Homepage</TableCell>
                                 <TableCell>Published Date</TableCell>
-                                <TableCell>Created</TableCell>
-                                <TableCell>Modified</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -89,10 +87,8 @@ const BlogList = () => {
                                     <TableCell> <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
                                     <TableCell> {item.slug} </TableCell>
                                     <TableCell> {item.content} </TableCell>
-                                    <TableCell>{item.add_homepage === 1 ? <span style={{ fontWeight:600 }}>Yes</span> : "No"}</TableCell>
+                                    <TableCell>{item.add_homepage === 1 ? <span style={{ fontWeight:500 }}>Yes</span> : "No"}</TableCell>
                                     <TableCell>{item.published_at.slice(0, 10)}</TableCell>
-                                    <TableCell>{item.created_at.slice(0, 10)}</TableCell>
-                                    <TableCell>{item.modified_at.slice(0, 10)}</TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>

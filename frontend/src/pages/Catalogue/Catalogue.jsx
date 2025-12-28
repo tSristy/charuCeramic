@@ -1,5 +1,5 @@
 import { Box, Button, Container, Divider, Grid, Stack, Typography } from "@mui/material";
-import bgImg from '../../img/bgDealer.jpg';
+import bgImg from '../../img/bg1.jpg';
 import StarIcon from '@mui/icons-material/Star';
 import { catalogueList, seriesList } from "../../Data";
 

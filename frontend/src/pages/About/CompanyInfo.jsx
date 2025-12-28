@@ -1,6 +1,7 @@
 import { Box, Button, Collapse, Container, Grid, Stack, Typography } from '@mui/material';
-import bgImg from '../../img/bgDealer.jpg';
+import bgImg from '../../img/bg2.png';
 import bgInfo from '../../img/bgInfo.jpg';
+import infoImg from '../../img/infoImg.jpg';
 import bannerVideo from '../../img/dummyVideo.mp4';
 import { useState } from 'react';
 
@@ -25,10 +26,10 @@ const CompanyInfo = () => {
 
 
             <Box sx={{ py: 10 }}>
-                {/* <Container> */}
-                <Grid container direction="row" spacing={2} p={5}>
+                <Container>
+                <Grid container direction="row" spacing={2}>
                     <Grid size={{ xs: 12, sm: 9 }} >
-                        <Box width={"73%"}>
+                        <Box width={"70%"}>
                             <Typography sx={{ fontSize: '1.15rem', fontWeight: 600, mb: 1, textAlign: 'left' }}>
                                 CHARU Ceramic Industries Limited
                             </Typography>
@@ -78,14 +79,14 @@ const CompanyInfo = () => {
                             }}>
                                 <Box sx={{ position: "relative" }}>
                                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
-                                        <Typography sx={{ fontSize: "10rem", fontWeight: 600, color: "#ff0000ff" }}>
+                                        <Typography sx={{ fontSize: "8rem", fontWeight: 600, color: "#ff0000ff" }}>
                                             12
                                         </Typography>
-                                        <Typography sx={{ fontSize: "9rem", fontWeight: 600, color: "#2e2e2eff" }}>
+                                        <Typography sx={{ fontSize: "7rem", fontWeight: 600, color: "#2e2e2eff" }}>
                                             +
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ position: "absolute", top: 190, left: 60 }}>
+                                    <Box sx={{ position: "absolute", top: 150, left: 60 }}>
                                         Years of experience
                                     </Box>
                                 </Box>
@@ -94,11 +95,10 @@ const CompanyInfo = () => {
                     </Grid>
 
                     <Grid size={{ xs: 12, sm: 3 }}>
-                        <Box component='img' src={"https://demo2.pavothemes.com/unita/wp-content/uploads/2025/09/h1-our-about03.jpg"} sx={{ width: "100%" }} />
-
+                        <Box component='img' src={infoImg} sx={{ width: "100%" }} />
                     </Grid>
                 </Grid>
-                {/* </Container> */}
+                </Container>
             </Box>
 
 
@@ -164,7 +164,7 @@ const CompanyInfo = () => {
             <Box sx={{ py: 20, backgroundImage: `url(${bgInfo})` }}>
                 <Container>
                     <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left', mb: 10 }}>
-                        Our Expertise
+                        Our Innovation
                     </Typography>
 
                     <Grid container spacing={2}>

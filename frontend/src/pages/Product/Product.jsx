@@ -1,11 +1,17 @@
 import { Accordion, AccordionDetails, AccordionSummary, Autocomplete, Box, Button, Checkbox, Container, Divider, FormControlLabel, FormGroup, Grid, TextField, Typography } from '@mui/material';
-import bgImg from '../../img/bgDealer.jpg';
+import bgImg from '../../img/bg3.jpg';
 import { catalogyList, homePageProductList } from '../../Data';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 
 const Product = () => {
+  const [searchParam] = useSearchParams();
+  const [category] = useState(searchParam.get("cat") || null)
 
+  console.log(category)
+  
     const handleChange = (e) => {
         console.log(e.target.name)
         // setState({

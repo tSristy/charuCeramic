@@ -22,7 +22,13 @@ app.use('/faq', faqRouter);
 const blogRouter = require('./routers/blogRouter');
 app.use('/blog', blogRouter);
 
-const projectRouter = require('./routers/projectRouter')
+const projectRouter = require('./routers/projectRouter');
 app.use('/project', projectRouter);
+
+const productRouter = require('./routers/productRouter');
+app.use('/product', productRouter);
+
+const catalogueRouter = require('./routers/catalogueRouter');
+app.use('/catalogue', catalogueRouter);
 
 app.listen(5174);

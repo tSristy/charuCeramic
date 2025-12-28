@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
-import { ServerApi,imageAPI } from "../../route/ServerAPI";
+import { ServerApi, imageAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -29,7 +29,7 @@ const CategoryList = () => {
                     return {
                         ...previousState,
                         totalRows: res.totalRows,
-                        totalPages: Math.round(res.totalRows / 10)
+                        totalPages: Math.ceil(res.totalRows / 10)
                     }
                 });
             })
@@ -47,14 +47,14 @@ const CategoryList = () => {
     return (
         <Box py={5}>
             <Container>
-                <Stack direction={{sm: "column", md: "row"}} justifyContent="space-between" alignItems="center">
+                <Stack direction={{ sm: "column", md: "row" }} justifyContent="space-between" alignItems="center">
                     <Box mb={3}>
                         <Typography variant="h5" fontWeight={600} mt={5} mb={1}>Records Explorer  <Chip label="Category" color="error" /></Typography>
                         <Typography variant="overline" color="text.secondary">System Database • {paginationDetails.totalRows} active entries</Typography>
                     </Box>
 
-                    <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
-                         <BtnAdminSearch
+                    <Box sx={{ width: { sm: "100%", md: "30%" }, display: "flex", gap: 1 }}>
+                        <BtnAdminSearch
                             onChange={(e) => setSearchVariable(e.target.value)}
                         />
                         <BtnAdminSubmit text="Create" onClick={() => { }} />
@@ -73,10 +73,7 @@ const CategoryList = () => {
                                 <TableCell>Image</TableCell>
                                 <TableCell>Add in Menu</TableCell>
                                 <TableCell>Display in Homepage</TableCell>
-                                {/* <TableCell>description</TableCell> */}
-                                <TableCell>Sub-Category</TableCell>
-                                {/* <TableCell>Created</TableCell> */}
-                                <TableCell>Modified</TableCell>
+                                <TableCell>Parent Category</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -87,14 +84,12 @@ const CategoryList = () => {
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.name} </TableCell>
                                     <TableCell> {item.slug} </TableCell>
-                                     <TableCell> <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
-                                   <TableCell> {item.add_menu == 1 ? "Yes" : "No"} </TableCell>
-                                    <TableCell> {item.add_homepage == 1 ? "Yes" : "No"} </TableCell>
-                                    {/* <TableCell> {item.description} </TableCell> */}
+                                    <TableCell> {item.featured_image && <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> || "N / A"} </TableCell>
+                                    <TableCell> {item.add_menu == 1 ? <Box component="span" fontWeight={"500"}>Yes</Box> : "No"} </TableCell>
+                                    <TableCell> {item.add_homepage == 1 ? <Box component="span" fontWeight={"500"}>Yes</Box> : "No"} </TableCell>
                                     <TableCell> {item.parent_id ? item.parent_id : "N/A"} </TableCell>
-                                    {/* <TableCell>{item.created_at.slice(0, 10)}</TableCell> */}
-                                    <TableCell>{item.modified_at.slice(0, 10)}</TableCell>
-                                    <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell><Tooltip title="Edit">
+                                        <IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
                                         <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
@@ -109,7 +104,6 @@ const CategoryList = () => {
                                     </Typography>
                                 </TableCell>
                                 <TableCell colSpan={10} align="right">
-
                                     <Pagination color="error" shape="rounded" hidePrevButton hideNextButton
                                         count={paginationDetails.totalPages}
                                         page={paginationDetails.pageNo}

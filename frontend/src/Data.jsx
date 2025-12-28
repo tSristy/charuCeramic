@@ -38,21 +38,18 @@ export const tempMenuList = [
 import StarIcon from '@mui/icons-material/Star';
 export const homePagePropsList = [{
     id: 1,
-    icon: <StarIcon />,
     title: "Coating Technology",
-    details: "Advanced coating technology produces a super smooth surface to reduce strain forming in the space between surfaces and prevents germ accumulation."
+    details: "Advanced coating creates ultra-smooth surfaces, preventing stains and germs."
 },
 {
     id: 2,
-    icon: <StarIcon />,
     title: "Green Innovation",
-    details: "Green innovation in toilets means using eco-friendly technology to save water and protect the environment. Charu is committed to promoting sustainability in Bangladesh through innovation."
+    details: "Eco-friendly toilet technology saves water and supports sustainable living."
 },
 {
     id: 3,
-    icon: <StarIcon />,
     title: "Clean Comfort",
-    details: "Easy Clean Technology helps make toilets easy to clean and maintain. Comfort Clean uses smooth surfaces, antibacterial coating, efficient flushing, and hidden trapways for better hygiene."
+    details: "Easy-clean design ensures hygiene, comfort, and effortless maintenance."
 }];
 
 
@@ -104,7 +101,7 @@ import productImg4 from './img/prdct4.jpg';
 import productImg5 from './img/prdct5.jpg';
 import productImg6 from './img/prdct6.png';
 import productImg7 from './img/prdct7.png';
-import productImg8 from './img/prdct8.jpg';
+import productImg8 from './img/prdct8.png';
 export const homePageProductList = [
     {
         id: 1,

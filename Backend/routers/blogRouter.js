@@ -7,10 +7,7 @@ const router = express.Router();
 router.post('/list', (req, res) => {
 	const { pageNo } = req.body;
 	const sql = `SELECT 
-		id, title, slug, summary, content, add_homepage, featured_image,
-		DATE_FORMAT(published_at, '%Y-%m-%d %H:%i:%s') as published_at,
-		DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as created_at,
-		DATE_FORMAT(modified_at, '%Y-%m-%d %H:%i:%s') as modified_at,
+		id, title, slug, summary, content, add_homepage, featured_image, published_at,
 		is_active
 		FROM blog_articles WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
 	SELECT COUNT(*) AS totalRows FROM blog_articles WHERE is_active = 1;`;

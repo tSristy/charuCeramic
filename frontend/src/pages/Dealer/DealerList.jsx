@@ -32,7 +32,7 @@ const DealerList = () => {
                     return {
                         ...previousState,
                         totalRows: res.totalRows,
-                        totalPages: Math.round(res.totalRows / 10)
+                        totalPages: Math.ceil(res.totalRows / 10)
                     }
                 });
             })
@@ -76,8 +76,6 @@ const DealerList = () => {
                                 <TableCell>Division</TableCell>
                                 <TableCell>District</TableCell>
                                 <TableCell>Thana</TableCell>
-                                <TableCell>Created</TableCell>
-                                <TableCell>Modified</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -92,8 +90,6 @@ const DealerList = () => {
                                     <TableCell> {item.division} </TableCell>
                                     <TableCell> {item.district} </TableCell>
                                     <TableCell> {item.thana} </TableCell>
-                                    <TableCell> {item.created_at.slice(0, 10)} </TableCell>
-                                    <TableCell> {item.modified_at.slice(0, 10)} </TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>

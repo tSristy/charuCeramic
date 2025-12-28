@@ -32,7 +32,7 @@ const FAQList = () => {
                     return {
                         ...previousState,
                         totalRows: res.totalRows,
-                        totalPages: Math.round(res.totalRows / 10)
+                        totalPages: Math.ceil(res.totalRows / 10)
                     }
                 });
             })
@@ -72,8 +72,6 @@ const FAQList = () => {
                                 <TableCell><SquareIcon fontSize="small" sx={{ color: "#ff0000" }} /></TableCell>
                                 <TableCell>Questions</TableCell>
                                 <TableCell>Answer</TableCell>
-                                <TableCell>Created</TableCell>
-                                <TableCell>Modified</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -84,8 +82,6 @@ const FAQList = () => {
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.question} </TableCell>
                                     <TableCell> {item.answer} </TableCell>
-                                    <TableCell> {item.created_at.slice(0, 10)} </TableCell>
-                                    <TableCell> {item.modified_at.slice(0, 10)} </TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000"} }}>

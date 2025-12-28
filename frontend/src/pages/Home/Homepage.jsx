@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Divider, Grid, IconButton, Stack, Typography } from "@mui/material";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 import { homePageProductList, homePagePropsList } from "../../Data.jsx";
@@ -9,13 +9,15 @@ import Carousel from "../../assets/Slide/Carousel.jsx";
 
 import bannerVideo from '../../img/dummyVideo.mp4';
 import bannerImg from '../../img/bg1.jpg';
-import productImg2 from '../../img/prdct2.jpg';
-import productImg4 from '../../img/prdct4.jpg';
-import productImg8 from '../../img/prdct8.jpg';
-import imgOt1 from '../../img/ot1.jpg';
-import imgOt2 from '../../img/ot2.jpg';
-import imgOt3 from '../../img/ot3.jpg';
-import imgOt4 from '../../img/ot4.jpg';
+
+import img3in1 from '../../img/3img1.jpg';
+import img3in2 from '../../img/3img2.jpg';
+import img3in3 from '../../img/prdct8.png';
+
+import imgOt1 from '../../img/hpicon1.png';
+import imgOt2 from '../../img/hpicon2.png';
+import imgOt3 from '../../img/hpicon3.png';
+import imgOt4 from '../../img/hpicon4.png';
 
 
 const Homepage = () => {
@@ -51,7 +53,7 @@ const Homepage = () => {
 
 
             {/* 3 boxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */}
-            <Box sx={{ pb: 10 }}>
+            <Box sx={{ p:5 }}>
                 <Container>
                     <Stack sx={{
                         bgcolor: "white",
@@ -83,7 +85,7 @@ const Homepage = () => {
             }}>
                 <Box sx={{
                     py: 10,
-                    bgcolor: 'rgba(0, 0, 0, 0.76)',
+                    bgcolor: 'rgba(0, 0, 0, 0.65)',
                     height: '100%',
                 }}>
                     <Container sx={{ py: 10 }}>
@@ -141,54 +143,54 @@ const Homepage = () => {
             <Box sx={{ py: 10 }}>
                 {/* <Container> */}
                 <Stack sx={{ alignItems: 'stratch', justifyContent: 'center' }} direction={{ sm: 'column', md: 'row' }}>
-                    <Box sx={{ bgcolor: '#ED1C24', py: 10, px: 5 }}>
+                    <Box sx={{ bgcolor: '#ED1C24', py: 10, px: 5, alignContent:"center" }}>
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left', color: 'white' }}>
                             Our Technology
                         </Typography>
                     </Box>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#000000ff', p: 5, px: 2 }}>
-                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
+                        <Box sx={{ bgcolor: '#000000ff', p: 10, px: 2 }}>
+                            <Box component="img" src={imgOt1} alt ="rimless" sx={{filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb:2}}/>
+                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                Rimless Design 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                 Rimless design delivers superior hygiene, efficient flushing, and effortless maintenance through a seamless bowl structure free of dirt-trapping edges.
                                 </Typography>
-                            <Box component="img" src={imgOt1} alt="Tech Image" sx={{ filter: 'grayscale(100%)', width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
-                        </Box>
+                             </Box>
 
-                        <Box sx={{ bgcolor: '#2b2b2b', p: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#2b2b2b', p: 10, px: 2 }}>
+                            <Box component="img" src={imgOt2} alt ="jet" sx={{filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb:2}}/>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
-                               Rimless Siphon Jet Flush 
+                               Rimless Siphon Jet 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                Rimless Siphon Jet Flush ensures powerful cleaning, enhanced hygiene, and efficient water flow with a seamless, edge-free bowl design.
                                </Typography>
-                            <Box component="img" src={imgOt2} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
-                        </Box>
+                            </Box>
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#4a4a4a', p: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#4a4a4a', p: 10, px: 2 }}>
+                            <Box component="img" src={imgOt3} alt ="hygigenic" sx={{filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb:2}}/>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
                                 Hygienic Glaze 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                 Hygienic Glaze creates an ultra-smooth, antimicrobial surface that resists stains, prevents bacterial buildup, and ensures long-lasting cleanliness.
                             </Typography>
-                            <Box component="img" src={imgOt3} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
-                        </Box>
+                           </Box>
 
 
-                        <Box sx={{ bgcolor: '#676767', p: 5, px: 2 }}>
+                        <Box sx={{ bgcolor: '#676767', p: 10, px: 2 }}>
+                            <Box component="img" src={imgOt4} alt ="hygigenic" sx={{filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb:2}}/>
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 5 }}>
-                                Click Release Technology 
+                                Click Release 
                             </Typography>
                             <Typography sx={{ fontSize: '.9rem', textAlign: 'left', color: 'white' }}>
                                 Click Release Technology allows effortless seat and cover removal for deep cleaning, improved hygiene, and quick, tool-free maintenance. 
                             </Typography>
-                            <Box component="img" src={imgOt4} alt="Tech Image" sx={{ width: '100%', height: '150px', objectFit: 'cover', mt: 5 }} />
                         </Box>
                     </Stack>
                 </Stack>
@@ -204,6 +206,7 @@ const Homepage = () => {
                         <Grid size={{ xs: 12, md: 6 }}>
                             <Box sx={{ position: 'relative', height: { xs: '350px', md: '500px' } }}>
                                 <Box sx={{
+                                    borderRadius: 3,
                                     position: 'absolute',
                                     top: 0,
                                     left: 0,
@@ -216,9 +219,10 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={productImg4} />
+                                }} component="img" src={img3in1} />
 
-                                <Box sx={{
+                                <Box sx={{                                    
+                                    borderRadius: 3,
                                     position: 'absolute',
                                     top: '50%',
                                     left: "10%",
@@ -230,9 +234,10 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={productImg2} />
+                                }} component="img" src={img3in2} />
 
                                 <Box sx={{
+                                    borderRadius: 3,
                                     position: 'absolute',
                                     top: '15%',
                                     left: "49%",
@@ -243,7 +248,7 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={productImg8} />
+                                }} component="img" src={img3in3} />
                             </Box>
                         </Grid>
 
@@ -253,10 +258,10 @@ const Homepage = () => {
                                 pb: { sm: 0, md: 10 },
                             }}>
                                 <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
-                                    Bangladesh's Maestro Sanitaryware & Bathware Brand
+                                    Bangladesh’s Benchmark for Premium Sanitaryware & Bathware
                                 </Typography>
                                 <Typography sx={{ fontSize: '.9rem', fontWeight: 400, textAlign: 'left', my: 2 }}>
-                                    Charu Ceramic has established itself as Bangladesh's Maestro Sanitaryware & Bathware brand through a combination of innovative design, superior quality, and a commitment to customer satisfaction. With state-of-the-art manufacturing facilities and a team of skilled professionals.
+                                    Charu Ceramic has set the benchmark for premium sanitaryware and bath ware in Bangladesh through innovative design, superior quality, advanced manufacturing, and an unwavering commitment to customer satisfaction.
                                 </Typography>
                                 <Box py={2}>
                                 <BtnUrlChange btnTitle="Know About Us" url="/company-information" />
@@ -293,7 +298,9 @@ const Homepage = () => {
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
                             Read About CHARU
                         </Typography>
+                        <IconButton onClick={(e)=>{}}>
                         <Button variant="none" sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ED1C24" }} />}>Explore All</Button>
+                        </IconButton>
                     </Stack>
 
                     <Grid container spacing={4}>

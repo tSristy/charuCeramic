@@ -4,22 +4,7 @@ import { useState } from "react";
 const IconColumnCard = ({ item }) => {
     const [hoverVar, setHoverVar] = useState(false)
     return (
-        <Box sx={{
-            p: 3,
-            // transition: "all 0.3s ease",
-            // '&:hover': {
-            //     transform: 'scale(1.2)',
-            //     bgcolor: myTheme.palette.green,
-            //     cursor: "pointer",
-            //     color: 'white'
-            // }
-        }}
-        // onMouseEnter={() =>
-        //     setHoverVar(true)}
-        // onMouseLeave={() =>
-        //     setHoverVar(false)
-        // }
-        >
+        <Box p={3}>
             <Typography sx={{
                 color: '#ED1C24'
                 // color: hoverVar ? 'white' : myTheme.palette.yellow

@@ -1,17 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../dbconfig');
-const upload = multer({ storage });
+const { upload } = require('./imgRoute');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
-    const sql = `SELECT 
-        id, title, file_path, summary, featured_image,
-        DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as created_at,
-        DATE_FORMAT(modified_at, '%Y-%m-%d %H:%i:%s') as modified_at,
-        is_active
-        FROM catalogue_details WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
+    const sql = `SELECT * FROM catalogue_details WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
     SELECT COUNT(*) AS totalRows FROM catalogue_details WHERE is_active = 1;`;
     db.query(sql, (err, results) => {
         if (err) {
@@ -39,40 +34,67 @@ router.get('/:id', (req, res) => {
 
 
 
-//-------------------------- Add a new item ---------------------------------
-router.post('/add', upload.single('featured_image'), (req, res) => {
-    const { title, file_path, summary, content } = req.body;
-    const featured_image = req.file ? `images/${req.file.filename}` : null;
+// Change upload.single to upload.fields
+const uploadFields = upload.fields([
+    { name: 'featured_image', maxCount: 1 },
+    { name: 'file_path', maxCount: 1 } // This is for your PDF
+]);
+
+router.post('/add', uploadFields, (req, res) => {
+    const { title, summary, content } = req.body;
+
+    // Access files via req.files instead of req.file
+    const featured_image = req.files['featured_image'] 
+        ? `images/${req.files['featured_image'][0].filename}` 
+        : null;
+
+    const file_path = req.files['file_path'] 
+        ? `images/${req.files['file_path'][0].filename}` 
+        : null;
+
     const sql = 'INSERT INTO catalogue_details (title, file_path, summary, content, featured_image) VALUES (?, ?, ?, ?, ?)';
+    
     db.query(sql, [title, file_path, summary, content, featured_image], (err, result) => {
         if (err) {
             console.error('Error adding catalogue item:', err);
-            res.status(500).json({ error: 'Failed to add catalogue item' });
-            return;
+            return res.status(500).json({ error: 'Failed to add catalogue item' });
         }
         res.json({ message: 'Catalogue item added successfully', itemId: result.insertId });
     });
 });
 
 
-
 //-------------------------- Update item details ---------------------------------
-router.put('/update/:id', upload.single('featured_image'), (req, res) => {
+router.put('/update/:id', uploadFields, (req, res) => {
     const itemId = req.params.id;
-    const { title, file_path, summary, content, is_active } = req.body;
-    let sql = 'UPDATE catalogue_details SET title = ?, file_path = ?, summary = ?, content = ?, is_active = ?, modified_at = NOW()';
-    const params = [title, file_path, summary, content, typeof is_active !== "undefined" ? is_active : 1];
-    if (req.file) {
-        sql += ', featured_image = ?';
-        params.push(`images/${req.file.filename}`);
+    const { title, summary, content } = req.body;
+
+    // 1. Start building the query
+    let sql = 'UPDATE catalogue_details SET title = ?, summary = ?, content = ?, modified_at = NOW()';
+    let params = [title, summary, content];
+
+    // 2. Check for a new PDF file
+    if (req.files && req.files['file_path']) {
+        const newFilePath = `images/${req.files['file_path'][0].filename}`;
+        sql += ', file_path = ?';
+        params.push(newFilePath);
     }
+
+    // 3. Check for a new Featured Image
+    if (req.files && req.files['featured_image']) {
+        const newImagePath = `images/${req.files['featured_image'][0].filename}`;
+        sql += ', featured_image = ?';
+        params.push(newImagePath);
+    }
+
+    // 4. Finalize query
     sql += ' WHERE id = ?';
     params.push(itemId);
+
     db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating catalogue item:', err);
-            res.status(500).json({ error: 'Failed to update catalogue item' });
-            return;
+            return res.status(500).json({ error: 'Failed to update catalogue item' });
         }
         res.json({ message: 'Catalogue item updated successfully' });
     });

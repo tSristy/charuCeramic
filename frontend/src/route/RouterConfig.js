@@ -26,6 +26,10 @@ import CreateBlogs from "../pages/News&Article/CreateBlogs";
 import BlogList from "../pages/News&Article/BlogList";
 import CreateProject from "../pages/Project/CreateProject";
 import ProjectList from "../pages/Project/ProjectList";
+import ProductList from "../pages/Product/ProductList";
+import CreateProduct from "../pages/Product/Create.Product";
+import CreateCatalogue from "../pages/Catalogue/CreateCatalogue";
+import CatalogueList from "../pages/Catalogue/CatalogueList";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -35,7 +39,7 @@ export const RouterConfig = createBrowserRouter([
             { path: "", Component: Homepage },
             { path: "company-information", Component: CompanyInfo },
             { path: "product", Component: Product },
-            { path: "01", Component: SingleProduct },
+            { path: ":single-product", Component: SingleProduct },
             { path: "catalogues", Component: Catalogue },
             { path: "dealer", Component: Dealer },
             { path: "contact", Component: Contact },
@@ -70,6 +74,13 @@ export const RouterConfig = createBrowserRouter([
 
             { path: "project-panel", Component: CreateProject},
             { path: "project-list", Component: ProjectList},
+
+            { path: "product-panel", Component: CreateProduct},
+            { path: "product-list", Component: ProductList},
+
+            { path: "catalogue-panel", Component: CreateCatalogue },
+            { path: "catalogue-list", Component:  CatalogueList},
+
         ],
     }
 ]);

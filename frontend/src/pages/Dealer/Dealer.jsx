@@ -1,5 +1,5 @@
 import { Autocomplete, Box, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, TextField, Typography } from "@mui/material";
-import bgImg from '../../img/bgDealer.jpg';
+import bgImg from '../../img/Dealer_page.jpg';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { dealerDetailList } from "../../Data";
@@ -19,7 +19,8 @@ const Dealer = () => {
 
     return (
         <>
-            <Box sx={{
+            <Box sx={{ 
+                // filter: "grayscale(100%)",
                 borderBottom: 4,
                 borderColor: "#ED1C24",
                 display: 'block',
@@ -44,7 +45,7 @@ const Dealer = () => {
                     <Box sx={{ mt: 5 }}>
                         <Grid container spacing={4}>
                             {
-                                dealerList.map(item => (
+                                dealerDetailList.map(item => (
                                     <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                                         <Box sx={{ border: '1px solid #ddd', p: 2, borderRadius: 1 }}>
                                             <Typography sx={{ fontWeight: 600, mb: 1 }}>{item.name}</Typography>
