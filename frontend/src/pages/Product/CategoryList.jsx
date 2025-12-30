@@ -7,15 +7,17 @@ import { useEffect, useState } from "react";
 import { ServerApi, imageAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import { useNavigate } from "react-router-dom";
 
 const CategoryList = () => {
+    const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
+    const [searchVariable, setSearchVariable] = useState(null);
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
         totalRows: 0,
         totalPages: 0
     });
-    const [searchVariable, setSearchVariable] = useState(null);
 
     useEffect(() => {
         const body = {
@@ -35,14 +37,21 @@ const CategoryList = () => {
             })
     }, [paginationDetails.pageNo]);
 
-    const HandleDelete = (id) => {
+    const handleDelete = (id) => {
         const tempArr = categoryList.filter(category => category.id !== id);
         ServerApi(`/category/delete/${id}`, 'DELETE', null, null)
             .then(res => res.json())
             .then(res => {
                 setCategoryList(tempArr);
             })
-    }
+    };
+
+    const handlePanel = (arg)=>{
+        if (typeof(arg) === "string") {
+                navigate(arg);
+        }
+        else navigate(`/category-panel?id=${arg}`);
+    };
 
     return (
         <Box py={5}>
@@ -57,7 +66,7 @@ const CategoryList = () => {
                         <BtnAdminSearch
                             onChange={(e) => setSearchVariable(e.target.value)}
                         />
-                        <BtnAdminSubmit text="Create" onClick={() => { }} />
+                        <BtnAdminSubmit text="Create" onClick={(e)=>handlePanel('/category-panel')} />
                     </Box>
                 </Stack>
 
@@ -89,9 +98,9 @@ const CategoryList = () => {
                                     <TableCell> {item.add_homepage == 1 ? <Box component="span" fontWeight={"500"}>Yes</Box> : "No"} </TableCell>
                                     <TableCell> {item.parent_id ? item.parent_id : "N/A"} </TableCell>
                                     <TableCell><Tooltip title="Edit">
-                                        <IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                        <IconButton onClick={(e)=>handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
-                                    <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
+                                    <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => handleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
                                         <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                 </TableRow>
                             ))}

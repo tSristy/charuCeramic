@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { imageAPI, ServerApi } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
@@ -18,6 +18,7 @@ import PinOutlinedIcon from '@mui/icons-material/PinOutlined';
 const CreateCategory = () => {
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
+    const navigate = useNavigate();
 
     const [parentCategory, setParentCategory] = useState([]);
     const [category, setCategory] = useState({
@@ -97,7 +98,7 @@ const CreateCategory = () => {
 
     const handleDelete = () => {
         if (ID === null) {
-
+            navigate(-1);
         } else {
             ServerApi(`/category/delete/` + ID, "DELETE", null, null)
                 .then((res) => res.json())
@@ -157,7 +158,7 @@ const CreateCategory = () => {
                                         {/* Category Name Field */}
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Category Name" icon={<CategoryIcon />} />
-                                            <TextField required fullWidth size="small" value={category.name} onChange={(e) => setCategory(p => ({ ...p, name: e.target.value, slug: '?category=' + e.target.value.toLowerCase().replace(/\s+/g, '-') }))} />
+                                            <TextField required fullWidth size="small" value={category.name} onChange={(e) => setCategory(p => ({ ...p, name: e.target.value, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))} />
                                         </Grid>
 
 

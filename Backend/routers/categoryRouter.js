@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../dbconfig');
+const db = require('../Service/dbconfig');
 const { upload } = require('./imgRoute');
 
 // ------------------------- Get ALL Items -------------------------------------
@@ -28,7 +28,7 @@ router.get('/show', (req, res) => {
     if (displayVar === "all") {
         queryExtended = "SELECT A.id AS cID, A.name AS cName, A.slug FROM category_details AS A WHERE is_active = 1";
     }
-    else queryExtended = `SELECT * FROM category_details WHERE is_active = 1 AND ${displayVar} = 1`;
+    else queryExtended = `SELECT * FROM category_details WHERE is_active = 1 AND ${displayVar} = 1 ORDER BY homepage_sequence ASC`;
 
     db.query(queryExtended, (err, results) => {
         if (err) {

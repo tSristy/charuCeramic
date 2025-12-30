@@ -7,19 +7,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 
 const Sidebar = () => {
     const menuList = [
-        { title: "Dashboard", url: "/dashboard", icon: <DashboardIcon /> },
-        { title: "Dealers", url: "/dealer-list", icon: <CreditCardIcon /> },
+        // { title: "Dashboard", url: "/dashboard", icon: <DashboardIcon /> },
         { title: "Categories", url: "/category-list", icon: <CategoryIcon /> },
-        { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
-        { title: "Blogs", url: "/blog-list", icon: <InboxIcon /> },
-        { title: "Projects", url: "/project-list", icon: <InboxIcon /> },
-        { title: "Products", url: "/product-list", icon: <InboxIcon /> },
+        { title: "Products", url: "/product-list", icon: <WarehouseIcon /> },
+        // { title: "Dealers", url: "/dealer-list", icon: <CreditCardIcon /> },
+        // { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
+        // { title: "Blogs", url: "/blog-list", icon: <InboxIcon /> },
+        // { title: "Projects", url: "/project-list", icon: <InboxIcon /> },
     ];
     const [open, setOpen] = useState(true);
     const navigate = useNavigate();

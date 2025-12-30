@@ -148,7 +148,7 @@ const CompanyInfo = () => {
                 <video
                     style={{
                         display: "block",
-                        filter: 'grayscale(100%)',
+                        // filter: 'grayscale(10%)',
                         height: '650px', objectFit: 'cover', width: '100%'
                     }}
                     autoPlay

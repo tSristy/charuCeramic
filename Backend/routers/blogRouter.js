@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../dbconfig');
+const db = require('../Service/dbconfig');
 const { upload } = require('./imgRoute');
 const router = express.Router();
 

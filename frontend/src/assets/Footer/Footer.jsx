@@ -57,12 +57,11 @@ const Footer = () => {
                            <Box px={2}>Social Links</Box> 
                             <Divider sx={{ my: 2, borderColor: '#444' }} />
                             <Stack direction="column" sx={{ alignItems: 'flex-start' }}>
-                                <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<FacebookIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Facebook</Button>
-                                <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<InstagramIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Instagram</Button>
-                                {/* <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<TwitterIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Twitter</Button> */}
-                                <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<LinkedInIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>LinkedIn</Button>
-                                <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<YouTubeIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>YouTube</Button>
-                                <Button onClick={(e)=>handleBtn(item.permalink,'_blank')} variant="none" startIcon={<WhatsAppIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>WhatsApp</Button>
+                                <Button onClick={(e)=>handleBtn("http://facebook.com/CharuCeramic",'_blank')} variant="none" startIcon={<FacebookIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Facebook</Button>
+                                <Button onClick={(e)=>handleBtn("http://instagram.com/charuceramic",'_blank')} variant="none" startIcon={<InstagramIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>Instagram</Button>
+                                <Button onClick={(e)=>handleBtn("http://linkedin.com/company/charuceramic",'_blank')} variant="none" startIcon={<LinkedInIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>LinkedIn</Button>
+                                <Button onClick={(e)=>handleBtn("https://www.youtube.com/@CharuCeramic",'_blank')} variant="none" startIcon={<YouTubeIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>YouTube</Button>
+                                <Button onClick={(e)=>handleBtn("https://wa.me/01700-706600",'_blank')} variant="none" startIcon={<WhatsAppIcon sx={{ color: '#999' }} />} sx={{ fontSize: '.8rem', textTransform: 'none' }}>WhatsApp</Button>
                             </Stack>
                         </Grid>
                         <Grid size={{ md: 2 }}>

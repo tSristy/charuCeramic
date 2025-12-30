@@ -5,9 +5,7 @@ import {
     AppBar,
     Toolbar, // Re-included for proper alignment
     Button,
-    Paper,
     List,
-    ListItem,
     ListItemButton,
     ListItemText,
     Container,
@@ -60,9 +58,10 @@ const Header = () => {
     }
 
     useEffect(() => {
-        ServerApi(`/header/menu`, 'GET', null, null)
-            .then(res => res.json())
-            .then(res => {
+       ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                // console.log(res)
                 if (res.data && res.data.length > 0) {
                     setMenuList(buildTree(res.data));
                 } else {
@@ -142,7 +141,7 @@ const Header = () => {
                                 <MenuItems items={menuList} />
                             </Stack>
                         )}
-                        <Button variant='contained'  sx={{fontSize:'.87rem'}} color='error'>3D Visualizer</Button>
+                        <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ED1C24', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button>
 
                         {/* --- MOBILE ICON --- */}
                         {isMobile && (
@@ -179,17 +178,21 @@ const Header = () => {
                         <Stack direction="row" sx={{ justifyContent: "space-evenly"}}>
 
                             {subMenuList.map((child) => (
-                                <Box>
-                                    <Typography sx={{py:1.5, fontWeight: 500, textTransform: "uppercase", fontSize: '.87rem'}}>
+                                <Box key={child.id}>
+                                    <Typography sx={{ py:1.5, fontWeight: 500, textTransform: "uppercase", fontSize: '.87rem', '&:hover': {
+                                            cursor: "pointer"
+                                        }
+                                    }} onClick={(e)=>handleClick(child.link)}>
                                     {child.title}
                                     </Typography>
+                                    
                                     { child.children.map(item=>(
-                                    <Box sx={{
+                                    <Box key={item.id} sx={{
                                         py:1.5,
                                         '&:hover': {
                                             cursor: "pointer"
                                         }
-                                    }} onClick={(e)=>handleClick(child.link)}>
+                                    }} onClick={(e)=>handleClick(item.link)}>
                                     <Typography sx={{ fontSize: '.87rem', textTransform: 'uppercase'}}>{item.title}</Typography>
                                     </Box>
                                     ))}

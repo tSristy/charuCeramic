@@ -18,14 +18,18 @@ const Carousel = ({ children }) => {
                 "--swiper-navigation-size": "25px",
             }}
             modules={[Navigation, Pagination, Autoplay, A11y]}
-           
+
             slidesPerView={1}
-            spaceBetween={10} // Add a small gap for mobile
-            
-            loop={true} // Only loop if more than 1 item
-            navigation={true} // Show arrows if not auto-playing
-            autoplay={false}
-            speed={500}
+            spaceBetween={10}
+
+            loop={true}
+            navigation={true}
+            speed={4000}
+            autoplay={{
+                delay: 6000,
+                disableOnInteraction: false,
+                // pauseOnMouseEnter: true, 
+            }}
             a11y={{ enabled: true }}
 
         >

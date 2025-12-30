@@ -27,11 +27,16 @@ import BlogList from "../pages/News&Article/BlogList";
 import CreateProject from "../pages/Project/CreateProject";
 import ProjectList from "../pages/Project/ProjectList";
 import ProductList from "../pages/Product/ProductList";
-import CreateProduct from "../pages/Product/Create.Product";
+import CreateProduct from "../pages/Product/CreateProduct";
 import CreateCatalogue from "../pages/Catalogue/CreateCatalogue";
 import CatalogueList from "../pages/Catalogue/CatalogueList";
+import Login from "../pages/Layout/Login";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const RouterConfig = createBrowserRouter([
+    {
+        path: "/login", Component: Login
+    },
     {
         path: "/",
         Component: PublicLayout,
@@ -39,7 +44,8 @@ export const RouterConfig = createBrowserRouter([
             { path: "", Component: Homepage },
             { path: "company-information", Component: CompanyInfo },
             { path: "product", Component: Product },
-            { path: ":single-product", Component: SingleProduct },
+            { path: "product/:category", Component: Product },
+            { path: ":number", Component: SingleProduct },
             { path: "catalogues", Component: Catalogue },
             { path: "dealer", Component: Dealer },
             { path: "contact", Component: Contact },
@@ -53,34 +59,35 @@ export const RouterConfig = createBrowserRouter([
             { path: "faq", Component: FAQ },
             { path: "privacy-policy", Component: Policy },
             { path: "terms-conditions", Component: TandC },
-
         ],
     },
     {
         path: "/",
-        Component: AdminLayout,
-        children: [
-            { path: "dealer-panel", Component: CreateDealer },
-            { path: "dealer-list", Component: DealerList },
+        Component: ProtectedRoute,
+        children: [{
+            Component: AdminLayout,
+            children: [
+                { path: "dealer-panel", Component: CreateDealer },
+                { path: "dealer-list", Component: DealerList },
 
-            { path: "category-panel", Component: CreateCategory },
-            { path: "category-list", Component: CategoryList },
+                { path: "category-panel", Component: CreateCategory },
+                { path: "category-list", Component: CategoryList },
 
-            { path: "faq-panel", Component: CreateFAQ },
-            { path: "faq-list", Component: FAQList },
+                { path: "faq-panel", Component: CreateFAQ },
+                { path: "faq-list", Component: FAQList },
 
-            { path: "blog-panel", Component: CreateBlogs },
-            { path: "blog-list", Component: BlogList },
+                { path: "blog-panel", Component: CreateBlogs },
+                { path: "blog-list", Component: BlogList },
 
-            { path: "project-panel", Component: CreateProject},
-            { path: "project-list", Component: ProjectList},
+                { path: "project-panel", Component: CreateProject },
+                { path: "project-list", Component: ProjectList },
 
-            { path: "product-panel", Component: CreateProduct},
-            { path: "product-list", Component: ProductList},
+                { path: "product-panel", Component: CreateProduct },
+                { path: "product-list", Component: ProductList },
 
-            { path: "catalogue-panel", Component: CreateCatalogue },
-            { path: "catalogue-list", Component:  CatalogueList},
-
-        ],
+                { path: "catalogue-panel", Component: CreateCatalogue },
+                { path: "catalogue-list", Component: CatalogueList },
+            ]
+        }],
     }
 ]);

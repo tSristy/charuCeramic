@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import { imageAPI, ServerApi } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
+	const navigate = useNavigate();
 	const [productList, setProductList] = useState([]);
 	const [paginationDetails, setPaginationDetails] = useState({
 		pageNo: 1,
@@ -45,6 +47,14 @@ const ProductList = () => {
 			})
 	}
 
+	 const handlePanel = (arg)=>{
+        if (typeof(arg) === "string") {
+                navigate(arg);
+        }
+        else navigate(`/product-panel?id=${arg}`);
+    };
+
+
 	return (
 		<Box py={5}>
 			<Container>
@@ -58,7 +68,7 @@ const ProductList = () => {
 						 <BtnAdminSearch
 							onChange={(e) => setSearchVariable(e.target.value)}
 						/>
-						<BtnAdminSubmit text="Create" onClick={() => { }} />
+						<BtnAdminSubmit text="Create" onClick={(e)=>handlePanel('/product-panel')} />
 					</Box>
 				</Stack>
 
@@ -93,7 +103,7 @@ const ProductList = () => {
 									<TableCell> {item.size} </TableCell>
 									<TableCell> {item.color} </TableCell>
 									<TableCell> {item.brand_name} </TableCell>
-									<TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+									<TableCell><Tooltip title="Edit"><IconButton onClick={(e)=>handlePanel(parseInt(item.id))}  sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
 									<TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
 									<TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
 										<DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

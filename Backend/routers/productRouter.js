@@ -1,12 +1,12 @@
 const express = require('express');
-const db = require('../dbconfig');
+const db = require('../Service/dbconfig');
 const { upload } = require('./imgRoute');
 const router = express.Router();
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
-    const sql = `SELECT A.id, A.name, A.model_number, A.SKU, A.size, A.color, A.brand_name, B.image_url, C.name AS cat_name FROM products AS A INNER JOIN product_images AS B ON A.id = B.product_id INNER JOIN category_details AS C On C.id = A.category_id WHERE A.is_active = 1 GROUP BY B.product_id LIMIT 10 OFFSET ${(pageNo - 1) * 10};
+    const sql = `SELECT A.id, A.name, A.model_number, A.SKU, A.size, A.color, A.brand_name, B.image_url, C.name AS cat_name FROM products AS A INNER JOIN product_images AS B ON A.id = B.product_id AND A.single_image = B.sort_order INNER JOIN category_details AS C On C.id = A.category_id WHERE A.is_active = 1 AND B.is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
 	    SELECT COUNT(*) AS totalRows FROM products WHERE is_active = 1;`;
     db.query(sql, (err, results) => {
         if (err) {
@@ -18,75 +18,110 @@ router.post('/list', (req, res) => {
 });
 
 
+router.post('/list-by-cat', (req, res) => {
+    const { pageNo, category } = req.body;
+    let query = "";
+    if (category && category.trim() !== '') {
+        query += ` AND ParentC.slug = '${category}' `;
+    }
+    query += ` `;
+
+    sql = `SELECT P.id, P.name, P.model_number, P.color, P.SKU, C.name AS category_name, C.slug AS category_slug, I.image_url, I.alt_text FROM products AS P INNER JOIN product_images AS I ON P.id = I.product_id AND P.single_image = I.sort_order INNER JOIN category_details AS C ON P.category_id = C.id INNER JOIN category_details AS ParentC ON ( C.parent_id = ParentC.id OR C.id = ParentC.id ) WHERE P.is_active = 1 AND I.is_active = 1 ${query}`;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching blog items:', err);
+            return res.status(500).json({ error: 'Failed to fetch blog items' });
+        }
+        res.json(results);
+    });
+});
+
+
 
 //-------------------------- Get item details by id -----------------------------
 router.get('/:id', (req, res) => {
-	const itemId = req.params.id;
-	const sql = `SELECT A.*, B.id AS cID, B.name AS cName, B.slug FROM products AS A INNER JOIN category_details AS B ON A.category_id = B.id WHERE A.is_active = 1 AND A.id = ?;SELECT * FROM product_images WHERE is_active = 1 AND product_id = ?;`;
-	db.query(sql, [itemId,itemId], (err, result) => {
-		if (err) {
-			console.error('Error fetching blog item:', err);
-			return res.status(500).json({ error: 'Failed to fetch blog item' });
-		}
-		res.json({
-            product:{
-            id: result[0][0].id,
-            name: result[0][0].name,
-            model_number: result[0][0].model_number,
-            SKU: result[0][0].SKU,
-            size: result[0][0].size,
-            color: result[0][0].color,
-            brand_name: result[0][0].brand_name,
-            category:{
-                cID: result[0][0].cID,
-                cName: result[0][0].cName,
-                slug: result[0][0].slug
-            }
-            }, images: result[1]});
-	});
+    const itemId = req.params.id;
+    const sql = `SELECT A.*, B.id AS cID, B.name AS cName, B.slug FROM products AS A INNER JOIN category_details AS B ON A.category_id = B.id WHERE A.is_active = 1 AND A.id = ?;SELECT * FROM product_images WHERE is_active = 1 AND product_id = ?;SELECT A.id AS spec_id, A.spec_label, A.spec_value, T.feature_image FROM  product_spec AS A LEFT JOIN technology AS T ON A.spec_value = T.name WHERE A.product_id =? AND A.is_active = 1`;
+    db.query(sql, [itemId, itemId, itemId], (err, result) => {
+        if (err) {
+            console.error('Error fetching blog item:', err);
+            return res.status(500).json({ error: 'Failed to fetch blog item' });
+        }
+        res.json({
+            product: {
+                id: result[0][0].id,
+                name: result[0][0].name,
+                model_number: result[0][0].model_number,
+                SKU: result[0][0].SKU,
+                size: result[0][0].size,
+                color: result[0][0].color,
+                brand_name: result[0][0].brand_name,
+                single_image: result[0][0].single_image,
+                first_image: result[0][0].first_image,
+                category: {
+                    cID: result[0][0].cID,
+                    cName: result[0][0].cName,
+                    slug: result[0][0].slug
+                }
+            },
+            images: result[1],
+            specList: result[2]
+        });
+    });
 });
 
 
 
 //-------------------------- Add a new product with multiple images ---------------------------------
 router.post('/add', upload.array('images', 10), (req, res) => {
-    const { category_id, name, description, model_number, SKU, size, color, brand_name, sequences } = req.body;
-    
+    const { category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image, sort_order, specLabel, specValue } = req.body;
+    const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
+    const specValueList = Array.isArray(specValue) ? specValue : [specValue];
+
     // Insert product details
-    const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, size, color, brand_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    
-    db.query(productSql, [category_id, name, description, model_number, SKU, size, color, brand_name], (err, result) => {
+    const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    db.query(productSql, [category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image], (err, result) => {
         if (err) {
             console.error('Error adding product:', err);
             return res.status(500).json({ error: 'Failed to add product' });
         }
-        
+
         const productId = result.insertId;
-        
+
+        specLabelList.map((item, index) => {
+            db.query(`INSERT INTO product_spec (product_id, spec_label, spec_value) VALUES (?,?,?)`, [productId, item, specValueList[index]], (err, result) => {
+                if (err) {
+                    console.log(err);
+                }
+            })
+        })
+
         // Handle multiple images
         if (req.files && req.files.length > 0) {
             const sequencesArray = Array.isArray(sort_order) ? sort_order : [sort_order];
             let completed = 0;
             let hasError = false;
-            
+
             req.files.forEach((file, index) => {
                 const image_url = `images/${file.filename}`;
                 const sort_order = sequencesArray[index] || index + 1;
-                
+
                 const imageSql = 'INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)';
-                
+
                 db.query(imageSql, [productId, image_url, name, sort_order], (err) => {
                     if (err) {
                         console.error('Error adding product image:', err);
                         hasError = true;
                     }
-                    
+
                     completed++;
                     if (completed === req.files.length) {
                         if (hasError) {
                             return res.status(500).json({ error: 'Product added but some images failed to upload' });
                         }
-                        res.json({ message: 'Product and images added successfully', productId: productId });
+                        res.status(200).json({ message: 'Product and images added successfully', productId: productId });
                     }
                 });
             });
@@ -101,88 +136,116 @@ router.post('/add', upload.array('images', 10), (req, res) => {
 //-------------------------- Update product with multiple images ---------------------------------
 router.put('/update/:id', upload.array('images', 10), (req, res) => {
     const productId = req.params.id;
-    const { category_id, name, description, model_number, SKU, size, color, brand_name, sort_order, existing_images, existing_sort_order, delValues } = req.body;
-    
-    
-    const delValuesArr = Array.isArray(delValues) ? delValues : [delValues];
-    if(delValuesArr.length !== 0 ){
-        delValuesArr.map((id)=>
-        db.query(`UPDATE product_images SET is_active = 0 WHERE id =?`,[id],(err,result)=>{
+    const { category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image, sort_order, existing_images, existing_sort_order, delValues, specId, specLabel, specValue, specDel } = req.body;
+
+    const specIDList = Array.isArray(specId) ? specId : [specId];
+    const specDelList = Array.isArray(specDel) ? specDel : [specDel];
+    const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
+    const specValueList = Array.isArray(specValue) ? specValue : [specValue];
+
+    specDelList.map((id => {
+        db.query(`UPDATE product_spec SET is_active = 0 WHERE id =${id}`, (err, result) => {
+            if (err) console.error(err);
             return;
-        }))
+        })
+    }));
+
+    specIDList.map((id, index) => {
+        if (!id) {
+            db.query(`INSERT INTO product_spec (product_id, spec_label, spec_value) VALUES (?,?,?)`, [productId, specLabel[index], specValueList[index]], (err, result) => {
+                if (err) {
+                    console.error(err);
+                }
+            })
+        }
+        else {
+            db.query(`UPDATE product_spec SET spec_label=?, spec_value=? WHERE id =?`, [specLabelList[index], specValueList[index], id], (err, result) => {
+                if (err) console.error(err)
+                return;
+            })
+        }
+    })
+
+    const delValuesArr = Array.isArray(delValues) ? delValues : [delValues];
+    if (delValuesArr.length !== 0) {
+        delValuesArr.map((id) =>
+            db.query(`UPDATE product_images SET is_active = 0 WHERE id =?`, [id], (err, result) => {
+                if (err) console.error(err)
+                return;
+            }))
     }
 
     // Update product details
-    const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, size = ?, color = ?, brand_name = ?, modified_at = NOW() WHERE id = ?';
-    
-    db.query(productSql, [category_id, name, description, model_number, SKU, size, color, brand_name, productId], (err) => {
+    const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, size = ?, color = ?, brand_name = ?, single_image =?, first_image = ?, modified_at = NOW() WHERE id = ?';
+
+    db.query(productSql, [category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image, productId], (err) => {
         if (err) {
             console.error('Error updating product:', err);
             return res.status(500).json({ error: 'Failed to update product' });
         }
-        
+
         let imageOperationsCompleted = 0;
         let imageOperationsTotal = 0;
         let hasImageError = false;
-        
+
         // Handle existing images (update sort_order only)
         if (existing_images) {
             const existingImagesArray = Array.isArray(existing_images) ? existing_images : [existing_images];
             const existingSequencesArray = Array.isArray(existing_sort_order) ? existing_sort_order : [existing_sort_order];
-            
+
             imageOperationsTotal += existingImagesArray.length;
-            
+
             existingImagesArray.forEach((image_url, index) => {
                 const sort_order = existing_sort_order[index] || index + 1;
-                
+
                 const updateImageSql = 'UPDATE product_images SET sort_order = ? WHERE product_id = ? AND image_url = ?';
-                
+
                 db.query(updateImageSql, [sort_order, productId, image_url], (err) => {
                     if (err) {
                         console.error('Error updating image sort order:', err);
                         hasImageError = true;
                     }
-                    
+
                     imageOperationsCompleted++;
                     checkCompletion();
                 });
             });
         }
-        
+
         // Handle new images
         if (req.files && req.files.length > 0) {
             const sequencesArray = Array.isArray(sort_order) ? sort_order : [sort_order];
-            
+
             imageOperationsTotal += req.files.length;
-            
+
             req.files.forEach((file, index) => {
                 const image_url = `images/${file.filename}`;
                 const sort_order = sequencesArray[index] || index + 1;
-                
+
                 const insertImageSql = 'INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)';
-                
+
                 db.query(insertImageSql, [productId, image_url, name, sort_order], (err) => {
                     if (err) {
                         console.error('Error adding new product image:', err);
                         hasImageError = true;
                     }
-                    
+
                     imageOperationsCompleted++;
                     checkCompletion();
                 });
             });
         }
-        
+
         // Check if all image operations are complete
         function checkCompletion() {
             if (imageOperationsCompleted === imageOperationsTotal) {
                 if (hasImageError) {
                     return res.status(500).json({ error: 'Product updated but some images failed to process' });
                 }
-                res.json({ message: 'Product and images updated successfully' });
+                res.status(200).json({ message: 'Product and images updated successfully' });
             }
         }
-        
+
         // If no images to process, send success response immediately
         if (imageOperationsTotal === 0) {
             res.json({ message: 'Product updated successfully (no images)' });
@@ -204,7 +267,7 @@ router.delete('/delete/:id', (req, res) => {
             res.status(500).json({ error: 'Failed to delete product item' });
             return;
         }
-        res.json({ message: 'Product item deleted successfully' });
+        res.status(200).json({ message: 'Product item deleted successfully' });
     });
 });
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../dbconfig');
+const db = require('../Service/dbconfig');
 const { upload } = require('./imgRoute');
 
 // ------------------------- Get ALL Items -------------------------------------
