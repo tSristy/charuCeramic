@@ -41,9 +41,6 @@ export const tempMenuList = [
   { id: 28, title: 'Bath Accessories', link: '/product/accessories', parentId: 10 },
 ];
 
-
-
-
 import StarIcon from '@mui/icons-material/Star';
 export const homePagePropsList = [{
     id: 1,
@@ -61,158 +58,7 @@ export const homePagePropsList = [{
     details: "Easy-clean design ensures hygiene, comfort, and effortless maintenance."
 }];
 
-
-
-export const catalogyList = [
-    { id: "B001", title: "Sanitaryware" },
-    { id: "B002", title: "Wash Basins" },
-    { id: "B003", title: "Toilets & WC" },
-    { id: "B004", title: "Urinals" },
-    { id: "B005", title: "Bidets" },
-
-    { id: "B006", title: "Faucets & Taps" },
-    { id: "B007", title: "Basin Mixers" },
-    { id: "B008", title: "Kitchen Taps" },
-    { id: "B009", title: "Shower Mixers" },
-    { id: "B010", title: "Sensor Taps" },
-
-    { id: "B011", title: "Showers" },
-    { id: "B012", title: "Overhead Showers" },
-    { id: "B013", title: "Hand Showers" },
-    { id: "B014", title: "Shower Panels" },
-    { id: "B015", title: "Shower Arms" },
-
-    { id: "B016", title: "Bath Fittings" },
-    { id: "B017", title: "Angle Valves" },
-    { id: "B018", title: "Stop Cocks" },
-    { id: "B019", title: "Bottle Traps" },
-    { id: "B020", title: "Waste Couplings" },
-
-    { id: "B021", title: "Bath Accessories" },
-    { id: "B022", title: "Towel Rails" },
-    { id: "B023", title: "Soap Holders" },
-    { id: "B024", title: "Robe Hooks" },
-    { id: "B025", title: "Mirror Cabinets" },
-
-    { id: "B026", title: "Drainage & Plumbing" },
-    { id: "B027", title: "Floor Drains" },
-    { id: "B028", title: "Pipes & Fittings" },
-    { id: "B029", title: "Traps & Connectors" }
-]
-
-
-
 import productImg from './img/productImg.jpg';
-import productImg1 from './img/prdct1.png';
-import productImg2 from './img/prdct2.jpg';
-import productImg3 from './img/prdct3.jpg';
-import productImg4 from './img/prdct4.jpg';
-import productImg5 from './img/prdct5.jpg';
-import productImg6 from './img/prdct6.png';
-import productImg7 from './img/prdct7.png';
-import productImg8 from './img/prdct8.png';
-export const homePageProductList = [
-    {
-        id: 1,
-        imgSrc: productImg1,
-        productName: 'Water Closet',
-        url: '',
-    },
-    {
-        id: 2,
-        imgSrc: productImg2,
-        productName: 'Wash Basin',
-        url: '',
-    },
-    {
-        id: 3,
-        imgSrc: productImg3,
-        productName: 'Urinal',
-        url: '',
-    },
-    {
-        id: 4,
-        imgSrc: productImg4,
-        productName: 'Public Area',
-        url: '',
-    },
-    {
-        id: 5,
-        imgSrc: productImg5,
-        productName: 'SQUAT ASIAN PAN',
-        url: '',
-    },
-    {
-        id: 6,
-        imgSrc: productImg6,
-        productName: 'Faucet',
-        url: '',
-    },
-    {
-        id: 7,
-        imgSrc: productImg7,
-        productName: 'Shower Mixer',
-        url: '',
-    },
-    {
-        id: 8,
-        imgSrc: productImg8,
-        productName: 'Accessories',
-        url: '',
-    },
-];
-
-
-
-
-export const dealerDetailList = [
-    {
-        id: 1,
-        name: "Dealer One",
-        address: "123 Main St, City, Country",
-        phone: "+1234567890",
-        email: ""
-    },
-    {
-        id: 2,
-        name: "Dealer Two",
-        address: "123 Main St, City, Country",
-        phone: "+1234567890",
-        email: ""
-    },
-    {
-        id: 3,
-        name: "Dealer Three",
-        address: "123 Main St, City, Country",
-        phone: "+1234567890",
-        email: ""
-    },
-    {
-        id: 4,
-        name: "Dealer Four",
-        address: "123 Main St, City, Country",
-        phone: "",
-        email: ""
-    },
-    {
-        id: 5,
-        name: "Dealer Five",
-        address: "123 Main St, City, Country",
-        phone: "+1234567890",
-        email: ""
-    },
-    {
-        id: 6,
-        name: "Dealer Six",
-        address: "123 Main St, City, Country",
-        phone: "+1234567890",
-        email: ""
-    }
-]
-
-
-
-
 export const catalogueList = [
     {
         id: 1,
@@ -238,6 +84,7 @@ export const catalogueList = [
         details: "lorem ipsum dolor sit amet, consectetur adipiscing elit.lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         score: 3.5
     }]
+    
 
 export const seriesList = [
     {
@@ -272,7 +119,6 @@ export const seriesList = [
         details: "lorem ipsum dolor sit amet, consectetur adipiscing elit.lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         score: 3.5
     }]
-
 
 
 export const faqQuestions = [

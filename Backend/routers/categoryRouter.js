@@ -74,7 +74,7 @@ router.get('/:id', (req, res) => {
 //-------------------------- Add a new item ---------------------------------
 router.post('/add', upload.single('featured_image'), (req, res) => {
     const { parent_id, name, slug, description, add_menu, add_homepage, homepage_sequence } = req.body;
-    const featured_image = req.file ? `images/${req.file.filename}` : null;
+    const featured_image = req.file ? `/images/${req.file.filename}` : null;
     const sql = 'INSERT INTO category_details (parent_id, name, slug, description, featured_image, add_menu, add_homepage,homepage_sequence, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [parent_id || null, name, slug, description, featured_image, add_menu, add_homepage, homepage_sequence, 1], (err, result) => {
         if (err) {
@@ -97,7 +97,7 @@ router.put('/update/:id', upload.single('featured_image'), (req, res) => {
     const params = [parent_id, name, slug, description, add_menu || 0, add_homepage || 0, homepage_sequence || null];
     if (req.file) {
         sql += ', featured_image = ?';
-        params.push(`images/${req.file.filename}`);
+        params.push(`/images/${req.file.filename}`);
     }
     sql += ' WHERE id = ?';
     params.push(itemId);

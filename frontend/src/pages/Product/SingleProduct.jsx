@@ -1,16 +1,14 @@
-import { Box, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from '@mui/material/Link';
 import { useParams } from "react-router-dom";
+
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import DescriptionIcon from '@mui/icons-material/Description';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-import imgOt1 from '../../img/hpicon1.png';
-import imgOt2 from '../../img/hpicon2.png';
-import imgOt3 from '../../img/hpicon3.png';
-import imgOt4 from '../../img/hpicon4.png';
-
-import { imageAPI, ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
+import BtnDonwload from "../../assets/Button/BtnDownload";
 
 
 const SingleProduct = () => {
@@ -21,6 +19,7 @@ const SingleProduct = () => {
         specTab: false,
         downloadTab: false,
     })
+    const tabs = [{ title: "Feature", val: "featureTab" }, { title: "Specs", val: "specTab" }, { title: "Download", val: "downloadTab" }]
 
     const handleTab = (name) => {
         setDetailTab(prev => ({
@@ -50,9 +49,10 @@ const SingleProduct = () => {
     };
 
     useEffect(() => {
-        ServerApi(`/product/${number}`, "GET", null, null)
+        ServerApi(`/product?url_path=${number}`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
+                console.log(res)
                 setProductDetails(res.product);
                 setImageList(res.images);
                 mainImageHanlde(res.images, res.product.first_image);
@@ -68,10 +68,10 @@ const SingleProduct = () => {
     return (
         <>
             <Box py={10}>
-                <Container>
+                <Container maxWidth="xl">
                     <Box>
-                        <Breadcrumbs aria-label="breadcrumb">
-                            <Link underline="hover" color="inherit" href="/Product">
+                        <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                            <Link underline="hover" color="inherit" href={`/Product/${productDetails?.category?.slug}`}>
                                 {productDetails?.category?.cName}
                             </Link>
                             <Link
@@ -81,144 +81,161 @@ const SingleProduct = () => {
                             >
                                 {productDetails?.name}
                             </Link>
-                            <Typography sx={{ color: 'text.primary' }}>{productDetails?.model_number}</Typography>
                         </Breadcrumbs>
                     </Box>
 
-                    <Grid container spacing={4} sx={{ py: 5 }}>
-                        <Grid size={{ sm: 9, md: 8 }}>
-                            <Box component="img" src={imageAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{ display: 'block', width: '100%', objectFit: 'cover', borderBottom: '5px solid #ffffffff' }} />
+                    <Grid container spacing={5} sx={{ p: 5, alignItems: "stretch" }}>
 
-                            <Stack direction="row" spacing={4} mt={4}>
-                                {
-                                    imageList?.filter(item => item.id !== mainImg.id)
-                                        .map(item => (
-                                            <Box key={item.id}
-                                                component="img"
-                                                src={imageAPI + item.image_url}
-                                                sx={{
-                                                    objectFit: "cover",
-                                                    display: 'block',
-                                                    width: { sm: '100%', lg: '200px' },
-                                                    height: '200px',
-                                                    bgcolor: '#444',
-                                                    '&:hover': {
-                                                        cursor: "pointer"
-                                                    }
-                                                }}
-                                                onClick={(e) => {
-                                                    setMainImg(item)
-                                                }} />
-                                        ))
-                                }
+                        <Grid size={{ sm: 9, md: 7 }}>
+                            <Box mt={5} px={10} sx={{ borderRight: '1px solid #d0d0d094' }}>
+                                <Box component="img" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{ display: 'block', width: '100%', objectFit: 'cover' }} />
+                            </Box>
+                            <Box px={10}>
+                                <Stack direction="row" spacing={4} mt={4}>
+                                    {
+                                        imageList?.filter(item => item.id !== mainImg.id)
+                                            .map(item => (
+                                                <Box key={item.id}
+                                                    component="img"
+                                                    src={urlAPI + item.image_url}
+                                                    sx={{
+                                                        objectFit: "cover",
+                                                        display: 'block',
+                                                        width: { sm: '100%', lg: '200px' },
+                                                        height: '200px',
+                                                        bgcolor: '#444',
+                                                        '&:hover': {
+                                                            cursor: "pointer"
+                                                        }
+                                                    }}
+                                                    onClick={(e) => {
+                                                        setMainImg(item)
+                                                    }} />
+                                            ))
+                                    }
 
-                            </Stack>
+                                </Stack>
+                            </Box>
                         </Grid>
 
+                        <Grid size={{ sm: 12, md: 5 }}>
+                            <Box px={5}>
+                                <h1>{productDetails?.name}</h1>
 
-                        <Grid size={{ sm: 12, md: 4 }}>
-                            <Stack direction="row">
-                                <Box onClick={(e) => handleTab("featureTab")} sx={{ fontWeight: 600, width: "30%",
-                                    fontSize: '.9rem', borderRadius: '8px 8px 0 0', px: 2, pt: 1, bgcolor: '#f0f0f0ff', color: "#2b2b2b", '&:hover': {
-                                        cursor: "pointer"
-                                    }
-                                }}>
-                                    Features
-                                </Box>
-                                <Box onClick={(e) => handleTab("specTab")} sx={{ fontWeight: 600, width: "30%",
-                                    fontSize: '.9rem', borderRadius: '8px 8px 0 0', px: 2, pt: 1, color: '#2b2b2b', bgcolor: '#dadadaff',  '&:hover': {
-                                        cursor: "pointer"
-                                    }
-                                }}>
-                                    Specs
-                                </Box>
-                            </Stack>
 
-                            {detailTab.featureTab && <Box sx={{ p: 2,  bgcolor: '#f0f0f0ff', color: "#2b2b2b", boxShadow: 1 }}>
-                               <ul>
-                                    { specList?.filter((item) => {
+
+                                <Stack direction="row">
+                                    {
+                                        tabs.map((item, index) => (
+                                            <Box key={index} onClick={(e) => handleTab(item.val)} sx={{
+                                                fontWeight: 600,
+                                                width: "30%",
+                                                border: 1,
+                                                borderBottom: 0,
+                                                borderColor: detailTab[item.val] ? '#181818ff' : "#eee",
+                                                bgcolor: detailTab[item.val] ? '#ffffffff' : "#2b2b2b",
+                                                fontSize: '.95rem',
+                                                px: 2,
+                                                py: 1,
+                                                color: detailTab[item.val] ? '#2b2b2b' : '#ffffffff',
+                                                '&:hover': {
+                                                    bgcolor: "white",
+                                                    color: "#2b2b2b",
+                                                    cursor: "pointer",
+                                                    borderColor: '#181818ff'
+                                                }
+                                            }}>
+                                                {item.title}
+                                            </Box>
+                                        ))
+                                    }
+                                </Stack>
+
+                                {detailTab.featureTab && <Box sx={{ p: 2, color: "#2b2b2b" }}>
+                                    <ul>
+                                        {specList?.filter((item) => {
                                             const label = item.spec_label.toLowerCase();
                                             return label == "feature" || label == "features";
                                         }).map((spec, index) => (
                                             <li className="li" key={index}>{spec.spec_value}</li>
                                         ))
-                                    }
-                                </ul>
-                            </Box>}
+                                        }
+                                    </ul>
+                                </Box>}
 
-                            {detailTab.specTab && <Box sx={{ fontSize: '.8rem', color: '#2b2b2b', bgcolor: '#dadadaff', boxShadow: 1 }}>
-                                <Box p={4}>
-                                    {specList.length > 0 ? (
-                                        specList.filter((item) => {
-                                            const label = item.spec_label.toLowerCase();
-                                            return label !== "feature" && label !== "features" && label !== "technology" && label !== "techno";
-                                        }).map((spec, index) => (
-                                            <Stack direction="row" key={index} spacing={2}>
-                                                <Box width={"40%"} sx={{ fontWeight: 500}}>{spec.spec_label}</Box>
-                                                <Box width={"60%"}>{spec.spec_value}</Box>
-                                            </Stack>
-                                        ))
-                                    ) : (
-                                        <Typography>No speficiations available.</Typography>
-                                    )}
-                                </Box>
-                            </Box>}
+                                {detailTab.specTab && <Box sx={{ fontSize: '1rem', color: '#2b2b2b' }}>
+                                    <Box p={4}>
+                                        {specList.length > 0 ? (
+                                            specList.filter((item) => {
+                                                const label = item.spec_label.toLowerCase();
+                                                return label !== "feature" && label !== "features" && label !== "technology" && label !== "techno";
+                                            }).map((spec, index) => (
+                                                <Stack direction="row" key={index}>
+                                                    <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>{spec.spec_label}</Box>
+                                                    <Box width={"60%"}>{spec.spec_value}</Box>
+                                                </Stack>
+                                            ))
+                                        ) : (
+                                            <Typography>No speficiations available.</Typography>
+                                        )}
+                                    </Box>
+                                </Box>}
 
-                            {detailTab.downloadTab && <Box sx={{ boxShadow: 1, fontSize: '.8rem', bgcolor: '#999999', color: "#FFF" }}>
-                                <Box p={2}>
-                                    <List>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <DescriptionIcon sx={{ fontSize: "1.5rem", color: "white" }} />
-                                                </ListItemIcon>
-                                                <ListItemText>
-                                                    <Typography sx={{ fontSize: '.8rem', color: "white" }}>2D Drawing</Typography>
-                                                </ListItemText>
-                                            </ListItemButton>
-                                        </ListItem>
+                                {detailTab.downloadTab && <Box sx={{ fontSize: '.8rem', color: "#2b2b2b" }}>
+                                    <Box p={2}>
+                                        <Stack direction="column">
+                                            <BtnDonwload fileUrl={imageList[2].image_url}>
+                                                <Stack direction="row" spacing={2} p={2}>
+                                                    <DescriptionIcon sx={{ fontSize: "2rem", color: "#333" }} />
 
+                                                    <Typography sx={{ fontWeight: 500, fontSize: '1.1rem', color: "#333" }}>2D Drawing</Typography>
+                                                </Stack>
+                                            </BtnDonwload>
 
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <DescriptionIcon sx={{ fontSize: "1.5rem", color: "white" }} />
-                                                </ListItemIcon>
-                                                <ListItemText>
-                                                    <Typography sx={{ fontSize: '.8rem', color: "white" }}>Image</Typography>
-                                                </ListItemText>
-                                            </ListItemButton>
-                                        </ListItem>
+                                            <BtnDonwload fileUrl={imageList[productDetails.first_image].image_url}>
+                                                <Stack direction="row" spacing={2} p={2}>
+                                                    <DescriptionIcon sx={{ fontSize: "2rem", color: "#333" }} />
 
+                                                    <Typography sx={{ fontWeight: 500, fontSize: '1.1rem', color: "#333" }}>Image</Typography>
+                                                </Stack>
+                                            </BtnDonwload>
 
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <DescriptionIcon sx={{ fontSize: "1.5rem", color: "white" }} />
-                                                </ListItemIcon>
-                                                <ListItemText>
-                                                    <Typography sx={{ fontSize: '.8rem', color: "white" }}>Specification Sheets</Typography>
-                                                </ListItemText>
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </Box>
-                            </Box>}
+                                            <BtnDonwload fileUrl={productDetails.spec_pdf}>
+                                                <Stack direction="row" spacing={2} p={2}>
+                                                    <DescriptionIcon sx={{ fontSize: "2rem", color: "#333" }} />
+
+                                                    <Typography sx={{ fontWeight: 500, fontSize: '1.1rem', color: "#333" }}>Specification Sheet</Typography>
+                                                </Stack>
+                                            </BtnDonwload>
+                                        </Stack>
+                                    </Box>
+                                </Box>}
 
 
-                            <Box mt={4}>
-                                <Typography sx={{ fontWeight: 600, mb: 2 }}>
-                                    Technology
-                                </Typography>
-                                <Stack direction="row" spacing={2}>
-                                    {specList.filter((item)=> {
+                                <Box mt={4}>
+                                    <Typography sx={{ fontWeight: 600, mb: 2 }}>
+                                        Technologies
+                                    </Typography>
+                                    <Divider sx={{ m: 2 }} />
+                                    <Stack direction="row" spacing={2}>
+                                        {specList.filter((item) => {
                                             const label = item.spec_label.toLowerCase();
                                             return label == "technology" || label == "techno";
                                         }).map((spec, index) => (
-                                    <Tooltip title={spec.spec_value}>
-                                        <Box component="img" src={imageAPI+spec.feature_image} alt="jet" sx={{ objectFit: "cover", height: "40px", mb: 2 }} />
-                                    </Tooltip>))}
-                                </Stack>
+                                            <Tooltip title={spec.spec_value}>
+                                                <Box component="img" src={urlAPI + spec.feature_image} alt="jet" sx={{ objectFit: "cover", height: "50px", mb: 2 }} />
+                                            </Tooltip>))}
+                                    </Stack>
+                                </Box>
+                                <Box mt={4}>
+                                    <Typography sx={{ fontWeight: 600, mb: 2 }}>
+                                        Description
+                                    </Typography>
+                                    <Divider sx={{ m: 2 }} />
+                                    <Typography>
+                                        {productDetails.description}
+                                    </Typography>
+                                </Box>
                             </Box>
                         </Grid>
                     </Grid>

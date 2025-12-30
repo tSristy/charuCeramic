@@ -140,7 +140,7 @@ const CreateDealer = () => {
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Thana" icon={<LocationOnOutlinedIcon />} />
-                                            <TextField fullWidth required size="small" value={dealer.thana} onChange={(e) => setDealer(p => ({ ...p, thana: e.target.value }))} />
+                                            <TextField fullWidth size="small" value={dealer.thana} onChange={(e) => setDealer(p => ({ ...p, thana: e.target.value }))} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12 }}>

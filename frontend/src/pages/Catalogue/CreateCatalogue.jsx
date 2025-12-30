@@ -2,13 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
-import { ServerApi, imageAPI } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
 import SyncIcon from '@mui/icons-material/Sync';
 import DescriptionIcon from '@mui/icons-material/Description';
-import LanguageIcon from '@mui/icons-material/Language';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -95,7 +94,7 @@ const CreateCatalogue = () => {
                     content: res.content || "",
                     featured_image: res.featured_image || ""
                 });
-                if (res.featured_image) setPreviewImg(imageAPI + res.featured_image);
+                if (res.featured_image) setPreviewImg(urlAPI + res.featured_image);
             })
             .catch(err => console.error(err));
     }, [ID]);
@@ -223,7 +222,7 @@ const CreateCatalogue = () => {
                             {previewImg ? (
                                 <Box component="img" src={previewImg} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
                             ) : catalogue.featured_image ? (
-                                <Box component="img" src={imageAPI + catalogue.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                                <Box component="img" src={urlAPI + catalogue.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
                             ) : (
                                 <Box sx={{ mb: 3, width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                                     <Typography color="text.secondary">No image selected</Typography>

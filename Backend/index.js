@@ -7,7 +7,9 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use("/api/images", express.static(path.join(__dirname, 'images')));
+app.use('/api/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/pdf', express.static(path.join(__dirname, 'pdf')));
+
 
 const dealerRouter = require('./routers/dealerRouter');
 app.use('/api/dealer', dealerRouter);

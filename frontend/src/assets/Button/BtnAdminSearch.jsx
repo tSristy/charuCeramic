@@ -4,7 +4,7 @@ import { InputAdornment, TextField } from '@mui/material';
 
 const BtnAdminSearch = ({ onChange }) => {
     return (
-        <TextField onChange={onChange}
+        <TextField onChange={onChange} disabled 
             placeholder="Search..."
             size="small"
             slotProps={{

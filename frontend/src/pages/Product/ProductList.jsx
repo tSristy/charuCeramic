@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
-import { imageAPI, ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ const ProductList = () => {
 					return {
 						...previousState,
 						totalRows: res.totalRows,
-						totalPages: Math.ceil(res.totalRows / 10)
+						totalPages: Math.ceil(res.totalRows / 12)
 					}
 				});
 			})
@@ -47,28 +47,28 @@ const ProductList = () => {
 			})
 	}
 
-	 const handlePanel = (arg)=>{
-        if (typeof(arg) === "string") {
-                navigate(arg);
-        }
-        else navigate(`/product-panel?id=${arg}`);
-    };
+	const handlePanel = (arg) => {
+		if (typeof (arg) === "string") {
+			navigate(arg);
+		}
+		else navigate(`/product-panel?id=${arg}`);
+	};
 
 
 	return (
 		<Box py={5}>
 			<Container>
-				<Stack direction={{sm: "column", md: "row"}} justifyContent="space-between" alignItems="center">
+				<Stack direction={{ sm: "column", md: "row" }} justifyContent="space-between" alignItems="center">
 					<Box mb={3}>
 						<Typography variant="h5" fontWeight={600} mt={5} mb={1}>Records Explorer  <Chip label="Product" color="error" /></Typography>
 						<Typography variant="overline" color="text.secondary">System Database • {paginationDetails.totalRows} active entries</Typography>
 					</Box>
 
-					<Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
-						 <BtnAdminSearch
+					<Box sx={{ width: { sm: "100%", md: "30%" }, display: "flex", gap: 1 }}>
+						<BtnAdminSearch
 							onChange={(e) => setSearchVariable(e.target.value)}
 						/>
-						<BtnAdminSubmit text="Create" onClick={(e)=>handlePanel('/product-panel')} />
+						<BtnAdminSubmit text="Create" onClick={(e) => handlePanel('/product-panel')} />
 					</Box>
 				</Stack>
 
@@ -84,8 +84,6 @@ const ProductList = () => {
 								<TableCell>Description</TableCell>
 								<TableCell>Model Number</TableCell>
 								<TableCell>SKU</TableCell>
-								<TableCell>Size</TableCell>
-								<TableCell>Color</TableCell>
 								<TableCell>Brand Name</TableCell>
 								<TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
 							</TableRow>
@@ -97,13 +95,11 @@ const ProductList = () => {
 									<TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
 									<TableCell> {item.name} </TableCell>
 									<TableCell> {item.cat_name} </TableCell>
-									<TableCell width={"10%"}> <Box component="img" src={imageAPI+item.image_url} sx={{ width: "100%", objectFit: "cover"}}/></TableCell>
+									<TableCell width={"10%"}> <Box component="img" src={urlAPI + item.image_url} sx={{ width: "100%", objectFit: "cover" }} /></TableCell>
 									<TableCell> {item.model_number} </TableCell>
 									<TableCell> {item.SKU} </TableCell>
-									<TableCell> {item.size} </TableCell>
-									<TableCell> {item.color} </TableCell>
 									<TableCell> {item.brand_name} </TableCell>
-									<TableCell><Tooltip title="Edit"><IconButton onClick={(e)=>handlePanel(parseInt(item.id))}  sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+									<TableCell><Tooltip title="Edit"><IconButton onClick={(e) => handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
 									<TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
 									<TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
 										<DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

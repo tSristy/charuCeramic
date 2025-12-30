@@ -83,7 +83,6 @@ const Header = () => {
             // Desktop Mega Menu Logic
             if (!isMobile) {
                 return (
-                    <>
                         <Box
                             key={item.id}
                         >
@@ -91,12 +90,11 @@ const Header = () => {
                                 onClick={(e) => handleClick(item.link)}
                                 color="inherit"
                                 endIcon={hasChildren ? <KeyboardArrowDownIcon /> : null}
-                                sx={{ textTransform: 'uppercase', fontWeight: 500, color: '#2b2b2b', px: 2, py: 2, fontSize: '.9em', '&:hover': { backgroundColor: '#f5f5f5' } }}
+                                sx={{ textTransform: 'uppercase', fontWeight: 600, color: '#2b2b2b', px: 2, py: 2, fontSize: '.9em', '&:hover': { backgroundColor: '#f5f5f5' } }}
                             >
                                 {item.title}
                             </Button>
                         </Box>
-                    </>
                 );
             }
 
@@ -132,7 +130,7 @@ const Header = () => {
 
                         {/* Logo Area */}
                         <Box>
-                            <img src={logo} alt="Charu Ceramic Logo" style={{ height: '50px' }} />
+                            <Box component='img' src={logo} alt="Charu Ceramic Logo" sx={{ '&:hover': { cursor: "pointer"}, height: '50px' }} onClick={(e)=>handleClick('/')}/>
                         </Box>
 
                         {/* --- DESKTOP MENU --- */}

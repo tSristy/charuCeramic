@@ -1,7 +1,7 @@
 export const divisions = [
     "Dhaka",
-    "Chattogram",
-    "Barishal",
+    "Chittagong",
+    "Barisal",
     "Khulna",
     "Rajshahi",
     "Rangpur",
@@ -26,7 +26,7 @@ export const districtsByDivision = {
         "Tangail"
     ],
 
-    Chattogram: [
+    Chittagong: [
         "Chattogram",
         "Bandarban",
         "Brahmanbaria",
@@ -40,7 +40,7 @@ export const districtsByDivision = {
         "Rangamati"
     ],
 
-    Barishal: [
+    Barisal: [
         "Barishal",
         "Barguna",
         "Bhola",

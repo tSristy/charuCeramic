@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { imageAPI, ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -309,7 +309,7 @@ const CreateCategory = () => {
                             {previewSrc ? (
                                 <Box component="img" src={previewSrc} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
                             ) : category.featured_image ? (
-                                <Box component="img" src={imageAPI + category.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                                <Box component="img" src={urlAPI + category.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
                             ) : (
                                 <Box sx={{ mb: 3, width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                                     <Typography color="text.secondary">No image selected</Typography>

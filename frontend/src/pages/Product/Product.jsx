@@ -1,11 +1,9 @@
-import { Accordion, AccordionDetails, AccordionSummary, Autocomplete, Box, Button, Checkbox, Container, Divider, FormControlLabel, FormGroup, Grid, TextField, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Container, Divider, FormControlLabel, FormGroup, Grid, Pagination, TextField, Typography } from '@mui/material';
 import bgImg from '../../img/bg3.jpg';
-import { homePageProductList } from '../../Data';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ServerApi, imageAPI } from '../../route/ServerAPI';
+import { ServerApi, urlAPI } from '../../route/ServerAPI';
 
 const Product = () => {
     const { category } = useParams();
@@ -20,13 +18,18 @@ const Product = () => {
         const path = currentSelected === item.slug ? '/product' : `/product/${item.slug}`;
         navigate(path);
     };
-
-
+    const [paginationDetails, setPaginationDetails] = useState({
+        pageNo: 1,
+        totalRows: 0,
+        totalPages: 0
+    });
+    const [searchVar, setSearchVar] = useState(" ");
 
     useEffect(() => {
         const body = {
-            pageNo: 0,
-            category: category
+            pageNo: paginationDetails.pageNo,
+            category: category,
+            searchVar: searchVar
         };
         ServerApi(`/category/show?displayVar=all`, "GET", null, null)
             .then((res) => res.json())
@@ -37,10 +40,16 @@ const Product = () => {
         ServerApi(`/product/list-by-cat`, "POST", null, body)
             .then(res => res.json())
             .then(res => {
-                console.log(res)
-                setProductList(res)
+                setProductList(res.items);
+                setPaginationDetails(previousState => {
+                    return {
+                        ...previousState,
+                        totalRows: res.totalRows,
+                        totalPages: Math.ceil(res.totalRows / 12)
+                    }
+                });
             })
-    }, [category])
+    }, [category, searchVar, paginationDetails.pageNo])
 
     return (
         <>
@@ -113,7 +122,7 @@ const Product = () => {
                         </Grid>
                         <Grid size={{ sm: 9 }}>
                             <Box>
-                                <Autocomplete size="small" renderInput={(params) => <TextField {...params} label="Search" />} />
+                                <TextField fullWidth size="small" onChange={(e) => setSearchVar(e.target.value)} label="Search" />
 
                                 <Grid container spacing={4} my={5} sx={{ height: '700px', overflowY: "auto" }}>
                                     {productList.length === 0 &&
@@ -122,7 +131,7 @@ const Product = () => {
                                         )
                                         || productList.map(product => (
                                             <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                                                <Box onClick={(e) => navigate(`/${product.id}`)}
+                                                <Box onClick={(e) => navigate(`/${product.url_path}`)}
                                                     sx={{
                                                         border: '1px solid #eee',
                                                         cursor: 'pointer',
@@ -131,7 +140,7 @@ const Product = () => {
                                                         //     filter: 'grayscale(0%)',
                                                         // }
                                                     }}>
-                                                    <Box component="img" src={imageAPI + product.image_url} alt={product.name} className="hoverEffect" sx={{ display: 'block', width: '100%', height: '250px', objectFit: 'cover', borderBottom: '5px solid #ffffffff' }} />
+                                                    <Box component="img" src={urlAPI + product.image_url} alt={product.name} className="hoverEffect" sx={{ display: 'block', width: '100%', height: '250px', objectFit: 'cover', borderBottom: '5px solid #ffffffff' }} />
 
                                                     <Typography sx={{ fontSize: '1.1rem', fontWeight: 500, textAlign: 'center', mt: 1 }}>
                                                         {product.name}
@@ -144,6 +153,17 @@ const Product = () => {
                                         ))}
                                 </Grid>
                             </Box>
+
+                            <Pagination color="error" shape="rounded" hidePrevButton hideNextButton siblingCount={0}
+                                boundaryCount={3}
+                                count={paginationDetails.totalPages}
+                                page={paginationDetails.pageNo}
+                                sx={{ '& .MuiPagination-ul': { gap: 1 }, display: 'flex', justifyContent: 'center' }}
+                                onChange={(e, value) => {
+                                    setPaginationDetails(previousState => {
+                                        return { ...previousState, pageNo: value }
+                                    })
+                                }} />
                         </Grid>
                     </Grid>
                 </Container>

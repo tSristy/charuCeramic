@@ -45,11 +45,11 @@ router.post('/add', uploadFields, (req, res) => {
 
     // Access files via req.files instead of req.file
     const featured_image = req.files['featured_image'] 
-        ? `images/${req.files['featured_image'][0].filename}` 
+        ? `/images/${req.files['featured_image'][0].filename}` 
         : null;
 
     const file_path = req.files['file_path'] 
-        ? `images/${req.files['file_path'][0].filename}` 
+        ? `/pdf/${req.files['file_path'][0].filename}` 
         : null;
 
     const sql = 'INSERT INTO catalogue_details (title, file_path, summary, content, featured_image) VALUES (?, ?, ?, ?, ?)';
@@ -75,14 +75,14 @@ router.put('/update/:id', uploadFields, (req, res) => {
 
     // 2. Check for a new PDF file
     if (req.files && req.files['file_path']) {
-        const newFilePath = `images/${req.files['file_path'][0].filename}`;
+        const newFilePath = `/pdf/${req.files['file_path'][0].filename}`;
         sql += ', file_path = ?';
         params.push(newFilePath);
     }
 
     // 3. Check for a new Featured Image
     if (req.files && req.files['featured_image']) {
-        const newImagePath = `images/${req.files['featured_image'][0].filename}`;
+        const newImagePath = `/images/${req.files['featured_image'][0].filename}`;
         sql += ', featured_image = ?';
         params.push(newImagePath);
     }

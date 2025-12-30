@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
-import { ServerApi, imageAPI } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 import { useNavigate } from "react-router-dom";
@@ -93,7 +93,7 @@ const CategoryList = () => {
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.name} </TableCell>
                                     <TableCell> {item.slug} </TableCell>
-                                    <TableCell> {item.featured_image && <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> || "N / A"} </TableCell>
+                                    <TableCell> {item.featured_image && <img src={urlAPI + item.featured_image} alt={item.title} width="50" /> || "N / A"} </TableCell>
                                     <TableCell> {item.add_menu == 1 ? <Box component="span" fontWeight={"500"}>Yes</Box> : "No"} </TableCell>
                                     <TableCell> {item.add_homepage == 1 ? <Box component="span" fontWeight={"500"}>Yes</Box> : "No"} </TableCell>
                                     <TableCell> {item.parent_id ? item.parent_id : "N/A"} </TableCell>

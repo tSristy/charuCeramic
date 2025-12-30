@@ -32,7 +32,7 @@ const DealerList = () => {
                     return {
                         ...previousState,
                         totalRows: res.totalRows,
-                        totalPages: Math.ceil(res.totalRows / 10)
+                        totalPages: Math.ceil(res.totalRows / 12)
                     }
                 });
             })

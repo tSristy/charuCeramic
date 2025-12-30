@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
-import { imageAPI, ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -76,13 +76,13 @@ const CatalogueList = () => {
                                     <TableCell> {item.title} </TableCell>
                                     <TableCell>
                                         {item.file_path ? (
-                                            <a href={imageAPI + item.file_path} target="_blank" rel="noreferrer"> PDF</a>
+                                            <a href={urlAPI + item.file_path} target="_blank" rel="noreferrer"> PDF</a>
                                         ) : "-"}
                                     </TableCell>
                                     <TableCell> {item.summary} </TableCell>
                                     <TableCell> {item.content} </TableCell>
                                     <TableCell>
-                                        {item.featured_image ? <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> : "-"}
+                                        {item.featured_image ? <img src={urlAPI + item.featured_image} alt={item.title} width="50" /> : "-"}
                                     </TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

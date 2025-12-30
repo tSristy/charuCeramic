@@ -40,7 +40,7 @@ router.get('/:id', (req, res) => {
 //-------------------------- Add a new item ---------------------------------
 router.post('/add', upload.single('featured_image'), (req, res) => {
     const { title, slug, summary, content } = req.body;
-    const featured_image = req.file ? `images/${req.file.filename}` : null;
+    const featured_image = req.file ? `/images/${req.file.filename}` : null;
     const sql = 'INSERT INTO project_details (title, slug, summary, content, featured_image) VALUES (?, ?, ?, ?, ?)';
     db.query(sql, [title, slug, summary, content, featured_image], (err, result) => {
         if (err) {
@@ -62,7 +62,7 @@ router.put('/update/:id', upload.single('featured_image'), (req, res) => {
     const params = [title, slug, summary, content, typeof is_active !== "undefined" ? is_active : 1];
     if (req.file) {
         sql += ', featured_image = ?';
-        params.push(`images/${req.file.filename}`);
+        params.push(`/images/${req.file.filename}`);
     }
     sql += ' WHERE id = ?';
     params.push(itemId);

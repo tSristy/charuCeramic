@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import SquareIcon from '@mui/icons-material/Square';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useEffect, useState } from "react";
-import { imageAPI, ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -82,7 +82,7 @@ const ProjectList = () => {
                                 <TableRow key={item.id}>
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.title} </TableCell>
-                                    <TableCell> <img src={imageAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
+                                    <TableCell> <img src={ urlAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
                                     <TableCell> {item.slug} </TableCell>
                                     <TableCell> {item.content?.substring(0, 50)}... </TableCell>
                                     <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

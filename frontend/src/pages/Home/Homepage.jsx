@@ -1,7 +1,6 @@
-import { Box, Button, Container, Divider, Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Divider, Grid, Stack, Typography } from "@mui/material";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
-import { homePagePropsList } from "../../Data.jsx";
 import IconColumnCard from "../../assets/Card/IconColumnCard";
 import BtnUrlChange from "../../assets/Button/BtnUrlChange";
 import CTA from "../../assets/Button/CTA.jsx";
@@ -20,8 +19,9 @@ import imgOt3 from '../../img/hpicon3.png';
 import imgOt4 from '../../img/hpicon4.png';
 import { useEffect, useState } from "react";
 
-import { imageAPI, ServerApi } from "../../route/ServerAPI.js";
+import { ServerApi, urlAPI } from "../../route/ServerAPI.js";
 import { useNavigate } from "react-router-dom";
+import { homePagePropsList } from "../../Data.jsx";
 
 
 const Homepage = () => {
@@ -32,7 +32,6 @@ const Homepage = () => {
         ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
-                // console.log(res)
                 setCategoryList(res);
             });
     }, [])
@@ -128,7 +127,7 @@ const Homepage = () => {
 
                     <Grid container spacing={4}>
                         {categoryList.map(product => (
-                            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }} onClick={(e)=>console.log(product.slug)}>
+                            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }} onClick={(e) => console.log(product.slug)}>
                                 <Box sx={{
                                     border: '1px solid #eee',
                                     cursor: 'pointer',
@@ -136,9 +135,9 @@ const Homepage = () => {
                                         borderBottom: '5px solid  #ED1C24',
                                         filter: 'grayscale(0%)',
                                         transform: 'scale(1.02)',
-                                    } 
-                                }} onClick={(e)=>navigate(`/product/${product.slug}`)}>
-                                    <Box component="img" src={imageAPI+product.featured_image} alt={product.name} className="hoverEffect" sx={{
+                                    }
+                                }} onClick={(e) => navigate(`/product/${product.slug}`)}>
+                                    <Box component="img" src={urlAPI + product.featured_image} alt={product.name} className="hoverEffect" sx={{
                                         display: 'block', filter: 'grayscale(100%)', width: '100%', height: '180px', objectFit: 'cover',
                                         transition: "all .3s ease", borderBottom: '5px solid #ffffffff'
                                     }} />
@@ -290,7 +289,7 @@ const Homepage = () => {
                     </Grid>
                 </Container>
             </Box>
--
+            -
 
             {/* VIDEOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */}
             <Box sx={{ py: 10 }}>
@@ -317,7 +316,7 @@ const Homepage = () => {
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
                             Read About CHARU
                         </Typography>
-                            <Button variant="none" sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ED1C24" }} />}>Explore All</Button>
+                        <Button variant="none" sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ED1C24" }} />}>Explore All</Button>
                     </Stack>
 
                     <Grid container spacing={4}>

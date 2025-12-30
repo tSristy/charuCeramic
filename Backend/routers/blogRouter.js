@@ -40,7 +40,7 @@ router.get('/:id', (req, res) => {
 //-------------------------- Add a new item ---------------------------------
 router.post('/add', upload.single('featured_image'), (req, res) => {
 	const { title, slug, summary, add_homepage, content, published_at } = req.body;
-	const featured_image = req.file ? `images/${req.file.filename}` : null;
+	const featured_image = req.file ? `/images/${req.file.filename}` : null;
 	const sql = 'INSERT INTO blog_articles (title, slug, add_homepage, summary, content, featured_image, published_at) VALUES (?, ?, ?, ?, ?, ?, ?)';
 	db.query(sql, [title, slug, add_homepage, summary, content, featured_image, published_at], (err, result) => {
 		if (err) {
@@ -62,7 +62,7 @@ router.put('/update/:id', upload.single('featured_image'), (req, res) => {
 	const params = [title, slug, summary, add_homepage, content, published_at];
 	if (req.file) {
 		sql += ', featured_image = ?';
-		params.push(`images/${req.file.filename}`);
+		params.push(`/images/${req.file.filename}`);
 	}
 	sql += ' WHERE id = ?';
 	params.push(itemId);

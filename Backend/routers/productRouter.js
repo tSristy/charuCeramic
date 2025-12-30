@@ -6,7 +6,7 @@ const router = express.Router();
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
     const { pageNo } = req.body;
-    const sql = `SELECT A.id, A.name, A.model_number, A.SKU, A.size, A.color, A.brand_name, B.image_url, C.name AS cat_name FROM products AS A INNER JOIN product_images AS B ON A.id = B.product_id AND A.single_image = B.sort_order INNER JOIN category_details AS C On C.id = A.category_id WHERE A.is_active = 1 AND B.is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
+    const sql = `SELECT A.id, A.name, A.model_number, A.SKU, A.brand_name, B.image_url, C.name AS cat_name FROM products AS A INNER JOIN product_images AS B ON A.id = B.product_id AND A.single_image = B.sort_order INNER JOIN category_details AS C On C.id = A.category_id WHERE A.is_active = 1 AND B.is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
 	    SELECT COUNT(*) AS totalRows FROM products WHERE is_active = 1;`;
     db.query(sql, (err, results) => {
         if (err) {
@@ -19,70 +19,135 @@ router.post('/list', (req, res) => {
 
 
 router.post('/list-by-cat', (req, res) => {
-    const { pageNo, category } = req.body;
-    let query = "";
+    const { pageNo, category, searchVar } = req.body;
+    const pageSize = 12;
+    const offset = (pageNo - 1) * pageSize;
+
+    let filterSql = "";
+    let params = [];
+
     if (category && category.trim() !== '') {
-        query += ` AND ParentC.slug = '${category}' `;
+        filterSql += ` AND (C.slug = ? OR C.parent_id = (SELECT id FROM category_details WHERE slug = ? LIMIT 1)) `;
+        params.push(category, category);
     }
-    query += ` `;
 
-    sql = `SELECT P.id, P.name, P.model_number, P.color, P.SKU, C.name AS category_name, C.slug AS category_slug, I.image_url, I.alt_text FROM products AS P INNER JOIN product_images AS I ON P.id = I.product_id AND P.single_image = I.sort_order INNER JOIN category_details AS C ON P.category_id = C.id INNER JOIN category_details AS ParentC ON ( C.parent_id = ParentC.id OR C.id = ParentC.id ) WHERE P.is_active = 1 AND I.is_active = 1 ${query}`;
+    if (searchVar && searchVar.trim() !== '') {
+        const searchTerm = `%${searchVar}%`;
+        filterSql += ` AND (P.name LIKE ? OR P.model_number LIKE ? OR C.name LIKE ?) `;
+        params.push(searchTerm, searchTerm, searchTerm);
+    }
 
-    db.query(sql, (err, results) => {
+    const sql = `SELECT P.id, P.name, P.model_number, P.SKU, P.url_path,
+               C.name AS category_name, C.slug AS category_slug, 
+               I.image_url, I.alt_text 
+        FROM products AS P 
+        INNER JOIN product_images AS I ON P.id = I.product_id AND P.single_image = I.sort_order 
+        INNER JOIN category_details AS C ON P.category_id = C.id 
+        WHERE P.is_active = 1 AND I.is_active = 1 ${filterSql}
+        ORDER BY P.id DESC
+        LIMIT ? OFFSET ?;
+        
+        SELECT COUNT(*) AS totalRows 
+        FROM products AS P
+        INNER JOIN category_details AS C ON P.category_id = C.id
+        WHERE P.is_active = 1 ${filterSql};
+    `;
+
+    const finalParams = [...params, pageSize, offset, ...params];
+
+    db.query(sql, finalParams, (err, results) => {
         if (err) {
-            console.error('Error fetching blog items:', err);
-            return res.status(500).json({ error: 'Failed to fetch blog items' });
+            console.error('Error fetching search items:', err);
+            return res.status(500).json({ error: 'Failed to fetch items' });
         }
-        res.json(results);
+
+        res.json({
+            items: results[0],
+            totalRows: results[1][0].totalRows,
+            pageNo: pageNo
+        });
     });
 });
 
 
-
-//-------------------------- Get item details by id -----------------------------
-router.get('/:id', (req, res) => {
-    const itemId = req.params.id;
+const getDataFunc = (itemId, res) => {
     const sql = `SELECT A.*, B.id AS cID, B.name AS cName, B.slug FROM products AS A INNER JOIN category_details AS B ON A.category_id = B.id WHERE A.is_active = 1 AND A.id = ?;SELECT * FROM product_images WHERE is_active = 1 AND product_id = ?;SELECT A.id AS spec_id, A.spec_label, A.spec_value, T.feature_image FROM  product_spec AS A LEFT JOIN technology AS T ON A.spec_value = T.name WHERE A.product_id =? AND A.is_active = 1`;
     db.query(sql, [itemId, itemId, itemId], (err, result) => {
         if (err) {
             console.error('Error fetching blog item:', err);
             return res.status(500).json({ error: 'Failed to fetch blog item' });
         }
+
+        if (!result[0] || result[0].length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        const productData = result[0][0];
+
         res.json({
             product: {
-                id: result[0][0].id,
-                name: result[0][0].name,
-                model_number: result[0][0].model_number,
-                SKU: result[0][0].SKU,
-                size: result[0][0].size,
-                color: result[0][0].color,
-                brand_name: result[0][0].brand_name,
-                single_image: result[0][0].single_image,
-                first_image: result[0][0].first_image,
+                id: productData.id,
+                name: productData.name,
+                model_number: productData.model_number,
+                SKU: productData.SKU,
+                size: productData.size,
+                color: productData.color,
+                brand_name: productData.brand_name,
+                spec_pdf: productData.spec_pdf,
+                single_image: productData.single_image,
+                first_image: productData.first_image,
+                description: productData.description,
                 category: {
-                    cID: result[0][0].cID,
-                    cName: result[0][0].cName,
-                    slug: result[0][0].slug
+                    cID: productData.cID,
+                    cName: productData.cName,
+                    slug: productData.slug
                 }
             },
-            images: result[1],
-            specList: result[2]
+            images: result[1] || [],
+            specList: result[2] || []
         });
     });
+}
+
+//-------------------------- Get item details by id -----------------------------
+router.get('/:id', (req, res) => {
+    const itemId = req.params.id;
+    getDataFunc(itemId, res);
 });
 
 
+router.get('/', (req, res) => {
+    const url_path = req.query.url_path;
+    db.query(`SELECT id FROM products WHERE url_path = ? AND is_active = 1`, [url_path], (err, data) => {
+        if (err) {
+            console.error(err);
+        }
+        else {
+            const itemId = (data[0].id);
+            getDataFunc(itemId, res);
+        }
+    })
+})
+
 
 //-------------------------- Add a new product with multiple images ---------------------------------
-router.post('/add', upload.array('images', 10), (req, res) => {
-    const { category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image, sort_order, specLabel, specValue } = req.body;
+const uploadFields = upload.fields([
+    { name: 'images', maxCount: 10 },
+    { name: 'spec_pdf', maxCount: 1 }
+]);
+
+router.post('/add', uploadFields, (req, res) => {
+    const pdfFile = req.files['spec_pdf'] ? `/pdf/${req.files['spec_pdf'][0].filename}` : null;
+    const images = req.files['images'] || [];
+
+    const { category_id, name, description, model_number, SKU, url_path, brand_name, single_image, first_image, sort_order, specLabel, specValue } = req.body;
+
     const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
     const specValueList = Array.isArray(specValue) ? specValue : [specValue];
 
-    // Insert product details
-    const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, url_path, spec_pdf, brand_name, single_image, first_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    db.query(productSql, [category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image], (err, result) => {
+    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile, brand_name, single_image, first_image], (err, result) => {
         if (err) {
             console.error('Error adding product:', err);
             return res.status(500).json({ error: 'Failed to add product' });
@@ -99,13 +164,13 @@ router.post('/add', upload.array('images', 10), (req, res) => {
         })
 
         // Handle multiple images
-        if (req.files && req.files.length > 0) {
+        if (images.length > 0) {
             const sequencesArray = Array.isArray(sort_order) ? sort_order : [sort_order];
             let completed = 0;
             let hasError = false;
 
-            req.files.forEach((file, index) => {
-                const image_url = `images/${file.filename}`;
+            images.forEach((file, index) => {
+                const image_url = `/images/${file.filename}`;
                 const sort_order = sequencesArray[index] || index + 1;
 
                 const imageSql = 'INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)';
@@ -117,7 +182,7 @@ router.post('/add', upload.array('images', 10), (req, res) => {
                     }
 
                     completed++;
-                    if (completed === req.files.length) {
+                    if (completed === images.length) {
                         if (hasError) {
                             return res.status(500).json({ error: 'Product added but some images failed to upload' });
                         }
@@ -134,37 +199,40 @@ router.post('/add', upload.array('images', 10), (req, res) => {
 
 
 //-------------------------- Update product with multiple images ---------------------------------
-router.put('/update/:id', upload.array('images', 10), (req, res) => {
+router.put('/update/:id', uploadFields, (req, res) => {
     const productId = req.params.id;
-    const { category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image, sort_order, existing_images, existing_sort_order, delValues, specId, specLabel, specValue, specDel } = req.body;
+    const pdfFile = req.files['spec_pdf'] ? `/pdf/${req.files['spec_pdf'][0].filename}` : null;
+
+    const images = req.files['images'] || [];
+
+    const { category_id, name, description, model_number, SKU, url_path, spec_pdf, brand_name, single_image, first_image, sort_order, existing_images, existing_sort_order, delValues, specId, specLabel, specValue, specDel } = req.body;
 
     const specIDList = Array.isArray(specId) ? specId : [specId];
     const specDelList = Array.isArray(specDel) ? specDel : [specDel];
     const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
     const specValueList = Array.isArray(specValue) ? specValue : [specValue];
 
-    specDelList.map((id => {
-        db.query(`UPDATE product_spec SET is_active = 0 WHERE id =${id}`, (err, result) => {
-            if (err) console.error(err);
-            return;
-        })
-    }));
+    specDelList.forEach(id => {
+        if (id) {
+            db.query(`UPDATE product_spec SET is_active = 0 WHERE id = ?`, [id], (err, result) => {
+                if (err) console.error("Spec delete error:", err);
+            });
+        }
+    });
 
-    specIDList.map((id, index) => {
+    specIDList.forEach((id, index) => {
         if (!id) {
-            db.query(`INSERT INTO product_spec (product_id, spec_label, spec_value) VALUES (?,?,?)`, [productId, specLabel[index], specValueList[index]], (err, result) => {
-                if (err) {
-                    console.error(err);
-                }
-            })
+            db.query(`INSERT INTO product_spec (product_id, spec_label, spec_value) VALUES (?,?,?)`,
+                [productId, specLabelList[index], specValueList[index]], (err, result) => {
+                    if (err) console.error("Spec insert error:", err);
+                });
+        } else {
+            db.query(`UPDATE product_spec SET spec_label=?, spec_value=? WHERE id =?`,
+                [specLabelList[index], specValueList[index], id], (err, result) => {
+                    if (err) console.error("Spec update error:", err);
+                });
         }
-        else {
-            db.query(`UPDATE product_spec SET spec_label=?, spec_value=? WHERE id =?`, [specLabelList[index], specValueList[index], id], (err, result) => {
-                if (err) console.error(err)
-                return;
-            })
-        }
-    })
+    });
 
     const delValuesArr = Array.isArray(delValues) ? delValues : [delValues];
     if (delValuesArr.length !== 0) {
@@ -175,10 +243,9 @@ router.put('/update/:id', upload.array('images', 10), (req, res) => {
             }))
     }
 
-    // Update product details
-    const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, size = ?, color = ?, brand_name = ?, single_image =?, first_image = ?, modified_at = NOW() WHERE id = ?';
+    const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, url_path = ?, spec_pdf = ?, brand_name = ?, single_image =?, first_image = ?, modified_at = NOW() WHERE id = ?';
 
-    db.query(productSql, [category_id, name, description, model_number, SKU, size, color, brand_name, single_image, first_image, productId], (err) => {
+    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile, brand_name, single_image, first_image, productId], (err) => {
         if (err) {
             console.error('Error updating product:', err);
             return res.status(500).json({ error: 'Failed to update product' });
@@ -219,7 +286,7 @@ router.put('/update/:id', upload.array('images', 10), (req, res) => {
             imageOperationsTotal += req.files.length;
 
             req.files.forEach((file, index) => {
-                const image_url = `images/${file.filename}`;
+                const image_url = `/images/${file.filename}`;
                 const sort_order = sequencesArray[index] || index + 1;
 
                 const insertImageSql = 'INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)';

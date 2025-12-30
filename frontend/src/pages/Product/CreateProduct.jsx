@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment, Snackbar, Alert } from "@mui/material";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment, Snackbar, Alert, Button } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { imageAPI, ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
@@ -48,11 +48,12 @@ const CreateProduct = () => {
 
     const [product, setProduct] = useState({
         category: {
-
         },
         name: "",
         description: "",
         model_number: "",
+        url_path: "",
+        spec_pdf: "",
         SKU: "",
         size: "",
         color: "",
@@ -113,8 +114,8 @@ const CreateProduct = () => {
         formData.append("description", product.description);
         formData.append("model_number", product.model_number);
         formData.append("SKU", product.SKU);
-        formData.append("size", product.size);
-        formData.append("color", product.color);
+        formData.append("url_path", product.url_path);
+        if (product.spec_pdf) formData.append("spec_pdf", product.spec_pdf);/////////
         formData.append("brand_name", product.brand_name);
         formData.append("single_image", product.single_image);
         formData.append("first_image", product.first_image);
@@ -162,8 +163,8 @@ const CreateProduct = () => {
                         description: "",
                         model_number: "",
                         SKU: "",
-                        size: "",
-                        color: "",
+                        url_path: "",
+                        spec_pdf: "",
                         brand_name: "",
                         first_image: "",
                         single_image: ""
@@ -180,7 +181,6 @@ const CreateProduct = () => {
             })
             .catch(err => console.error(err));
     };
-
 
     const handleDelete = () => {
         if (ID === null) {
@@ -216,12 +216,20 @@ const CreateProduct = () => {
                 onClose={handleAlertClose}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Alert
-                    onClose={handleAlertClose}
-                    severity={msgText.message ? "success" : "error"}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >{msgText.message}</Alert>
+                {msgText && typeof msgText === "object" && Object.keys(msgText).length > 0 && (
+                    <Alert
+                        onClose={handleAlertClose}
+                        severity={
+                            Object.keys(msgText)[0] === "message"
+                                ? "success"
+                                : "error"
+                        }
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >
+                        {Object.values(msgText)[0]}
+                    </Alert>
+                )}
             </Snackbar>
             <Container>
                 <Box mb={3}>
@@ -265,12 +273,12 @@ const CreateProduct = () => {
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Product Name" icon={<DescriptionIcon />} />
-                                            <TextField required fullWidth size="small" value={product.name} onChange={(e) => setProduct(p => ({ ...p, name: e.target.value }))} />
+                                            <TextField required fullWidth size="small" value={product.name} onChange={(e) => setProduct(p => ({ ...p, name: e.target.value.replace(/^./, c => c.toUpperCase()) }))} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Model Number" icon={<PinOutlinedIcon />} />
-                                            <TextField fullWidth required size="small" value={product.model_number} onChange={(e) => setProduct(p => ({ ...p, model_number: e.target.value }))} />
+                                            <TextField fullWidth required size="small" value={product.model_number} onChange={(e) => setProduct(p => ({ ...p, model_number: e.target.value.replace(/^./, c => c.toUpperCase()), url_path: e.target.value.replace(/\s+/g, "").toLowerCase() }))} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
@@ -278,19 +286,54 @@ const CreateProduct = () => {
                                             <TextField fullWidth size="small" value={product.brand_name} onChange={(e) => setProduct(p => ({ ...p, brand_name: e.target.value }))} />
                                         </Grid>
 
-                                        <Grid size={{ xs: 12, sm: 4 }}>
-                                            <FormLabel text="Size" icon={<PinOutlinedIcon />} />
-                                            <TextField fullWidth size="small" value={product.size} onChange={(e) => setProduct(p => ({ ...p, size: e.target.value }))} />
-                                        </Grid>
 
-                                        <Grid size={{ xs: 12, sm: 4 }}>
-                                            <FormLabel text="Color" icon={<ColorLensIcon />} />
-                                            <Tooltip title="Provide the name of the color">
-                                                <TextField fullWidth size="small" value={product.color} onChange={(e) => setProduct(p => ({ ...p, color: e.target.value }))} />
+                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                            <FormLabel text="Specification File" icon={<DescriptionIcon />} />
+
+                                            <Tooltip title="Provide PDF that has size of under 10Mb ">
+                                                <Button color={product.spec_pdf ? "disable" : "error"}
+                                                    component="label"
+                                                    variant={
+                                                        product.spec_pdf ? "outlined" : "contained"
+                                                    }
+
+                                                    startIcon={<AttachFileIcon />}
+                                                    sx={{ textTransform: 'none', width: "100%", py: 1 }}
+                                                    endIcon={product.spec_pdf ? <IconButton sx={{ bgcolor: "#23232365" }}
+                                                        size="small"
+                                                        onClick={() => setProduct(p => ({ ...p, spec_pdf: "" }))}
+                                                    >
+                                                        <CloseIcon fontSize="small" sx={{ color: "white" }} />
+                                                    </IconButton> : null}
+
+                                                >
+                                                    {product.spec_pdf ? product.spec_pdf.name : "Specification PDF"}
+                                                    <input
+                                                        type="file"
+                                                        accept="application/pdf"
+                                                        hidden
+                                                        onChange={(e) => {
+                                                            const file = e.target.files[0];
+                                                            if (file) {
+                                                                if (file.size > 10 * 1024 * 1024) {
+                                                                    setOpenAlert(true);
+                                                                    window.scrollTo({
+                                                                        top: 100,
+                                                                        left: 100,
+                                                                        behavior: "smooth",
+                                                                    });
+                                                                    setMsgText({ error: "The file is too large. Max(10MB" });
+                                                                    return;
+                                                                }
+                                                                setProduct(p => ({ ...p, spec_pdf: file }));
+                                                            }
+                                                        }}
+                                                    />
+                                                </Button>
                                             </Tooltip>
                                         </Grid>
 
-                                        <Grid size={{ xs: 12, sm: 4 }}>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="SKU" icon={<LanguageIcon />} />
                                             <TextField fullWidth size="small" value={product.SKU} onChange={(e) => setProduct(p => ({ ...p, SKU: e.target.value }))} />
                                         </Grid>
@@ -346,14 +389,17 @@ const CreateProduct = () => {
                                         <Grid size={{ xs: 6, sm: 3 }}>
                                             <FormLabel text="Single Img no." icon={<PinOutlinedIcon />} />
                                             <Tooltip title="Select the image no that will be displayed after selecting categories">
-                                                <TextField fullWidth size="small" value={product.single_image} onChange={(e) => setProduct(p => ({ ...p, single_image: e.target.value }))} />
+                                                <TextField fullWidth required size="small" value={product.single_image} onChange={(e) => setProduct(p => ({ ...p, single_image: e.target.value }))} />
                                             </Tooltip>
                                         </Grid>
 
                                         <Grid size={{ xs: 6, sm: 3 }}>
-                                            <FormLabel text="First Img no." icon={<PinOutlinedIcon />} />
+                                            <FormLabel text="First Img no." required icon={<PinOutlinedIcon />} />
                                             <Tooltip title="Select the image no that will displayed first after selecting the products">
-                                                <TextField fullWidth size="small" value={product.first_image} onChange={(e) => setProduct(p => ({ ...p, first_image: e.target.value }))} />
+                                                <TextField fullWidth size="small" value={product.first_image} onChange={(e) => {
+                                                    e.stopPropagation();
+                                                    setProduct(p => ({ ...p, first_image: e.target.value }))
+                                                }} />
                                             </Tooltip>
                                         </Grid>
 
@@ -432,7 +478,8 @@ const CreateProduct = () => {
 
                                         <Grid size={{ xs: 12 }}>
                                             <FormLabel text="Description" icon={<DescriptionIcon />} />
-                                            <TextField multiline rows={3} fullWidth size="small" value={product.description} onChange={(e) => setProduct(p => ({ ...p, description: e.target.value }))} placeholder="Put the speficiation and feature details here" />
+                                            <TextField multiline minRows={3}
+                                                maxRows={10} fullWidth size="small" value={product.description} onChange={(e) => setProduct(p => ({ ...p, description: e.target.value }))} placeholder="Put the speficiation and feature details here" />
                                         </Grid>
 
                                         <Grid size={{ xs: 12 }}>
@@ -452,7 +499,7 @@ const CreateProduct = () => {
                         <Grid container spacing={2} sx={{ bgcolor: "#fff", borderRadius: 2, boxShadow: 1, p: 2, mb: 2 }}>
                             {images.length !== 0 ? images.map((img, index) => (
                                 <Grid size={6} sx={{ position: "relative" }}>
-                                    <Box component={"img"} src={img.preview ? img.preview : imageAPI + img.image_url} alt="prev" sx={{ borderRadius: 2, display: "block", width: "100%", height: "150px", objectFit: 'cover', mb: 1 }} />
+                                    <Box component={"img"} src={img.preview ? img.preview : urlAPI + img.image_url} alt="prev" sx={{ borderRadius: 2, display: "block", width: "100%", height: "150px", objectFit: 'cover', mb: 1 }} />
                                     <Box sx={{ position: "absolute", top: 5, right: 5 }}>
                                         <IconButton sx={{ bgcolor: "#23232365" }}
                                             size="small"
@@ -474,13 +521,6 @@ const CreateProduct = () => {
                                                 setImages(updated);
                                             }
                                         }}
-                                    // slotProps={{
-                                    //     input: {
-                                    //         endAdornment: <InputAdornment position="end">
-
-                                    //         </InputAdornment>
-                                    //     }
-                                    // }}
                                     />
                                 </Grid>
                             )) : <Typography variant="overline">No Images is selected</Typography>}
