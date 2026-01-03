@@ -1,7 +1,7 @@
 import { Box, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Link from '@mui/material/Link';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -13,6 +13,7 @@ import BtnDonwload from "../../assets/Button/BtnDownload";
 
 const SingleProduct = () => {
     const { number } = useParams();
+    const navigate = useNavigate();
 
     const [detailTab, setDetailTab] = useState({
         featureTab: true,
@@ -35,6 +36,8 @@ const SingleProduct = () => {
     const [mainImg, setMainImg] = useState(null);
     const [imageList, setImageList] = useState([]);
     const [specList, setSpecList] = useState([]);
+    /////////////////////////more compitable
+    const [testVar, setTestVar] = useState({});
 
     const mainImageHanlde = (imgList, seq) => {
         if (!imgList || !Array.isArray(imgList)) return; // Safety check
@@ -51,15 +54,23 @@ const SingleProduct = () => {
     useEffect(() => {
         ServerApi(`/product?url_path=${number}`, "GET", null, null)
             .then((res) => res.json())
-            .then((res) => {
+            .then(res => {
                 console.log(res)
+                if (res === 404) { navigate("/404-not-found", { replace: true }); }
                 setProductDetails(res.product);
                 setImageList(res.images);
                 mainImageHanlde(res.images, res.product.first_image);
                 setSpecList(res.specList);
+
+                res.specList?.filter(item => {
+                    const label = item.spec_label.toLowerCase();
+                    return label !== "feature" && label !== 'technology';
+                }).map(spec => (
+                    setTestVar(p => ({ ...p, [spec.spec_label]: spec.spec_value }))
+                ))
             })
     }, [number])
-
+    console.log(testVar)
 
     if (!productDetails || !mainImg) {
         return <Typography align="center" variant="overline" py={10}>Loading Product...</Typography>;
@@ -84,14 +95,19 @@ const SingleProduct = () => {
                         </Breadcrumbs>
                     </Box>
 
-                    <Grid container spacing={5} sx={{ p: 5, alignItems: "stretch" }}>
-
+                    <Grid container spacing={5} sx={{ alignItems: "stretch" }}>
                         <Grid size={{ sm: 9, md: 7 }}>
                             <Box mt={5} px={10} sx={{ borderRight: '1px solid #d0d0d094' }}>
-                                <Box component="img" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{ display: 'block', width: '100%', objectFit: 'cover' }} />
+                                <Box component="img" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{
+                                    display: 'block', width: '100%',
+                                    aspectRatio: {
+                                        xs: '1 / 1',
+                                        md: '1 / 1',
+                                    }, height: 'auto', objectFit: 'cover'
+                                }} />
                             </Box>
                             <Box px={10}>
-                                <Stack direction="row" spacing={4} mt={4}>
+                                <Stack direction={{ xs: "column", sm: "row" }} sx={{ justifyContent: "space-between" }} mt={4}>
                                     {
                                         imageList?.filter(item => item.id !== mainImg.id)
                                             .map(item => (
@@ -101,8 +117,13 @@ const SingleProduct = () => {
                                                     sx={{
                                                         objectFit: "cover",
                                                         display: 'block',
-                                                        width: { sm: '100%', lg: '200px' },
-                                                        height: '200px',
+                                                        width: { sm: '150px', md: '200px' },
+
+                                                        aspectRatio: {
+                                                            xs: '4 / 3',
+                                                            sm: '1 / 1',
+                                                        }, height: 'auto',
+
                                                         bgcolor: '#444',
                                                         '&:hover': {
                                                             cursor: "pointer"
@@ -121,8 +142,6 @@ const SingleProduct = () => {
                         <Grid size={{ sm: 12, md: 5 }}>
                             <Box px={5}>
                                 <h1>{productDetails?.name}</h1>
-
-
 
                                 <Stack direction="row">
                                     {
@@ -165,26 +184,47 @@ const SingleProduct = () => {
 
                                 {detailTab.specTab && <Box sx={{ fontSize: '1rem', color: '#2b2b2b' }}>
                                     <Box p={4}>
-                                        {specList.length > 0 ? (
-                                            specList.filter((item) => {
-                                                const label = item.spec_label.toLowerCase();
-                                                return label !== "feature" && label !== "features" && label !== "technology" && label !== "techno";
-                                            }).map((spec, index) => (
-                                                <Stack direction="row" key={index}>
-                                                    <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>{spec.spec_label}</Box>
-                                                    <Box width={"60%"}>{spec.spec_value}</Box>
-                                                </Stack>
-                                            ))
-                                        ) : (
-                                            <Typography>No speficiations available.</Typography>
-                                        )}
+                                        {testVar.Item && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Item</Box>
+                                            <Box width={"60%"}>{testVar.Item || 'N/A'}</Box>
+                                        </Stack>}
+
+                                        {testVar['Water Use'] && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Water Use</Box>
+                                            <Box width={"60%"}>{testVar['Water Use'] || 'N/A'}</Box>
+                                        </Stack>}
+
+                                        {testVar['Trap Way'] && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Trap Way</Box>
+                                            <Box width={"60%"}>{testVar['Trap Way'] || 'N/A'}</Box>
+                                        </Stack>}
+
+                                        {testVar['Size'] && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Size</Box>
+                                            <Box width={"60%"}>{testVar['Size'] || 'N/A'}</Box>
+                                        </Stack>}
+
+                                        {testVar['Outlet Range'] && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Outlet Range</Box>
+                                            <Box width={"60%"}>{testVar['Outlet Range'] || 'N/A'}</Box>
+                                        </Stack>}
+
+                                        {testVar['Color'] && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Color</Box>
+                                            <Box width={"60%"}>{testVar['Color'] || 'N/A'}</Box>
+                                        </Stack>}
+
+                                        {testVar['Flushing System'] && <Stack direction="row">
+                                            <Box width={"40%"} sx={{ fontWeight: 500, mb: 1 }}>Flushing System</Box>
+                                            <Box width={"60%"}>{testVar['Flushing System'] || 'N/A'}</Box>
+                                        </Stack>}
                                     </Box>
                                 </Box>}
 
                                 {detailTab.downloadTab && <Box sx={{ fontSize: '.8rem', color: "#2b2b2b" }}>
                                     <Box p={2}>
                                         <Stack direction="column">
-                                            <BtnDonwload fileUrl={imageList[2].image_url}>
+                                            <BtnDonwload fileUrl={imageList.find(result => parseInt(result.sort_order) === parseInt(productDetails.drawing_image))?.image_url}>
                                                 <Stack direction="row" spacing={2} p={2}>
                                                     <DescriptionIcon sx={{ fontSize: "2rem", color: "#333" }} />
 
@@ -192,7 +232,7 @@ const SingleProduct = () => {
                                                 </Stack>
                                             </BtnDonwload>
 
-                                            <BtnDonwload fileUrl={imageList[productDetails.first_image].image_url}>
+                                            <BtnDonwload fileUrl={imageList.find(result => parseInt(result.sort_order) === parseInt(productDetails.first_image))?.image_url}>
                                                 <Stack direction="row" spacing={2} p={2}>
                                                     <DescriptionIcon sx={{ fontSize: "2rem", color: "#333" }} />
 
@@ -227,6 +267,7 @@ const SingleProduct = () => {
                                             </Tooltip>))}
                                     </Stack>
                                 </Box>
+
                                 <Box mt={4}>
                                     <Typography sx={{ fontWeight: 600, mb: 2 }}>
                                         Description

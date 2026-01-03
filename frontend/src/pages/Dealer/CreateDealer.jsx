@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TextField, Autocomplete, Stack, Container, Typography, Box, IconButton, Divider, Grid } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi } from "../../route/ServerAPI";
 import { districtsByDivision, divisions } from "./data";
@@ -17,6 +17,7 @@ import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 const CreateDealer = () => {
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
+    const navigate = useNavigate();
 
     const [dealer, setDealer] = useState({
         name: "",
@@ -52,7 +53,7 @@ const CreateDealer = () => {
 
     const handleDelete = () => {
         if (ID === null) {
-
+            navigate(-1);
         } else {
             ServerApi(`/dealer/delete/` + ID, "DELETE", null, null)
                 .then((res) => res.json())

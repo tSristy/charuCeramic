@@ -16,7 +16,7 @@ const config = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'charuceramic',
+    database: 'charu_ceramic',
     multipleStatements: true,
     waitForConnections: true,
     connectionLimit: 10, 

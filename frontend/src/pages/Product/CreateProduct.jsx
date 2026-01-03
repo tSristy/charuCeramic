@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment, Snackbar, Alert, Button } from "@mui/material";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, InputAdornment, Snackbar, Alert, Button } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
@@ -16,14 +16,16 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import PinOutlinedIcon from '@mui/icons-material/PinOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import UploadingLoader from "../../assets/Modal/UploadingLoader";
+import BtnOpenInTab from "../../assets/Button/BtnDownload";
 
 
 const CreateProduct = () => {
     const navigate = useNavigate();
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
+    const [loading, setLoading] = useState(false);
 
     const [openAlert, setOpenAlert] = useState(false);
     const [msgText, setMsgText] = useState({});
@@ -59,7 +61,8 @@ const CreateProduct = () => {
         color: "",
         brand_name: "",
         single_image: "",
-        first_image: ""
+        first_image: "",
+        drawing_image: ""
     });
 
     const imgTriggerClick = useRef(null);
@@ -106,6 +109,7 @@ const CreateProduct = () => {
     };
 
     const handleSubmit = (e) => {
+        setLoading(true);
         e.preventDefault();
 
         const formData = new FormData();
@@ -114,11 +118,12 @@ const CreateProduct = () => {
         formData.append("description", product.description);
         formData.append("model_number", product.model_number);
         formData.append("SKU", product.SKU);
-        formData.append("url_path", product.url_path);
+        formData.append("url_path", product.model_number.replace(/\s+/g, "").toLowerCase());
         if (product.spec_pdf) formData.append("spec_pdf", product.spec_pdf);/////////
         formData.append("brand_name", product.brand_name);
         formData.append("single_image", product.single_image);
         formData.append("first_image", product.first_image);
+        formData.append("drawing_image", product.drawing_image);
 
         specList.forEach(item => {
             formData.append("specId", (item.spec_id));
@@ -153,8 +158,10 @@ const CreateProduct = () => {
             .then(res => res.json())
             .then(res => {
                 setOpenAlert(true);
+                setLoading(false);
                 setMsgText(res);
-                if (method === "POST") {
+
+                if (method === "POST" && res.productId) {
                     setProduct({
                         category: {
 
@@ -210,6 +217,7 @@ const CreateProduct = () => {
 
     return (
         <Box bgcolor={"#f8fafc"} py={5}>
+            {loading && <UploadingLoader loading={true} />}
             <Snackbar
                 open={openAlert}
                 autoHideDuration={3000}
@@ -278,19 +286,25 @@ const CreateProduct = () => {
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Model Number" icon={<PinOutlinedIcon />} />
-                                            <TextField fullWidth required size="small" value={product.model_number} onChange={(e) => setProduct(p => ({ ...p, model_number: e.target.value.replace(/^./, c => c.toUpperCase()), url_path: e.target.value.replace(/\s+/g, "").toLowerCase() }))} />
+                                            <TextField fullWidth required size="small" value={product.model_number} onChange={(e) => setProduct(p => ({ ...p, model_number: e.target.value.replace(/^./, c => c.toUpperCase()) }))} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Brand Name" icon={<LanguageIcon />} />
-                                            <TextField fullWidth size="small" value={product.brand_name} onChange={(e) => setProduct(p => ({ ...p, brand_name: e.target.value }))} />
+                                            {/* <TextField fullWidth size="small" value={product.brand_name} onChange={(e) => setProduct(p => ({ ...p, brand_name: e.target.value }))} /> */}
+                                         <Autocomplete size="small"
+                                                options={["CHARU",'COTTO']}
+                                                value={product.brand_name || null}
+                                                onChange={(_, newVal) => setProduct(p => ({ ...p, brand_name: newVal }))}
+                                                renderInput={(params) => <TextField required {...params} />}
+                                            />
                                         </Grid>
 
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Specification File" icon={<DescriptionIcon />} />
 
-                                            <Tooltip title="Provide PDF that has size of under 10Mb ">
+                                            <Tooltip title="Provide PDF that has size of under 2Mb ">
                                                 <Button color={product.spec_pdf ? "disable" : "error"}
                                                     component="label"
                                                     variant={
@@ -299,15 +313,22 @@ const CreateProduct = () => {
 
                                                     startIcon={<AttachFileIcon />}
                                                     sx={{ textTransform: 'none', width: "100%", py: 1 }}
-                                                    endIcon={product.spec_pdf ? <IconButton sx={{ bgcolor: "#23232365" }}
+                                                    endIcon={product.spec_pdf ? <IconButton sx={{ p: 0, bgcolor: "#23232365" }}
                                                         size="small"
-                                                        onClick={() => setProduct(p => ({ ...p, spec_pdf: "" }))}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            e.preventDefault();
+                                                            setProduct(p => ({ ...p, spec_pdf: "" }))
+                                                        }}
                                                     >
                                                         <CloseIcon fontSize="small" sx={{ color: "white" }} />
                                                     </IconButton> : null}
 
                                                 >
-                                                    {product.spec_pdf ? product.spec_pdf.name : "Specification PDF"}
+                                                    {product.spec_pdf ?
+                                                        (product.spec_pdf instanceof File ? product.spec_pdf.name : product.spec_pdf)
+                                                        : "Specification PDF"
+                                                    }
                                                     <input
                                                         type="file"
                                                         accept="application/pdf"
@@ -315,14 +336,14 @@ const CreateProduct = () => {
                                                         onChange={(e) => {
                                                             const file = e.target.files[0];
                                                             if (file) {
-                                                                if (file.size > 10 * 1024 * 1024) {
+                                                                if (file.size > 2 * 1024 * 1024) {
                                                                     setOpenAlert(true);
                                                                     window.scrollTo({
                                                                         top: 100,
                                                                         left: 100,
                                                                         behavior: "smooth",
                                                                     });
-                                                                    setMsgText({ error: "The file is too large. Max(10MB" });
+                                                                    setMsgText({ error: "The file is too large. Max(2MB" });
                                                                     return;
                                                                 }
                                                                 setProduct(p => ({ ...p, spec_pdf: file }));
@@ -331,11 +352,6 @@ const CreateProduct = () => {
                                                     />
                                                 </Button>
                                             </Tooltip>
-                                        </Grid>
-
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormLabel text="SKU" icon={<LanguageIcon />} />
-                                            <TextField fullWidth size="small" value={product.SKU} onChange={(e) => setProduct(p => ({ ...p, SKU: e.target.value }))} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
@@ -386,16 +402,28 @@ const CreateProduct = () => {
                                             </Tooltip>
                                         </Grid>
 
+                                        <Grid size={{ xs: 12, sm: 3 }}>
+                                            <FormLabel text="SKU" icon={<LanguageIcon />} />
+                                            <TextField fullWidth size="small" value={product.SKU} onChange={(e) => setProduct(p => ({ ...p, SKU: e.target.value }))} />
+                                        </Grid>
+
                                         <Grid size={{ xs: 6, sm: 3 }}>
                                             <FormLabel text="Single Img no." icon={<PinOutlinedIcon />} />
-                                            <Tooltip title="Select the image no that will be displayed after selecting categories">
+                                            <Tooltip title="Select the image no. that will be displayed after selecting categories">
                                                 <TextField fullWidth required size="small" value={product.single_image} onChange={(e) => setProduct(p => ({ ...p, single_image: e.target.value }))} />
                                             </Tooltip>
                                         </Grid>
 
                                         <Grid size={{ xs: 6, sm: 3 }}>
+                                            <FormLabel text="2D Drawing Img no." icon={<PinOutlinedIcon />} />
+                                            <Tooltip title="Select the image no. that will be download as 2D download image">
+                                                <TextField fullWidth required size="small" value={product.drawing_image} onChange={(e) => setProduct(p => ({ ...p, drawing_image: e.target.value }))} />
+                                            </Tooltip>
+                                        </Grid>
+
+                                        <Grid size={{ xs: 6, sm: 3 }}>
                                             <FormLabel text="First Img no." required icon={<PinOutlinedIcon />} />
-                                            <Tooltip title="Select the image no that will displayed first after selecting the products">
+                                            <Tooltip title="Select the image no. that will displayed first after selecting the products">
                                                 <TextField fullWidth size="small" value={product.first_image} onChange={(e) => {
                                                     e.stopPropagation();
                                                     setProduct(p => ({ ...p, first_image: e.target.value }))
@@ -412,7 +440,7 @@ const CreateProduct = () => {
                                                         freeSolo
                                                         value={item?.spec_label || ''}
 
-                                                        options={['Feature', 'Technology']}
+                                                        options={['Feature', 'Technology', 'Size', 'Color', 'Trap Way', 'Out Range', 'Flushing System', 'Water Use', 'Item']}
 
                                                         onChange={(event, newValue) => {
                                                             setSpecList(prev =>
@@ -525,6 +553,10 @@ const CreateProduct = () => {
                                 </Grid>
                             )) : <Typography variant="overline">No Images is selected</Typography>}
                         </Grid>
+
+                        {ID && product.spec_pdf &&
+                            <BtnOpenInTab fileUrl={product.spec_pdf}><Box sx={{ mb: 3, py: 1, textAlign: 'center', borderRadius: 2, width: '100%', color: "#fff", bgcolor: "#333" }}>{product.model_number}_specification.pdf</Box> </BtnOpenInTab>
+                        }
 
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>

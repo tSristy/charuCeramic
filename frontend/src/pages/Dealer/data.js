@@ -25,7 +25,6 @@ export const districtsByDivision = {
         "Shariatpur",
         "Tangail"
     ],
-
     Chittagong: [
         "Chattogram",
         "Bandarban",

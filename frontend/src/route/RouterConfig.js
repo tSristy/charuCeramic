@@ -32,6 +32,7 @@ import CreateCatalogue from "../pages/Catalogue/CreateCatalogue";
 import CatalogueList from "../pages/Catalogue/CatalogueList";
 import Login from "../pages/Layout/Login";
 import ProtectedRoute from "./ProtectedRoute";
+import NoPage from "../pages/NoPage";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -89,5 +90,7 @@ export const RouterConfig = createBrowserRouter([
                 { path: "catalogue-list", Component: CatalogueList },
             ]
         }],
-    }
+    },
+    { path: "/404-not-found", Component: NoPage },
+    { path: "*", Component: NoPage }
 ]);

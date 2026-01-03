@@ -21,7 +21,7 @@ export const tempMenuList = [
   { id: 8, title: 'Wash Basin', link: '/product/wash-basin', parentId: 3 },
   { id: 15, title: 'Above Counter Basin', link: '/product/above-counter-basin', parentId: 8 },
   { id: 16, title: 'Counter Top Basin', link: '/product/counter-top-basin', parentId: 8 },
-  { id: 17, title: 'Padestal Basin', link: '/product/pedestal-basins', parentId: 8 },
+  { id: 17, title: 'Padestal Basin', link: '/product/pedestal-basin', parentId: 8 },
   { id: 18, title: 'Half Padestal Basin', link: '/product/half-pedestal-basin', parentId: 8 },
   { id: 19, title: 'Under Counter Basin', link: '/product/under-counter-basin', parentId: 8 },
 

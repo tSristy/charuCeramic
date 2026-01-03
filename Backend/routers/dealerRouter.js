@@ -4,7 +4,7 @@ const db = require('../Service/dbconfig');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-    const { pageNo , searchVar } = req.body;
+    const { pageNo , searchVar={} } = req.body;
     const { find, district, division } = searchVar;
     const limit = 12;
     const offset = (pageNo - 1) * limit;
@@ -13,8 +13,8 @@ router.post('/list', (req, res) => {
     let params = [];
 
     if (find && find.trim() !== '') {
-        conditions.push("(name LIKE ? OR thana LIKE ?)");
-        params.push(`%${find}%`, `%${find}%`);
+        conditions.push("(name LIKE ? OR thana LIKE ? OR address Like ? or phone like ?)");
+        params.push(`%${find}%`, `%${find}%`, `%${find}%`,`%${find}%`);
     }
 
     if (district && district.trim() !== '') {

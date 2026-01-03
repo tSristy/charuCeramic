@@ -96,6 +96,7 @@ const getDataFunc = (itemId, res) => {
                 spec_pdf: productData.spec_pdf,
                 single_image: productData.single_image,
                 first_image: productData.first_image,
+                drawing_image: productData.drawing_image,
                 description: productData.description,
                 category: {
                     cID: productData.cID,
@@ -123,8 +124,12 @@ router.get('/', (req, res) => {
             console.error(err);
         }
         else {
+            if(data.length === 0){
+                res.send(404);
+            }
+            else{
             const itemId = (data[0].id);
-            getDataFunc(itemId, res);
+            getDataFunc(itemId, res);}
         }
     })
 })
@@ -140,14 +145,14 @@ router.post('/add', uploadFields, (req, res) => {
     const pdfFile = req.files['spec_pdf'] ? `/pdf/${req.files['spec_pdf'][0].filename}` : null;
     const images = req.files['images'] || [];
 
-    const { category_id, name, description, model_number, SKU, url_path, brand_name, single_image, first_image, sort_order, specLabel, specValue } = req.body;
+    const { category_id, name, description, model_number, SKU, url_path, brand_name, single_image, first_image, drawing_image, sort_order, specLabel, specValue } = req.body;
 
     const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
     const specValueList = Array.isArray(specValue) ? specValue : [specValue];
 
-    const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, url_path, spec_pdf, brand_name, single_image, first_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, url_path, spec_pdf, brand_name, single_image, first_image, drawing_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
 
-    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile, brand_name, single_image, first_image], (err, result) => {
+    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile, brand_name, single_image, first_image, drawing_image], (err, result) => {
         if (err) {
             console.error('Error adding product:', err);
             return res.status(500).json({ error: 'Failed to add product' });
@@ -198,15 +203,22 @@ router.post('/add', uploadFields, (req, res) => {
 
 
 
+
 //-------------------------- Update product with multiple images ---------------------------------
 router.put('/update/:id', uploadFields, (req, res) => {
     const productId = req.params.id;
-    const pdfFile = req.files['spec_pdf'] ? `/pdf/${req.files['spec_pdf'][0].filename}` : null;
+    
+    const newPdfFile = req.files['spec_pdf'] ? `/pdf/${req.files['spec_pdf'][0].filename}` : null;
+    const newImages = req.files['images'] || [];
 
-    const images = req.files['images'] || [];
-
-    const { category_id, name, description, model_number, SKU, url_path, spec_pdf, brand_name, single_image, first_image, sort_order, existing_images, existing_sort_order, delValues, specId, specLabel, specValue, specDel } = req.body;
-
+    const { 
+        category_id, name, description, model_number, SKU, url_path, 
+        spec_pdf, 
+        brand_name, single_image, first_image, drawing_image, sort_order, 
+        existing_images, existing_sort_order, delValues, 
+        specId, specLabel, specValue, specDel 
+    } = req.body;
+console.log(delValues, specId, specLabel,specValue,specDel);
     const specIDList = Array.isArray(specId) ? specId : [specId];
     const specDelList = Array.isArray(specDel) ? specDel : [specDel];
     const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
@@ -243,9 +255,11 @@ router.put('/update/:id', uploadFields, (req, res) => {
             }))
     }
 
-    const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, url_path = ?, spec_pdf = ?, brand_name = ?, single_image =?, first_image = ?, modified_at = NOW() WHERE id = ?';
+   const finalPdf = newPdfFile || spec_pdf; 
 
-    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile, brand_name, single_image, first_image, productId], (err) => {
+    const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, url_path = ?, spec_pdf = ?, brand_name = ?, single_image = ?, first_image = ?, drawing_image = ?, modified_at = NOW() WHERE id = ?';
+
+    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, finalPdf, brand_name, single_image, first_image, drawing_image, productId], (err) => {
         if (err) {
             console.error('Error updating product:', err);
             return res.status(500).json({ error: 'Failed to update product' });
@@ -255,7 +269,6 @@ router.put('/update/:id', uploadFields, (req, res) => {
         let imageOperationsTotal = 0;
         let hasImageError = false;
 
-        // Handle existing images (update sort_order only)
         if (existing_images) {
             const existingImagesArray = Array.isArray(existing_images) ? existing_images : [existing_images];
             const existingSequencesArray = Array.isArray(existing_sort_order) ? existing_sort_order : [existing_sort_order];
@@ -263,59 +276,47 @@ router.put('/update/:id', uploadFields, (req, res) => {
             imageOperationsTotal += existingImagesArray.length;
 
             existingImagesArray.forEach((image_url, index) => {
-                const sort_order = existing_sort_order[index] || index + 1;
-
+                const s_order = existingSequencesArray[index] || index + 1;
                 const updateImageSql = 'UPDATE product_images SET sort_order = ? WHERE product_id = ? AND image_url = ?';
-
-                db.query(updateImageSql, [sort_order, productId, image_url], (err) => {
-                    if (err) {
-                        console.error('Error updating image sort order:', err);
-                        hasImageError = true;
-                    }
-
+                db.query(updateImageSql, [s_order, productId, image_url], (err) => {
+                    if (err) hasImageError = true;
                     imageOperationsCompleted++;
                     checkCompletion();
                 });
             });
         }
 
-        // Handle new images
-        if (req.files && req.files.length > 0) {
+        if (newImages.length > 0) {
             const sequencesArray = Array.isArray(sort_order) ? sort_order : [sort_order];
-
-            imageOperationsTotal += req.files.length;
-
-            req.files.forEach((file, index) => {
+            imageOperationsTotal += newImages.length;
+            newImages.forEach((file, index) => {
                 const image_url = `/images/${file.filename}`;
-                const sort_order = sequencesArray[index] || index + 1;
+                const s_order = sequencesArray[index] || (imageOperationsTotal + index);
 
                 const insertImageSql = 'INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)';
 
-                db.query(insertImageSql, [productId, image_url, name, sort_order], (err) => {
+                db.query(insertImageSql, [productId, image_url, name, s_order], (err) => {
                     if (err) {
-                        console.error('Error adding new product image:', err);
+                        console.error('Error adding image:', err);
                         hasImageError = true;
                     }
-
                     imageOperationsCompleted++;
                     checkCompletion();
                 });
             });
         }
 
-        // Check if all image operations are complete
         function checkCompletion() {
             if (imageOperationsCompleted === imageOperationsTotal) {
                 if (hasImageError) {
-                    return res.status(500).json({ error: 'Product updated but some images failed to process' });
+                    return res.status(500).json({ error: 'Product updated but some images failed' });
                 }
-                res.status(200).json({ message: 'Product and images updated successfully' });
+                res.status(200).json({ message: 'Product updated successfully' });
             }
         }
 
-        // If no images to process, send success response immediately
         if (imageOperationsTotal === 0) {
-            res.json({ message: 'Product updated successfully (no images)' });
+            res.json({ message: 'Product updated successfully' });
         }
     });
 });

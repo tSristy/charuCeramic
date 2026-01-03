@@ -4,11 +4,7 @@ import { urlAPI } from "../../route/ServerAPI";
 const BtnOpenInTab = ({ fileUrl, children }) => {
     const handleOpen = () => {
         if (!fileUrl) return;
-        
-        // Construct the full URL
         const fullUrl = urlAPI + fileUrl;
-        
-        // This is the standard JS way to open in a new tab
         window.open(fullUrl, '_blank', 'noopener,noreferrer');
     };
 
@@ -16,6 +12,7 @@ const BtnOpenInTab = ({ fileUrl, children }) => {
         <Box 
             onClick={handleOpen} 
             sx={{ 
+                width: '100%',
                 display: 'inline-block', 
                 '&:hover': {
                     cursor: 'pointer',

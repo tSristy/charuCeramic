@@ -8,8 +8,10 @@ import { ServerApi } from "../../route/ServerAPI";
 
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import { useNavigate } from "react-router-dom";
 
 const DealerList = () => {
+    const navigate = useNavigate();
     const [dealerList, setDealerList] = useState([]);
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
@@ -47,6 +49,13 @@ const DealerList = () => {
             })
     }
 
+    const handlePanel = (arg)=>{
+        if (typeof(arg) === "string") {
+                navigate(arg);
+        }
+        else navigate(`/dealer-panel?id=${arg}`);
+    };
+
     return (
         <Box py={5}>
             <Container>
@@ -61,7 +70,7 @@ const DealerList = () => {
                         <BtnAdminSearch
                             onChange={(e) => setSearchVariable(e.target.value)}
                         />
-                        <BtnAdminSubmit text="Create" onClick={() => { }} />
+                        <BtnAdminSubmit text="Create" onClick={(e) => {handlePanel('/dealer-panel')}} />
                     </Box>
                 </Stack>
 
@@ -90,7 +99,7 @@ const DealerList = () => {
                                     <TableCell> {item.division} </TableCell>
                                     <TableCell> {item.district} </TableCell>
                                     <TableCell> {item.thana} </TableCell>
-                                    <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell><Tooltip title="Edit"><IconButton  onClick={(e)=>handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
                                         <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

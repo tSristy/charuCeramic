@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import { useNavigate } from "react-router-dom";
 
 const CatalogueList = () => {
+    const navigate = useNavigate();
     const [catalogueList, setCatalogueList] = useState([]);
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
@@ -40,6 +42,13 @@ const CatalogueList = () => {
             .catch(err => console.error(err));
     }
 
+    const handlePanel = (arg)=>{
+        if (typeof(arg) === "string") {
+                navigate(arg);
+        }
+        else navigate(`/catalogue-panel?id=${arg}`);
+    };
+
     return (
         <Box py={5}>
             <Container>
@@ -51,7 +60,7 @@ const CatalogueList = () => {
 
                     <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
                          <BtnAdminSearch onChange={(e) => setSearchVariable(e.target.value)} />
-                        <BtnAdminSubmit text="Create" onClick={() => { }} />
+                        <BtnAdminSubmit text="Create" onClick={(e)=>handlePanel('/catalogue-panel')} />
                     </Box>
                 </Stack>
 
@@ -63,7 +72,7 @@ const CatalogueList = () => {
                                 <TableCell>Title</TableCell>
                                 <TableCell>PDF</TableCell>
                                 <TableCell>Summary</TableCell>
-                                <TableCell>Content</TableCell>
+                                <TableCell>Series</TableCell>
                                 <TableCell>Image</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
@@ -76,15 +85,15 @@ const CatalogueList = () => {
                                     <TableCell> {item.title} </TableCell>
                                     <TableCell>
                                         {item.file_path ? (
-                                            <a href={urlAPI + item.file_path} target="_blank" rel="noreferrer"> PDF</a>
+                                            <a href={urlAPI + item.file_path} target="_blank" rel="noreferrer">PDF</a>
                                         ) : "-"}
                                     </TableCell>
-                                    <TableCell> {item.summary} </TableCell>
-                                    <TableCell> {item.content} </TableCell>
+                                    <TableCell> {item.content.slice(0,150)+"..."} </TableCell>
+                                    <TableCell> {item.summary === "1" ? "Product Series" : "N / A"} </TableCell>
                                     <TableCell>
                                         {item.featured_image ? <img src={urlAPI + item.featured_image} alt={item.title} width="50" /> : "-"}
                                     </TableCell>
-                                    <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell><Tooltip title="Edit"><IconButton onClick={(e)=>handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={() => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                 </TableRow>

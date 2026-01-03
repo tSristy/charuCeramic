@@ -11,13 +11,15 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import WebStoriesIcon from '@mui/icons-material/WebStories';
 
 const Sidebar = () => {
     const menuList = [
         // { title: "Dashboard", url: "/dashboard", icon: <DashboardIcon /> },
         { title: "Categories", url: "/category-list", icon: <CategoryIcon /> },
         { title: "Products", url: "/product-list", icon: <WarehouseIcon /> },
-        // { title: "Dealers", url: "/dealer-list", icon: <CreditCardIcon /> },
+        { title: "Catalogues", url: "/catalogue-list", icon: <WebStoriesIcon /> },
+        { title: "Dealers", url: "/dealer-list", icon: <CreditCardIcon /> },
         // { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
         // { title: "Blogs", url: "/blog-list", icon: <InboxIcon /> },
         // { title: "Projects", url: "/project-list", icon: <InboxIcon /> },

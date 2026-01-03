@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment } from "@mui/material";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, Autocomplete, Tooltip, Switch, InputAdornment, Snackbar, Alert } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
@@ -14,11 +14,23 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import PinOutlinedIcon from '@mui/icons-material/PinOutlined';
+import UploadingLoader from "../../assets/Modal/UploadingLoader";
 
 const CreateCategory = () => {
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
+    const [openAlert, setOpenAlert] = useState(false);
+    const [msgText, setMsgText] = useState({});
+
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
     const [parentCategory, setParentCategory] = useState([]);
     const [category, setCategory] = useState({
@@ -129,6 +141,28 @@ const CreateCategory = () => {
 
     return (
         <Box bgcolor={"#f8fafc"} py={5}>
+            {loading && <UploadingLoader loading={true} />}
+            <Snackbar
+                open={openAlert}
+                autoHideDuration={3000}
+                onClose={handleAlertClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                {msgText && typeof msgText === "object" && Object.keys(msgText).length > 0 && (
+                    <Alert
+                        onClose={handleAlertClose}
+                        severity={
+                            Object.keys(msgText)[0] === "message"
+                                ? "success"
+                                : "error"
+                        }
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >
+                        {Object.values(msgText)[0]}
+                    </Alert>
+                )}
+            </Snackbar>
             <Container>
                 {/* ------------------------Title and Description------------------------ */}
                 <Box mb={3}>

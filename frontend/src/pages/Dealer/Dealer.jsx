@@ -28,6 +28,8 @@ const Dealer = () => {
         ServerApi(`/dealer/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
+                if(res){
+                console.log(res)
                 setDealerList(res.items);
                 setPaginationDetails(previousState => {
                     return {
@@ -36,7 +38,9 @@ const Dealer = () => {
                         totalPages: Math.ceil(res.totalRows / 12)
                     }
                 });
-            })
+            }
+            else return;
+    })
     }, [searchVar,paginationDetails.pageNo]);
 
     return (
@@ -77,7 +81,7 @@ const Dealer = () => {
                                 alignItems: "stretch",
                             }}>
                             {
-                                dealerList.map(item => (
+                                dealerList?.map(item => (
                                     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} sx={{
                                         // border: '1px solid #ddd', \
                                         '&:hover':{

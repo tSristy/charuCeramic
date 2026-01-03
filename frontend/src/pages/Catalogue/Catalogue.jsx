@@ -1,9 +1,35 @@
-import { Box, Button, Container, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import bgImg from '../../img/bg1.jpg';
-import StarIcon from '@mui/icons-material/Star';
-import { catalogueList, seriesList } from "../../Data";
+import { useEffect, useState } from "react";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
+import BtnOpenInTab from "../../assets/Button/BtnDownload";
 
 const Catalogue = () => {
+    const [catalogueList, setCatalogueList] = useState([]);
+    const [paginationDetails, setPaginationDetails] = useState({
+            pageNo: 1,
+            totalRows: 0,
+            totalPages: 0
+        });
+        const [searchVariable, setSearchVariable] = useState(null);
+    
+        useEffect(() => {
+            const body = { pageNo: paginationDetails.pageNo };
+            ServerApi(`/catalogue/list`, 'POST', null, body)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    setCatalogueList(res.items);
+                    setPaginationDetails(prev => ({
+                        ...prev,
+                        totalRows: res.totalRows,
+                        totalPages: Math.ceil(res.totalRows / 10)
+                    }));
+                })
+                .catch(err => console.error(err));
+        }, [paginationDetails.pageNo]);
+    
+
     return (
         <Box sx={{ bgcolor: "#fff" }}>
             <Box sx={{
@@ -22,46 +48,49 @@ const Catalogue = () => {
                         Catalogue Collections
                     </Typography>
 
+
                     <Box sx={{ mt: 5 }}>
                         <Grid container spacing={4}>
                             {
-                                catalogueList.map(item => (
+                                catalogueList.lenth !== 0 && catalogueList.filter(general=> parseInt(general.summary)===0)
+                                .map(item => (
                                     <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                        <Box sx={{
-                                            boxShadow: 1, borderRadius: 2, bgcolor: "white", '&:hover .hoverEffect': {
-                                                filter: "grayscale(0%)",
-                                                transition: "all 0.3s ease-in-out"
-                                            }
-                                        }}>
-                                            <Box className="hoverEffect"
-                                                component="img"
-                                                src={item.imgSrc}
-                                                sx={{
-                                                    filter: "grayscale(100%)",
-                                                    display: 'block',
-                                                    width: "100%",
-                                                    height: "470px",
-                                                    objectFit: "cover",
-                                                }} />
-                                            <Box sx={{ p: 2 }}>
-                                                <Stack direction="row" justifyContent="space-between" >
-                                                    <Typography sx={{ fontSize: '1rem' }}>
-                                                        {item.title}
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: '.8rem' }}><StarIcon sx={{ color: "#ff9500ff", fontSize: '.8rem' }} />{item.score}</Typography>
+                                        <BtnOpenInTab fileUrl={item.file_path}>
+                                            <Box sx={{
+                                                bgcolor: "white", '&:hover .hoverEffect': {
+                                                    // filter: "grayscale(0%)",
+                                                    borderBottom: 2,
+                                                    overflow: 'hidden',
+                                                    transition: "all 0.3s ease-in-out"
+                                                }
+                                            }}>
+                                                <Box className="hoverEffect"
+                                                    component="img"
+                                                    src={urlAPI + item.featured_image}
+                                                    sx={{
+                                                        // filter: "grayscale(100%)",
+                                                        display: 'block',
+                                                        width: "100%",
+                                                        height: "470px",
+                                                        objectFit: "cover",
+                                                    }} />
+                                                <Box sx={{ p: 2 }}>
+                                                    <Stack direction="column" justifyContent="center" alignItems="center" >
+                                                        <Typography sx={{ fontSize: '1.2rem', textAlign: "center", fontWeight: 600 }}>
+                                                            {item.title.toUpperCase()}
+                                                        </Typography>
 
-                                                </Stack>
-                                                <Typography sx={{ fontSize: '.8rem', color: 'text.secondary' }} noWrap>
-                                                    {item.details}
-                                                </Typography>
-                                                <Divider sx={{ my: 1 }} />
-                                                <Box sx={{ justifyContent: 'flex-end', display: 'flex' }}>
-                                                    <Button variant="none" sx={{ p: 0, m: 0, fontSize: '.7rem', color: '#1976d2' }}>
-                                                        Download
-                                                    </Button>
+                                                        <Button variant="none" className="hoverEffect" sx={{
+                                                            width: "200px", p: 0, m: 0, borderRadius: 0, fontSize: '1.2rem', color: '#0065caff', fontWeight: '600',
+                                                            borderBottom: 0,
+                                                        }}>
+                                                            READ MORE
+                                                            <Box sx={{ fontWeight: 400, bgcolor: "red", fontSize: '.6rem', ml: 1, px: 1, color: "#fff" }}>PDF</Box>
+                                                        </Button>
+                                                    </Stack>
                                                 </Box>
                                             </Box>
-                                        </Box>
+                                        </BtnOpenInTab>
                                     </Grid>
                                 ))
                             }
@@ -80,35 +109,39 @@ const Catalogue = () => {
                     <Box sx={{ mt: 5 }}>
                         <Grid container spacing={4}>
                             {
-                                seriesList.map(item => (
+                                catalogueList.filter(products=>parseInt(products.summary) === 1)
+                                .map(item => (
                                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                                        <Box sx={{ borderRadius: 2, '&:hover .hoverEffect': {
-                                                filter: "grayscale(0%)",
-                                                transition: "all 0.3s ease-in-out"
-                                            }
-                                        }}>
-                                            <Box className="hoverEffect"
-                                                component="img"
-                                                src={item.imgSrc}
-                                                sx={{
-                                                    filter: "grayscale(100%)",
-                                                    display: 'block',
-                                                    width: "100%",
-                                                    height: "350px",
-                                                    objectFit: "cover",
-                                                }} />
-                                            <Box sx={{ p: 2 }}>
-                                                
-                                                <Typography variant="h6" textAlign={'center'}>
-                                                    {item.title}
-                                                </Typography>
-                                                <Box sx={{ justifyContent: 'center', display: 'flex' }}>
-                                                    <Button color='error'>
-                                                        Read More
-                                                    </Button>
+                                        <BtnOpenInTab fileUrl={item.file_path}>
+                                            <Box sx={{
+                                                borderRadius: 2, '&:hover .hoverEffect': {
+                                                    filter: "grayscale(0%)",
+                                                    transition: "all 0.3s ease-in-out"
+                                                }
+                                            }}>
+
+                                                <Box className="hoverEffect"
+                                                    component="img"
+                                                    src={urlAPI + item.featured_image}
+                                                    sx={{
+                                                        filter: "grayscale(100%)",
+                                                        display: 'block',
+                                                        width: "100%",
+                                                        height: "350px",
+                                                        objectFit: "cover",
+                                                    }} />
+                                                <Box sx={{ p: 2 }}>
+                                                    <Typography variant="h6" textAlign={'center'}>
+                                                        {item.title}
+                                                    </Typography>
+                                                    <Box sx={{ justifyContent: 'center', display: 'flex' }}>
+                                                        <Button color='error'>
+                                                            Read More
+                                                        </Button>
+                                                    </Box>
                                                 </Box>
                                             </Box>
-                                        </Box>
+                                        </BtnOpenInTab>
                                     </Grid>
                                 ))
                             }

@@ -80,7 +80,7 @@ const CompanyInfo = () => {
                                 <Box sx={{ position: "relative" }}>
                                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
                                         <Typography sx={{ fontSize: "8rem", fontWeight: 600, color: "#ff0000ff" }}>
-                                            12
+                                            9
                                         </Typography>
                                         <Typography sx={{ fontSize: "7rem", fontWeight: 600, color: "#2e2e2eff" }}>
                                             +
