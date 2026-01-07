@@ -5,13 +5,18 @@ const router = express.Router();
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-	const { pageNo } = req.body;
+	const { pageNo, searchVariable } = req.body;
 	const sql = `SELECT 
 		id, title, slug, summary, content, add_homepage, featured_image, published_at,
 		is_active
-		FROM blog_articles WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
-	SELECT COUNT(*) AS totalRows FROM blog_articles WHERE is_active = 1;`;
-	db.query(sql, (err, results) => {
+		FROM blog_articles WHERE is_active = 1 
+		AND ( ? IS NULL OR title LIKE CONCAT('%', ?, '%')
+		OR published_at LIKE CONCAT('%', ?, '%')
+		) ORDER BY published_at desc LIMIT 10 OFFSET ?;
+	SELECT COUNT(*) AS totalRows FROM blog_articles WHERE is_active = 1 AND ( ? IS NULL OR title LIKE CONCAT('%', ?, '%')
+		OR published_at LIKE CONCAT('%', ?, '%')
+		) ;`;
+	db.query(sql,[searchVariable, searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable, searchVariable], (err, results) => {
 		if (err) {
 			console.error('Error fetching blog items:', err);
 			return res.status(500).json({ error: 'Failed to fetch blog items' });

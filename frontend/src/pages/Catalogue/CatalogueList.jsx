@@ -17,10 +17,12 @@ const CatalogueList = () => {
         totalRows: 0,
         totalPages: 0
     });
-    const [searchVariable, setSearchVariable] = useState(null);
+    const [searchVariable, setSearchVariable] = useState('');
 
     useEffect(() => {
-        const body = { pageNo: paginationDetails.pageNo };
+        const body = { pageNo: paginationDetails.pageNo,
+            searchVariable: searchVariable
+         };
         ServerApi(`/catalogue/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
@@ -32,7 +34,7 @@ const CatalogueList = () => {
                 }));
             })
             .catch(err => console.error(err));
-    }, [paginationDetails.pageNo]);
+    }, [searchVariable, paginationDetails.pageNo]);
 
     const HandleDelete = (id) => {
         const tempArr = catalogueList.filter(c => c.id !== id);

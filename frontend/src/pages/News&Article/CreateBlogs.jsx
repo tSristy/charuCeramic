@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Switch, Tooltip } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Switch, Tooltip, Snackbar, Alert } from "@mui/material";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import UploadingLoader from "../../assets/Modal/UploadingLoader";
 
 import SyncIcon from '@mui/icons-material/Sync';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -14,10 +15,23 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import TextFormat from "../../assets/FormLabel/TextFormat";
 
 const CreateBlogs = () => {
+    const navigate = useNavigate();
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
+const [loading, setLoading] = useState(false);
+
+    const [openAlert, setOpenAlert] = useState(false);
+    const [msgText, setMsgText] = useState({});
+
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
     const [blogDetails, setBlogDetails] = useState({
         title: "",
@@ -47,6 +61,7 @@ const CreateBlogs = () => {
 
 
     const handleSubmit = (e) => {
+        setLoading(true);
         e.preventDefault();
         if (ID) {
             handleUpdate();
@@ -56,7 +71,7 @@ const CreateBlogs = () => {
             formData.append("title", blogDetails.title);
             formData.append("slug", blogDetails.slug);
             formData.append("add_homepage", blogDetails.add_homepage);
-            formData.append("summary", blogDetails.summary);
+            formData.append("summary", blogDetails.content.slice(0, 100));
             formData.append("content", blogDetails.content);
             formData.append("published_at", blogDetails.published_at);
             if (blogDetails.featured_image && blogDetails.featured_image instanceof File) {
@@ -66,13 +81,27 @@ const CreateBlogs = () => {
             ServerApi(`/blog/add`, "POST", null, formData, true)
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log("create response:", res);
+                    setOpenAlert(true);
+                setLoading(false);
+                setMsgText(res);
+
+                if (res.itemId) {
+                    setBlogDetails({title: "",
+        slug: "",
+        summary: "",
+        content: "",
+        add_homepage: 0,
+        published_at: "",
+        featured_image: ""});
+        setPreviewSrc('');
+                }
                 })
                 .catch((err) => console.error(err));
         }
     };
 
     const handleUpdate = () => {
+        setLoading(true);
         const formData = new FormData();
         formData.append("title", blogDetails.title);
         formData.append("slug", blogDetails.slug);
@@ -86,13 +115,17 @@ const CreateBlogs = () => {
 
         ServerApi(`/blog/update/` + ID, "PUT", null, formData, true)
             .then((res) => res.json())
-            .then((res) => console.log("update response:", res))
+            .then((res) => {
+                setOpenAlert(true);
+                setLoading(false);
+                setMsgText(res);
+            })
             .catch((err) => console.error(err));
     };
 
     const handleDelete = () => {
         if (ID === null) {
-
+            navigate('/blog-list');
         } else {
             ServerApi(`/blog/delete/` + ID, "DELETE", null, null)
                 .then((res) => res.json())
@@ -112,9 +145,33 @@ const CreateBlogs = () => {
     }, [ID]);
 
 
+    
+
     return (
         <Box bgcolor={"#f8fafc"} py={5}>
-            <Container>
+            {loading && <UploadingLoader loading={true} />}
+            <Snackbar
+                open={openAlert}
+                autoHideDuration={3000}
+                onClose={handleAlertClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                {msgText && typeof msgText === "object" && Object.keys(msgText).length > 0 && (
+                    <Alert
+                        onClose={handleAlertClose}
+                        severity={
+                            Object.keys(msgText)[0] === "message"
+                                ? "success"
+                                : "error"
+                        }
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >
+                        {Object.values(msgText)[0]}
+                    </Alert>
+                )}
+            </Snackbar>
+             <Container>
                 {/* ------------------------Title and Description------------------------ */}
                 <Box mb={3}>
                     <Typography variant="h5" fontWeight={600} mt={5} mb={1}> News & Article Management</Typography>
@@ -151,7 +208,7 @@ const CreateBlogs = () => {
 
                                         <Grid size={{ xs: 12, sm: 4 }}>
                                             <FormLabel text="Publish Date" icon={<CalendarTodayIcon />} />
-                                            <TextField type="date" fullWidth size="small" value={blogDetails.published_at} onChange={(e) => setBlogDetails(p => ({ ...p, published_at: e.target.value }))} />
+                                            <TextField type="date" fullWidth size="small" value={blogDetails.published_at ? blogDetails.published_at.split('T')[0] : ''} onChange={(e) => setBlogDetails(p => ({ ...p, published_at: e.target.value }))} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 4 }}>
@@ -172,7 +229,7 @@ const CreateBlogs = () => {
 
                                         {/* Image Field */}
                                         <Grid size={{ xs: 12, sm: 4 }}>
-                                            <FormLabel text="Featured Image" icon={<AttachFileIcon />} />
+                                            <FormLabel text="Featured Image || 430*320" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
                                                 <TextField
                                                     fullWidth
@@ -223,9 +280,14 @@ const CreateBlogs = () => {
                                             </Stack>
                                         </Grid>
 
+
+                                                    {/* EDITABLE TEXTFIELD*/}
                                         <Grid size={{ xs: 12 }}>
                                             <FormLabel text="Content" icon={<DescriptionIcon />} />
-                                            <TextField multiline rows={2} required fullWidth size="small" value={blogDetails.content} onChange={(e) => setBlogDetails(p => ({ ...p, summary: e.target.value.slice(0, 100), content: e.target.value }))} />
+                                            <TextFormat
+                                                onChange={(html) => setBlogDetails(p => ({ ...p, content: html }))}
+                                                initialValue={blogDetails.content} // This must be the string from your database
+                                            />
                                         </Grid>
 
                                         <Grid size={{ xs: 12 }}>

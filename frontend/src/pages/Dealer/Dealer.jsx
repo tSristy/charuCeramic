@@ -13,7 +13,7 @@ const Dealer = () => {
         totalRows: 0,
         totalPages: 0
     });
-    const [searchVar, setSearchVar] = useState({
+    const [searchVariable, setSearchVariable] = useState({
         find: "",
         district: "",
         division: "",
@@ -22,14 +22,13 @@ const Dealer = () => {
 
     useEffect(() => {
         const body = {
-            searchVar: searchVar,
+            searchVariable: searchVariable,
             pageNo: paginationDetails.pageNo
         };
         ServerApi(`/dealer/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
                 if(res){
-                console.log(res)
                 setDealerList(res.items);
                 setPaginationDetails(previousState => {
                     return {
@@ -41,17 +40,17 @@ const Dealer = () => {
             }
             else return;
     })
-    }, [searchVar,paginationDetails.pageNo]);
+    }, [searchVariable,paginationDetails.pageNo]);
 
     return (
         <>
             <Box sx={{
-                // filter: "grayscale(100%)",
                 borderBottom: 4,
                 borderColor: "#ED1C24",
                 display: 'block',
-                width: "100%",
-                height: "350px",
+                aspectRatio: '16/5',
+                objectFit: 'cover', width: '100%',
+                height: "100%",
                 objectFit: "cover"
             }}
                 component="img" src={bgImg} />
@@ -63,13 +62,13 @@ const Dealer = () => {
                     </Typography>
 
                     <Stack direction={{ sm: "column", md: "row" }} spacing={4}>
-                       <TextField  fullWidth size="small" onChange={(e)=>setSearchVar(prev=>({...prev, find: e.target.value }))} label="Search" />
+                       <TextField  fullWidth size="small" onChange={(e)=>setSearchVariable(prev=>({...prev, find: e.target.value }))} label="Search" />
                        
-                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>setSearchVar(prev=>({...prev, division: newVal }))} 
+                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>setSearchVariable(prev=>({...prev, division: newVal }))} 
                         options={divisions} renderInput={(params) => <TextField {...params} label="Search Divison" />} />
 
-                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>setSearchVar(prev=>({...prev, district: newVal }))} 
-                         options={searchVar.division ? districtsByDivision[searchVar.division] || [] : []}
+                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>setSearchVariable(prev=>({...prev, district: newVal }))} 
+                         options={searchVariable.division ? districtsByDivision[searchVariable.division] || [] : []}
                                                  renderInput={(params) => <TextField {...params} label="Search District" />} freeSolo/>
                     </Stack>
 

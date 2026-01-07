@@ -36,8 +36,9 @@ const Catalogue = () => {
                 borderBottom: 4,
                 borderColor: "#ED1C24",
                 display: 'block',
-                width: "100%",
-                height: "350px",
+                aspectRatio: '16/5',
+                objectFit: 'cover', width: '100%',
+                height: "100%",
                 objectFit: "cover"
             }}
                 component="img" src={bgImg} />

@@ -18,7 +18,9 @@ const DealerList = () => {
         totalRows: 0,
         totalPages: 0
     });
-    const [searchVariable, setSearchVariable] = useState(null);
+    const [searchVariable, setSearchVariable] = useState({
+        find: ''
+    });
 
 
     useEffect(() => {
@@ -68,7 +70,7 @@ const DealerList = () => {
 
                     <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
                         <BtnAdminSearch
-                            onChange={(e) => setSearchVariable(e.target.value)}
+                            onChange={(e) => setSearchVariable({find: e.target.value})}
                         />
                         <BtnAdminSubmit text="Create" onClick={(e) => {handlePanel('/dealer-panel')}} />
                     </Box>

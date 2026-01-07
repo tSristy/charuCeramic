@@ -18,8 +18,9 @@ const CompanyInfo = () => {
                 borderBottom: 4,
                 borderColor: "#ED1C24",
                 display: 'block',
-                width: "100%",
-                height: "350px",
+                aspectRatio: '16/5',
+                objectFit: 'cover', width: '100%',
+                height: "100%",
                 objectFit: "cover"
             }}
                 component="img" src={bgImg} />
@@ -27,82 +28,82 @@ const CompanyInfo = () => {
 
             <Box sx={{ py: 10 }}>
                 <Container>
-                <Grid container direction="row" spacing={2}>
-                    <Grid size={{ xs: 12, sm: 9 }} >
-                        <Box width={"70%"}>
-                            <Typography sx={{ fontSize: '1.15rem', fontWeight: 600, mb: 1, textAlign: 'left' }}>
-                                CHARU Ceramic Industries Limited
-                            </Typography>
-                            <Typography sx={{ fontSize: '2.5rem', fontWeight: 500, textAlign: 'left' }}>Leading Sanitary Ware Manufacturer in Bangladesh
-                            </Typography>
-                        </Box>
+                    <Grid container direction="row" spacing={2}>
+                        <Grid size={{ xs: 12, sm: 9 }} >
+                            <Box width={"70%"}>
+                                <Typography sx={{ fontSize: '1.15rem', fontWeight: 600, mb: 1, textAlign: 'left' }}>
+                                    CHARU Ceramic Industries Limited
+                                </Typography>
+                                <Typography sx={{ fontSize: '2.5rem', fontWeight: 500, textAlign: 'left' }}>Leading Sanitary Ware Manufacturer in Bangladesh
+                                </Typography>
+                            </Box>
 
-                        <Grid container spacing={2}>
-                            <Grid size={{ xs: 12, sm: seeMore ? 12 : 8 }} sx={{
-                                transition: 'all 0.5s ease-in-out', py: 3
-                            }}>
-                                <Box py={3}>
-                                    <Typography sx={{
-                                        whiteSpace: "pre-line",
-                                        fontSize: ".85rem"
-                                    }}>
-                                        CHARU Ceramic Industries Limited represents a significant milestone in Bangladesh's industrial development. Established in March 2012, our company proudly stands as the first manufacturing facility in Bangladesh to produce sanitary ware that meets rigorous international standards.
-                                        This achievement was made possible through collaborative partnerships with premier consultants from both Europe and Asia, ensuring world-class expertise in every aspect of our operations.
-                                    </Typography>
-                                </Box>
-                                <Collapse in={seeMore} timeout={500} unmountOnExit>
-                                    {seeMore && <Typography sx={{
-                                        mb: 3,
-                                        whiteSpace: "pre-line",
-                                        fontSize: ".85rem"
-                                    }}>
+                            <Grid container spacing={2}>
+                                <Grid size={{ xs: 12, sm: seeMore ? 12 : 8 }} sx={{
+                                    transition: 'all 0.5s ease-in-out', py: 3
+                                }}>
+                                    <Box py={3}>
+                                        <Typography sx={{
+                                            whiteSpace: "pre-line",
+                                            fontSize: ".85rem"
+                                        }}>
+                                            CHARU Ceramic Industries Limited represents a significant milestone in Bangladesh's industrial development. Established in March 2012, our company proudly stands as the first manufacturing facility in Bangladesh to produce sanitary ware that meets rigorous international standards.
+                                            This achievement was made possible through collaborative partnerships with premier consultants from both Europe and Asia, ensuring world-class expertise in every aspect of our operations.
+                                        </Typography>
+                                    </Box>
+                                    <Collapse in={seeMore} timeout={500} unmountOnExit>
+                                        {seeMore && <Typography sx={{
+                                            mb: 3,
+                                            whiteSpace: "pre-line",
+                                            fontSize: ".85rem"
+                                        }}>
 
-                                        Our commitment to quality is formally recognized through ISO 9001:2015 certification, validating our adherence to globally recognized quality management systems across all operational areas. This certification demonstrates our dedication to consistent quality and continuous improvement in our manufacturing processes.
+                                            Our commitment to quality is formally recognized through ISO 9001:2015 certification, validating our adherence to globally recognized quality management systems across all operational areas. This certification demonstrates our dedication to consistent quality and continuous improvement in our manufacturing processes.
 
-                                        The technological foundation of our facility showcases our commitment to excellence. We have invested in cutting-edge manufacturing equipment from industry leaders SACMI, UNIMAK, and HEXIANG. This advanced machinery enables an impressive annual production capacity of 1.5 million pieces, positioning us as a significant player in the regional market.
-                                        A particularly noteworthy achievement in our company's history is our technical collaboration with Siam Sanitary Ware Industry Co. Ltd. of Thailand. Through this partnership, CHARU manufactures the internationally acclaimed COTTO brand in Bangladesh, bringing world-renowned quality and design to the local market.
-                                        While our initial focus has been on meeting the growing domestic demand for high-quality sanitary ware in Bangladesh, we have established a solid foundation for expanding into international markets. Our export strategy is a key component of our business development plan, reflecting our confidence in the quality and competitiveness of our products on the global stage.
-                                    </Typography>}
-                                </Collapse>
-                                <Box>
-                                    <Button variant="contained" color="error" onClick={(e) => setSeeMore(!seeMore)}> {seeMore ? "See Less" : "See More"}
-                                    </Button>
-                                </Box>
+                                            The technological foundation of our facility showcases our commitment to excellence. We have invested in cutting-edge manufacturing equipment from industry leaders SACMI, UNIMAK, and HEXIANG. This advanced machinery enables an impressive annual production capacity of 1.5 million pieces, positioning us as a significant player in the regional market.
+                                            A particularly noteworthy achievement in our company's history is our technical collaboration with Siam Sanitary Ware Industry Co. Ltd. of Thailand. Through this partnership, CHARU manufactures the internationally acclaimed COTTO brand in Bangladesh, bringing world-renowned quality and design to the local market.
+                                            While our initial focus has been on meeting the growing domestic demand for high-quality sanitary ware in Bangladesh, we have established a solid foundation for expanding into international markets. Our export strategy is a key component of our business development plan, reflecting our confidence in the quality and competitiveness of our products on the global stage.
+                                        </Typography>}
+                                    </Collapse>
+                                    <Box>
+                                        <Button variant="contained" color="error" onClick={(e) => setSeeMore(!seeMore)}> {seeMore ? "See Less" : "See More"}
+                                        </Button>
+                                    </Box>
+                                </Grid>
+
+
+                                {seeMore ? null : <Grid size={{ xs: 12, sm: 4 }} sx={{
+                                    transition: 'all 0.5s ease-in-out',
+                                    opacity: seeMore ? 0 : 1,
+                                    overflow: 'hidden',
+                                    visibility: seeMore ? 'hidden' : 'visible'
+                                }}>
+                                    <Box sx={{ position: "relative" }}>
+                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
+                                            <Typography sx={{ fontSize: "8rem", fontWeight: 600, color: "#ff0000ff" }}>
+                                                9
+                                            </Typography>
+                                            <Typography sx={{ fontSize: "7rem", fontWeight: 600, color: "#2e2e2eff" }}>
+                                                +
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ position: "absolute", top: 150, left: 60 }}>
+                                            Years of experience
+                                        </Box>
+                                    </Box>
+                                </Grid>}
                             </Grid>
+                        </Grid>
 
-
-                            {seeMore ? null : <Grid size={{ xs: 4 }} sx={{
-                                transition: 'all 0.5s ease-in-out',
-                                opacity: seeMore ? 0 : 1,
-                                overflow: 'hidden',
-                                visibility: seeMore ? 'hidden' : 'visible'
-                            }}>
-                                <Box sx={{ position: "relative" }}>
-                                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
-                                        <Typography sx={{ fontSize: "8rem", fontWeight: 600, color: "#ff0000ff" }}>
-                                            9
-                                        </Typography>
-                                        <Typography sx={{ fontSize: "7rem", fontWeight: 600, color: "#2e2e2eff" }}>
-                                            +
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={{ position: "absolute", top: 150, left: 60 }}>
-                                        Years of experience
-                                    </Box>
-                                </Box>
-                            </Grid>}
+                        <Grid size={{ xs: 12, sm: 3 }}>
+                            <Box component='img' src={infoImg} sx={{ width: "100%" }} />
                         </Grid>
                     </Grid>
-
-                    <Grid size={{ xs: 12, sm: 3 }}>
-                        <Box component='img' src={infoImg} sx={{ width: "100%" }} />
-                    </Grid>
-                </Grid>
                 </Container>
             </Box>
 
 
-            <Box sx={{ p: 15, backgroundImage: `radial-gradient(circle closest-corner at 20% 20%, #811d1dff, #1e1e1eff)` }}>
+            <Box sx={{ p: { sm: 2, md: 15 }, backgroundImage: `radial-gradient(circle closest-corner at 20% 20%, #811d1dff, #1e1e1eff)` }}>
                 <Container>
                     <Box pb={10}>
                         <Typography color='#fff' fontSize={"2.5rem"}>MORAL PURPOSE</Typography>
@@ -147,9 +148,10 @@ const CompanyInfo = () => {
             <Box>
                 <video
                     style={{
-                        display: "block",
-                        // filter: 'grayscale(10%)',
-                        height: '650px', objectFit: 'cover', width: '100%'
+                        display: 'block',
+                        aspectRatio: '16/7',
+                        objectFit: 'cover', width: '100%',
+                        height: "100%"
                     }}
                     autoPlay
                     loop

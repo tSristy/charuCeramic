@@ -44,8 +44,10 @@ const Homepage = () => {
                 <Carousel>
                     <video
                         style={{
-                            // filter: 'grayscale(10%)',
-                            height: '650px', objectFit: 'cover', width: '100%'
+                            // filter: 'grayscale(10%)', 
+                        aspectRatio: '16/7',
+                        height: "auto",
+                             objectFit: 'cover', width: '100%'
                         }}
                         autoPlay
                         loop
@@ -59,7 +61,8 @@ const Homepage = () => {
                     <Box sx={{
                         display: 'block',
                         width: "100%",
-                        height: "650px",
+                        aspectRatio: '16/7',
+                        height: "auto",
                         objectFit: "cover"
                     }}
                         component="img" src={bannerImg} />
@@ -127,7 +130,7 @@ const Homepage = () => {
 
                     <Grid container spacing={4}>
                         {categoryList.map(product => (
-                            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }} onClick={(e) => console.log(product.slug)}>
+                            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
                                 <Box sx={{
                                     border: '1px solid #eee',
                                     cursor: 'pointer',
@@ -138,7 +141,7 @@ const Homepage = () => {
                                     }
                                 }} onClick={(e) => navigate(`/product/${product.slug}`)}>
                                     <Box component="img" src={urlAPI + product.featured_image} alt={product.name} className="hoverEffect" sx={{
-                                        display: 'block', filter: 'grayscale(100%)', width: '100%', height: '180px', objectFit: 'cover',
+                                        display: 'block', filter: 'grayscale(100%)', width: '100%', aspectRatio: '4/3', height: '180px', objectFit: 'cover',
                                         transition: "all .3s ease", borderBottom: '5px solid #ffffffff'
                                     }} />
 
@@ -162,7 +165,7 @@ const Homepage = () => {
                 <Stack sx={{ alignItems: 'stratch', justifyContent: 'center' }} direction={{ sm: 'column', md: 'row' }}>
                     <Box sx={{ bgcolor: '#ED1C24', py: 10, px: 5, alignContent: "center" }}>
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left', color: 'white' }}>
-                            Our Technology
+                            Our Technologies
                         </Typography>
                     </Box>
 
@@ -276,7 +279,7 @@ const Homepage = () => {
                                 pb: { sm: 0, md: 10 },
                             }}>
                                 <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
-                                    Bangladesh’s Benchmark for Premium Sanitaryware & Bathware
+                                    Bangladesh’s Benchmark for Premium Sanitaryware 
                                 </Typography>
                                 <Typography sx={{ fontSize: '.9rem', fontWeight: 400, textAlign: 'left', my: 2 }}>
                                     Charu Ceramic has set the benchmark for premium sanitaryware and bath ware in Bangladesh through innovative design, superior quality, advanced manufacturing, and an unwavering commitment to customer satisfaction.
@@ -289,14 +292,15 @@ const Homepage = () => {
                     </Grid>
                 </Container>
             </Box>
-            -
+
 
             {/* VIDEOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */}
-            <Box sx={{ py: 10 }}>
+            <Box sx={{ py: { md: 4, lg: 10 } }}>
                 <video
                     style={{
-                        // filter: 'grayscale(10%)',
-                        height: '500px', objectFit: 'cover', width: '100%'
+                         aspectRatio: '16/7',
+                        height: "auto",
+                             objectFit: 'cover', width: '100%'
                     }}
                     autoPlay
                     loop

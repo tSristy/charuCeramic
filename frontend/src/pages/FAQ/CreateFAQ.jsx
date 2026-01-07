@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TextField, Stack, Container, Typography, Box, IconButton, Divider, Grid } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
@@ -11,6 +11,7 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 
 const CreateFAQ = () => {
+    const navigate = useNavigate();
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
 
@@ -43,6 +44,7 @@ const CreateFAQ = () => {
 
     const handleDelete = () => {
          if (ID === null) {
+            navigate('/faq-list');
         } else {
             ServerApi(`/faq/delete/` + ID, "DELETE", null, null)
             .then((res) => res.json())

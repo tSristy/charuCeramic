@@ -5,10 +5,44 @@ const router = express.Router();
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-    const { pageNo } = req.body;
-    const sql = `SELECT A.id, A.name, A.model_number, A.SKU, A.brand_name, B.image_url, C.name AS cat_name FROM products AS A INNER JOIN product_images AS B ON A.id = B.product_id AND A.single_image = B.sort_order INNER JOIN category_details AS C On C.id = A.category_id WHERE A.is_active = 1 AND B.is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
-	    SELECT COUNT(*) AS totalRows FROM products WHERE is_active = 1;`;
-    db.query(sql, (err, results) => {
+    const { pageNo, searchVariable } = req.body;
+    const sql = `SELECT 
+    A.id,
+    A.name,
+    A.model_number,
+    A.SKU,
+    A.brand_name,
+    B.image_url,
+    C.name AS cat_name
+FROM products AS A
+INNER JOIN product_images AS B
+    ON A.id = B.product_id
+   AND A.single_image = B.sort_order
+INNER JOIN category_details AS C
+    ON C.id = A.category_id
+WHERE A.is_active = 1
+  AND B.is_active = 1
+  AND (
+        ? IS NULL
+        OR A.name LIKE CONCAT('%', ?, '%')
+        OR A.model_number LIKE CONCAT('%', ?, '%')
+        OR A.brand_name LIKE CONCAT('%', ?, '%')
+        OR C.name LIKE CONCAT('%', ?, '%')
+      )
+LIMIT 12 OFFSET ?;SELECT COUNT(DISTINCT A.id) AS totalRows
+FROM products AS A
+INNER JOIN category_details AS C
+    ON C.id = A.category_id
+WHERE A.is_active = 1
+  AND (
+        ? IS NULL
+        OR A.name LIKE CONCAT('%', ?, '%')
+        OR A.model_number LIKE CONCAT('%', ?, '%')
+        OR A.brand_name LIKE CONCAT('%', ?, '%')
+        OR C.name LIKE CONCAT('%', ?, '%')
+      );
+`;
+    db.query(sql, [searchVariable, searchVariable, searchVariable, searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable, searchVariable, searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching blog items:', err);
             return res.status(500).json({ error: 'Failed to fetch blog items' });
@@ -19,7 +53,7 @@ router.post('/list', (req, res) => {
 
 
 router.post('/list-by-cat', (req, res) => {
-    const { pageNo, category, searchVar } = req.body;
+    const { pageNo, category, searchVariable } = req.body;
     const pageSize = 12;
     const offset = (pageNo - 1) * pageSize;
 
@@ -31,10 +65,10 @@ router.post('/list-by-cat', (req, res) => {
         params.push(category, category);
     }
 
-    if (searchVar && searchVar.trim() !== '') {
-        const searchTerm = `%${searchVar}%`;
-        filterSql += ` AND (P.name LIKE ? OR P.model_number LIKE ? OR C.name LIKE ?) `;
-        params.push(searchTerm, searchTerm, searchTerm);
+    if (searchVariable && searchVariable.trim() !== '') {
+        const searchTerm = `%${searchVariable}%`;
+        filterSql += ` AND (P.name LIKE ? OR P.model_number LIKE ? OR C.name LIKE ? OR P.brand_name LIKE ? ) `;
+        params.push(searchTerm, searchTerm, searchTerm, searchTerm);
     }
 
     const sql = `SELECT P.id, P.name, P.model_number, P.SKU, P.url_path,
@@ -124,12 +158,13 @@ router.get('/', (req, res) => {
             console.error(err);
         }
         else {
-            if(data.length === 0){
+            if (data.length === 0) {
                 res.send(404);
             }
-            else{
-            const itemId = (data[0].id);
-            getDataFunc(itemId, res);}
+            else {
+                const itemId = (data[0].id);
+                getDataFunc(itemId, res);
+            }
         }
     })
 })
@@ -207,18 +242,18 @@ router.post('/add', uploadFields, (req, res) => {
 //-------------------------- Update product with multiple images ---------------------------------
 router.put('/update/:id', uploadFields, (req, res) => {
     const productId = req.params.id;
-    
+
     const newPdfFile = req.files['spec_pdf'] ? `/pdf/${req.files['spec_pdf'][0].filename}` : null;
     const newImages = req.files['images'] || [];
 
-    const { 
-        category_id, name, description, model_number, SKU, url_path, 
-        spec_pdf, 
-        brand_name, single_image, first_image, drawing_image, sort_order, 
-        existing_images, existing_sort_order, delValues, 
-        specId, specLabel, specValue, specDel 
+    const {
+        category_id, name, description, model_number, SKU, url_path,
+        spec_pdf,
+        brand_name, single_image, first_image, drawing_image, sort_order,
+        existing_images, existing_sort_order, delValues,
+        specId, specLabel, specValue, specDel
     } = req.body;
-console.log(delValues, specId, specLabel,specValue,specDel);
+    console.log(delValues, specId, specLabel, specValue, specDel);
     const specIDList = Array.isArray(specId) ? specId : [specId];
     const specDelList = Array.isArray(specDel) ? specDel : [specDel];
     const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];
@@ -255,7 +290,7 @@ console.log(delValues, specId, specLabel,specValue,specDel);
             }))
     }
 
-   const finalPdf = newPdfFile || spec_pdf; 
+    const finalPdf = newPdfFile || spec_pdf;
 
     const productSql = 'UPDATE products SET category_id = ?, name = ?, description = ?, model_number = ?, SKU = ?, url_path = ?, spec_pdf = ?, brand_name = ?, single_image = ?, first_image = ?, drawing_image = ?, modified_at = NOW() WHERE id = ?';
 

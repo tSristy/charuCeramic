@@ -33,6 +33,7 @@ import CatalogueList from "../pages/Catalogue/CatalogueList";
 import Login from "../pages/Layout/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import NoPage from "../pages/NoPage";
+import CareerList from "../pages/Career/CareerList";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -88,6 +89,9 @@ export const RouterConfig = createBrowserRouter([
 
                 { path: "catalogue-panel", Component: CreateCatalogue },
                 { path: "catalogue-list", Component: CatalogueList },
+
+                { path: "career-list", Component: CareerList },
+                { path: "career-view", Component: CatalogueList },
             ]
         }],
     },

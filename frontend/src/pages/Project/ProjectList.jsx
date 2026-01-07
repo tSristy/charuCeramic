@@ -7,19 +7,22 @@ import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import { useNavigate } from "react-router-dom";
 
 const ProjectList = () => {
+    const navigate = useNavigate();
     const [projectList, setProjectList] = useState([]);
+    const [searchVariable, setSearchVariable] = useState('');
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
         totalRows: 0,
         totalPages: 0
     });
-    const [searchVariable, setSearchVariable] = useState(null);
 
     useEffect(() => {
         const body = {
-            pageNo: paginationDetails.pageNo
+            pageNo: paginationDetails.pageNo,
+            searchVariable: searchVariable
         };
         ServerApi(`/project/list`, 'POST', null, body)
             .then(res => res.json())
@@ -33,7 +36,7 @@ const ProjectList = () => {
                     }
                 });
             })
-    }, [paginationDetails.pageNo]);
+    }, [searchVariable, paginationDetails.pageNo]);
 
 
     const HandleDelete = (id) => {
@@ -44,6 +47,13 @@ const ProjectList = () => {
                 setProjectList(tempArr);
             })
     }
+
+    const handlePanel = (arg)=>{
+        if (typeof(arg) === "string") {
+                navigate(arg);
+        }
+        else navigate(`/project-panel?id=${arg}`);
+    };
 
     return (
         <Box py={5}>
@@ -58,7 +68,7 @@ const ProjectList = () => {
                          <BtnAdminSearch
                             onChange={(e) => setSearchVariable(e.target.value)}
                         />
-                        <BtnAdminSubmit text="Create" onClick={() => { }} />
+                        <BtnAdminSubmit text="Create" onClick={(e) => {handlePanel('/project-panel')}} />
                     </Box>
                 </Stack>
 
@@ -71,21 +81,21 @@ const ProjectList = () => {
                                 <TableCell><SquareIcon fontSize="small" sx={{ color: "#ff0000" }} /></TableCell>
                                 <TableCell>Project Title</TableCell>
                                 <TableCell>Image</TableCell>
-                                <TableCell>URL Path</TableCell>
+                                <TableCell>Location</TableCell>
                                 <TableCell>Content</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {projectList.map((item, index) => (
+                            {projectList?.map((item, index) => (
                                 <TableRow key={item.id}>
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.title} </TableCell>
                                     <TableCell> <img src={ urlAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
-                                    <TableCell> {item.slug} </TableCell>
+                                    <TableCell> {item.location} </TableCell>
                                     <TableCell> {item.content?.substring(0, 50)}... </TableCell>
-                                    <TableCell><Tooltip title="Edit"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell><Tooltip title="Edit"><IconButton onClick={(e) => handlePanel(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
                                         <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

@@ -17,9 +17,9 @@ const Contact = () => {
             }}>
                 <Box sx={{
                     display: 'block',
-                    width: "100%",
-                    height: "350px",
-                    objectFit: "cover",
+                    aspectRatio: '16/5',
+                    objectFit: 'cover', width: '100%',
+                    height: "100%",
                     filter: "grayscale(100%)"
                 }}
                     component="img" src={bgImg} />
@@ -37,11 +37,11 @@ const Contact = () => {
                                 <Stack direction="row" sx={{ my: 4, justifyContent: 'space-between' }}>
                                     <Box>
                                         <Typography sx={{ fontSize: '1rem' }}>Please reach us at</Typography>
-                                        <Typography sx={{ fontWeight: 600 }}>info@example.com</Typography>
+                                        <Typography sx={{ fontWeight: 600 }}>info@charuceramic.com</Typography>
                                     </Box>
                                     <Box>
                                         <Typography sx={{ textAlign: "right", fontWeight: 600 }}>Phone</Typography>
-                                        <Typography sx={{ textAlign: "right", fontSize: '1rem' }}>+1 234 567 890</Typography>
+                                        <Typography sx={{ textAlign: "right", fontSize: '1rem' }}>+880 1700 706 600</Typography>
                                     </Box>
                                 </Stack>
 
@@ -55,7 +55,7 @@ const Contact = () => {
                                     </Box>
                                     <Box>
                                         <Typography sx={{ textAlign: 'right', fontWeight: 600 }}>Factory</Typography>
-                                        <Typography sx={{ textAlign: 'right', fontSize: '1rem' }}>Dhaka</Typography>
+                                        <Typography sx={{ textAlign: 'right', fontSize: '1rem' }}>Madhabpur, Habiganj, Sylhet, Bangladesh</Typography>
                                     </Box>
                                 </Stack>
                             </Box>

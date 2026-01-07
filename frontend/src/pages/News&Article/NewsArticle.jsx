@@ -1,7 +1,35 @@
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Container, Divider, Grid, Stack, Typography } from "@mui/material";
 import bgImg from '../../img/bgDealer.jpg';
+import { useEffect, useState } from "react";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 
 const NewsArticle = () => {
+
+    const [blogList, setBlogList] = useState([]);
+    const [paginationDetails, setPaginationDetails] = useState({
+        pageNo: 1,
+        totalRows: 0,
+        totalPages: 0
+    });
+
+    useEffect(() => {
+        const body = {
+            pageNo: paginationDetails.pageNo,
+        };
+        ServerApi(`/blog/list`, 'POST', null, body)
+            .then(res => res.json())
+            .then(res => {
+                setBlogList(res.items);
+                setPaginationDetails(previousState => {
+                    return {
+                        ...previousState,
+                        totalRows: res.totalRows,
+                        totalPages: Math.ceil(res.totalRows / 10)
+                    }
+                });
+            })
+    }, [paginationDetails.pageNo]);
+
     return (
         <>
             <Container sx={{ py: 10 }}>
@@ -28,11 +56,12 @@ const NewsArticle = () => {
                             >
                                 <CardMedia
                                     component="img"
-                                    image={bgImg}
+                                    image={urlAPI + blogList[0]?.featured_image}
                                     alt="news"
                                     sx={{
+                                        width: "auto",
+                                        aspectRatio: '4/3',
                                         height: "100%",
-                                        width: "100%",
                                         objectFit: "cover",
                                     }}
                                 />
@@ -81,16 +110,20 @@ const NewsArticle = () => {
                                         lineHeight: 1.3,
                                     }}
                                 >
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    {blogList[0]?.title}
                                 </Typography>
 
                                 <Typography
                                     sx={{
                                         fontSize: ".9rem",
                                         mb: 2,
+                                        overflow: 'hidden'
                                     }}
                                 >
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur facilis est praesentium alias molestias voluptatibus magni et obcaecati iste rem laboriosam voluptatem quaerat ab, aperiam voluptate ex ut eveniet totam!
+                                    <div
+                                        className="blog-post-content"
+                                        dangerouslySetInnerHTML={{ __html: blogList[0]?.content.slice(0,400) }}
+                                    />
                                 </Typography>
 
                                 <Typography
@@ -99,7 +132,7 @@ const NewsArticle = () => {
                                         mt: "auto",
                                     }}
                                 >
-                                    24 Nov, 2025
+                                    {blogList[0]?.published_at?.split(' ')[0]}
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -108,50 +141,29 @@ const NewsArticle = () => {
                     <Grid size={{ sx: 12, sm: 4 }}>
                         <Card sx={{ bgcolor: "white" }}>
                             <CardContent >
-
                                 <Typography variant="overline">
                                     Latest Updates
                                 </Typography>
 
                                 <Divider py={1} />
-                                <Box px={2} pt={2}>
-                                    <Typography sx={{ fontSize: '1rem' }}>
-                                        Article
-                                    </Typography>
+                                {blogList?.filter((_, index) => index > 0 && index < 4)
+                                    .map((item, index) => (
+                                        <Box px={2} pt={2} key={index}>
+                                            <Typography sx={{ fontSize: '1rem', fontWeight: 500 }}>
+                                                {item.title}
+                                            </Typography>
 
-                                    <Typography sx={{ fontSize: '.8rem', color: 'text.secondary' }} noWrap>
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem earum sit dicta magni laudantium
-                                    </Typography>
-                                </Box>
+                                            <Typography sx={{ fontSize: '.8rem', color: 'text.secondary' }} noWrap>
+                                                <div
+                                                    className="blog-post-content"
+                                                    dangerouslySetInnerHTML={{ __html: item.content.slice(0, 100) }}
+                                                />
+                                            </Typography>
+                                            <Divider py={1} />
+                                        </Box>
+                                    ))
+                                }
                             </CardContent>
-                            <Divider py={1} />
-
-                            <CardContent>
-                                <Box px={2}>
-                                    <Typography sx={{ fontSize: '1rem' }}>
-                                        News
-                                    </Typography>
-
-                                    <Typography sx={{ fontSize: '.8rem', color: 'text.secondary' }} noWrap>
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem earum sit dicta magni laudantium
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-
-                            <Divider py={1} />
-                            <CardContent>
-                                <Box px={2}>
-                                    <Typography sx={{ fontSize: '1rem' }}>
-                                        News
-                                    </Typography>
-
-                                    <Typography sx={{ fontSize: '.8rem', color: 'text.secondary' }} noWrap>
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem earum sit dicta magni laudantium
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-
-
                         </Card>
                     </Grid>
                 </Grid>
@@ -159,44 +171,39 @@ const NewsArticle = () => {
 
 
 
-            <Container sx={{ py: 10 }}>
+            <Container sx={{ pb: 10 }}>
                 <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, mb: 5, textAlign: 'flex-start' }}>
                     Media
                 </Typography>
                 <Grid container spacing={4}>
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box>
-                            <Box component="img" src={bgImg} alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                            <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                The Evolution of Sanitaryware: A Look into Charu Ceramic's Journey
-                            </Typography>
-                            {/* <Typography sx={{ fontSize: '.9rem', textAlign: 'left' }}>
-                                    Explore the transformative journey of Charu Ceramic in the sanitaryware industry, highlighting key milestones.
-                                </Typography> */}
-                        </Box>
-                    </Grid><Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box>
-                            <Box component="img" src={bgImg} alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                            <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                The Evolution of Sanitaryware: A Look into Charu Ceramic's Journey
-                            </Typography>
-                            {/* <Typography sx={{ fontSize: '.9rem', textAlign: 'left' }}>
-                                    Explore the transformative journey of Charu Ceramic in the sanitaryware industry, highlighting key milestones.
-                                </Typography> */}
-                        </Box>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box>
-                            <Box component="img" src={bgImg} alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                            <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                The Evolution of Sanitaryware: A Look into Charu Ceramic's Journey
-                            </Typography>
-                            {/* <Typography sx={{ fontSize: '.9rem', textAlign: 'left' }}>
-                                    Explore the transformative journey of Charu Ceramic in the sanitaryware industry, highlighting key milestones.
-                                </Typography> */}
-                        </Box>
-                    </Grid>
+                    {
+                        blogList?.filter((_, index) => index > 3 )
+                            .map((item, index) => (
+                                <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }}>
+                                    <Box>
+                                        <Box component="img" src={urlAPI + item.featured_image}
+                                alt={item.title} sx={{ width: '100%', height: 'auto',
+                                aspectRatio: '16/9', objectFit: 'cover' }} />
+                                        <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
+                                           {item.title}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            ))
+                    }
                 </Grid>
+
+                {/* <Stack py={4} alignItems="center">
+                                {paginationDetails.totalPages > paginationDetails.pageNo ? (
+                                    <Button variant='outlined' color='error' disabled={loading} onClick={() => {
+                                        setPaginationDetails(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
+                                    }}>
+                                        {loading ? "Loading..." : "Load More"}
+                                    </Button>
+                                ) : (
+                                    productList.length > 0 && <Typography variant='overline' color='textDisabled'>End of results</Typography>
+                                )}
+                            </Stack> */}
             </Container>
         </>
     );

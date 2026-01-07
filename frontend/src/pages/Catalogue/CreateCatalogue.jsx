@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Tooltip, Button, Snackbar, Alert, Switch } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import FormLabel from "../../assets/FormLabel/FormLabel";
@@ -16,6 +16,7 @@ import UploadingLoader from "../../assets/Modal/UploadingLoader";
 import BtnOpenInTab from "../../assets/Button/BtnDownload";
 
 const CreateCatalogue = () => {
+    const navigate = useNavigate();
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
 
@@ -108,7 +109,7 @@ const CreateCatalogue = () => {
 
     const handleDelete = () => {
         if (ID === null) {
-            navigate(-1)
+            navigate('/catalogue-list');
         } else {
             ServerApi(`/catalogue/delete/${ID}`, "DELETE", null, null)
                 .then(res => res.json())
@@ -122,7 +123,6 @@ const CreateCatalogue = () => {
         ServerApi(`/catalogue/${ID}`, "GET", null, null)
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 setCatalogue({
                     title: res.title || "",
                     file_path: res.file_path || "",
@@ -231,7 +231,7 @@ const CreateCatalogue = () => {
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormLabel text="Featured Image" icon={<AttachFileIcon />} />
+                                            <FormLabel text="Featured Image || 370*520" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
                                                 <TextField
                                                     fullWidth

@@ -191,7 +191,7 @@ const CreateProduct = () => {
 
     const handleDelete = () => {
         if (ID === null) {
-            navigate(-1)
+            navigate('/product-list')
         } else {
             ServerApi(`/product/delete/` + ID, "DELETE", null, null)
                 .then((res) => res.json())

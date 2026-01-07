@@ -12,6 +12,9 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+
 
 const Sidebar = () => {
     const menuList = [
@@ -20,9 +23,9 @@ const Sidebar = () => {
         { title: "Products", url: "/product-list", icon: <WarehouseIcon /> },
         { title: "Catalogues", url: "/catalogue-list", icon: <WebStoriesIcon /> },
         { title: "Dealers", url: "/dealer-list", icon: <CreditCardIcon /> },
-        // { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
-        // { title: "Blogs", url: "/blog-list", icon: <InboxIcon /> },
-        // { title: "Projects", url: "/project-list", icon: <InboxIcon /> },
+        { title: "Blogs", url: "/blog-list", icon: <NewspaperIcon /> },
+        { title: "Projects", url: "/project-list", icon: <ApartmentIcon /> },
+        { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
     ];
     const [open, setOpen] = useState(true);
     const navigate = useNavigate();

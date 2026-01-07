@@ -53,7 +53,7 @@ const CreateDealer = () => {
 
     const handleDelete = () => {
         if (ID === null) {
-            navigate(-1);
+            navigate('/dealer-list');
         } else {
             ServerApi(`/dealer/delete/` + ID, "DELETE", null, null)
                 .then((res) => res.json())

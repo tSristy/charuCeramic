@@ -4,8 +4,8 @@ const db = require('../Service/dbconfig');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-    const { pageNo , searchVar={} } = req.body;
-    const { find, district, division } = searchVar;
+    const { pageNo , searchVariable={} } = req.body;
+    const { find, district, division } = searchVariable;
     const limit = 12;
     const offset = (pageNo - 1) * limit;
 

@@ -110,7 +110,7 @@ const CreateCategory = () => {
 
     const handleDelete = () => {
         if (ID === null) {
-            navigate(-1);
+            navigate('/category-list');
         } else {
             ServerApi(`/category/delete/` + ID, "DELETE", null, null)
                 .then((res) => res.json())

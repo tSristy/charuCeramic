@@ -35,6 +35,10 @@ app.use('/api/catalogue', catalogueRouter);
 const technoRouter = require('./routers/technologyRouter');
 app.use('/api/technology', technoRouter);
 
+
+const careerRouter = require('./routers/careerRouter');
+app.use('/api/career', careerRouter);
+
 const loginRouter = require('./routers/login');
 app.use('/api', loginRouter);
 

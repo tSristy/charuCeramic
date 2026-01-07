@@ -5,13 +5,35 @@ const { upload } = require('./imgRoute');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-    const { pageNo } = req.body;
-    const sql = `SELECT 
-        id, parent_id, name, slug, description, featured_image, add_menu, add_homepage,
-        is_active
-        FROM category_details WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
-    SELECT COUNT(*) AS totalRows FROM category_details WHERE is_active = 1;`;
-    db.query(sql, (err, results) => {
+    const { pageNo, searchVariable } = req.body;
+
+    const sql = `SELECT
+    id,
+    parent_id,
+    name,
+    slug,
+    description,
+    featured_image,
+    add_menu,
+    add_homepage,
+    is_active
+FROM
+    category_details
+WHERE
+    is_active = 1 AND (
+        ? IS NULL OR name LIKE CONCAT('%', ?, '%')
+    )
+LIMIT 10 OFFSET ?;
+SELECT
+    COUNT(*) AS totalRows
+FROM
+    category_details
+WHERE
+    is_active = 1 AND (
+        ? IS NULL OR name LIKE CONCAT('%', ?, '%')
+    )`;
+
+    db.query(sql, [searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching items:', err);
             return res.status(500).json({ error: 'Failed to fetch items' });

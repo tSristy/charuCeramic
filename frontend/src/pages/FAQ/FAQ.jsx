@@ -6,8 +6,24 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { faqQuestions } from '../../Data';
 import { Box, Container } from '@mui/material';
 import bgImg from '../../img/bgDealer.jpg';
+import { useEffect, useState } from 'react';
+import { ServerApi } from '../../route/ServerAPI';
 
 const FAQ = () => {
+    const [faqList,setFaqList] = useState([]);
+    useEffect(() => {
+            const body = {
+                pageNo: 1,
+                searchVariable: ''
+            };
+    
+            ServerApi(`/faq/list`, 'POST', null, body)
+                .then(res => res.json())
+                .then(res => {
+                    setFaqList(res.items);
+                })
+        }, []);
+
     return (
         <Box>
             <Box sx={{
@@ -25,7 +41,7 @@ const FAQ = () => {
                     <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, mb: 5, textAlign: 'center' }}>
                         Frequently Asked Questions
                     </Typography>
-                    {faqQuestions.map((item, index) => (
+                    {faqList.map((item, index) => (
                         <Accordion key={index} defaultExpanded={index === 0 ? true : false} sx={{ mb: 2, boxShadow: 0 }}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon color='error' />}

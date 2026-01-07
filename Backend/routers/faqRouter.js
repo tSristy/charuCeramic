@@ -4,12 +4,14 @@ const db = require('../Service/dbconfig');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-    const { pageNo } = req.body;
+    const { pageNo, searchVariable } = req.body;
     const sql = `SELECT 
         id, question, answer, is_active
-        FROM faq WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
-    SELECT COUNT(*) AS totalRows FROM faq WHERE is_active = 1;`;
-    db.query(sql, (err, results) => {
+        FROM faq WHERE is_active = 1 AND (
+        ? IS NULL OR question LIKE CONCAT('%', ?, '%')) LIMIT 15 OFFSET ?;
+    SELECT COUNT(*) AS totalRows FROM faq WHERE is_active = 1 AND (
+        ? IS NULL OR question LIKE CONCAT('%', ?, '%')) ;`;
+    db.query(sql, [searchVariable, searchVariable, ((pageNo - 1) * 15), searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching faq:', err);
             return res.status(500).json({ error: 'Failed to fetch faq' });
@@ -59,7 +61,7 @@ router.put('/update/:id', (req, res) => {
 // -------------------------- Get faq details by id -----------------------------
 router.get('/:id', (req, res) => {
     const faqId = req.params.id;
-    
+
     const sql = 'SELECT * FROM faq WHERE is_active = 1 AND id = ?';
     db.query(sql, [faqId], (err, result) => {
         if (err) {

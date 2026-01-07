@@ -21,7 +21,8 @@ const ProductList = () => {
 
 	useEffect(() => {
 		const body = {
-			pageNo: paginationDetails.pageNo
+			pageNo: paginationDetails.pageNo,
+			searchVariable: searchVariable
 		};
 		ServerApi(`/product/list`, 'POST', null, body)
 			.then(res => res.json())
@@ -35,7 +36,7 @@ const ProductList = () => {
 					}
 				});
 			})
-	}, [paginationDetails.pageNo]);
+	}, [searchVariable, paginationDetails.pageNo]);
 
 
 	const HandleDelete = (id) => {
@@ -83,7 +84,6 @@ const ProductList = () => {
 								<TableCell>Category</TableCell>
 								<TableCell>Description</TableCell>
 								<TableCell>Model Number</TableCell>
-								<TableCell>SKU</TableCell>
 								<TableCell>Brand Name</TableCell>
 								<TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
 							</TableRow>
@@ -97,7 +97,6 @@ const ProductList = () => {
 									<TableCell> {item.cat_name} </TableCell>
 									<TableCell width={"10%"}> <Box component="img" src={urlAPI + item.image_url} sx={{ width: "100%", objectFit: "cover" }} /></TableCell>
 									<TableCell> {item.model_number} </TableCell>
-									<TableCell> {item.SKU} </TableCell>
 									<TableCell> {item.brand_name} </TableCell>
 									<TableCell><Tooltip title="Edit"><IconButton onClick={(e) => handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
 									<TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

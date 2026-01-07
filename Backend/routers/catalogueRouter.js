@@ -5,10 +5,13 @@ const { upload } = require('./imgRoute');
 
 // ------------------------- Get ALL Items -------------------------------------
 router.post('/list', (req, res) => {
-    const { pageNo } = req.body;
-    const sql = `SELECT * FROM catalogue_details WHERE is_active = 1 LIMIT 10 OFFSET ${(pageNo - 1) * 10};
-    SELECT COUNT(*) AS totalRows FROM catalogue_details WHERE is_active = 1;`;
-    db.query(sql, (err, results) => {
+    const { pageNo, searchVariable } = req.body;
+    const sql = `SELECT * FROM catalogue_details WHERE is_active = 1 AND (
+        ? IS NULL OR title LIKE CONCAT('%', ?, '%')
+    ) LIMIT 10 OFFSET ?;
+    SELECT COUNT(*) AS totalRows FROM catalogue_details WHERE is_active = 1 AND (
+        ? IS NULL OR title LIKE CONCAT('%', ?, '%'));`;
+    db.query(sql,[searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching catalogue items:', err);
             return res.status(500).json({ error: 'Failed to fetch catalogue items' });

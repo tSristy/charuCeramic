@@ -36,7 +36,6 @@ const SingleProduct = () => {
     const [mainImg, setMainImg] = useState(null);
     const [imageList, setImageList] = useState([]);
     const [specList, setSpecList] = useState([]);
-    /////////////////////////more compitable
     const [testVar, setTestVar] = useState({});
 
     const mainImageHanlde = (imgList, seq) => {
@@ -55,7 +54,6 @@ const SingleProduct = () => {
         ServerApi(`/product?url_path=${number}`, "GET", null, null)
             .then((res) => res.json())
             .then(res => {
-                console.log(res)
                 if (res === 404) { navigate("/404-not-found", { replace: true }); }
                 setProductDetails(res.product);
                 setImageList(res.images);
@@ -70,7 +68,13 @@ const SingleProduct = () => {
                 ))
             })
     }, [number])
-    console.log(testVar)
+
+
+    useEffect(()=>{
+       if(productDetails.id){
+        ServerApi
+       }
+    },[])
 
     if (!productDetails || !mainImg) {
         return <Typography align="center" variant="overline" py={10}>Loading Product...</Typography>;
@@ -97,7 +101,7 @@ const SingleProduct = () => {
 
                     <Grid container spacing={5} sx={{ alignItems: "stretch" }}>
                         <Grid size={{ sm: 9, md: 7 }}>
-                            <Box mt={5} px={10} sx={{ borderRight: '1px solid #d0d0d094' }}>
+                            <Box mt={5} px={{md:2,lg:10}} sx={{ borderRight: '1px solid #d0d0d094' }}>
                                 <Box component="img" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{
                                     display: 'block', width: '100%',
                                     aspectRatio: {
@@ -106,8 +110,8 @@ const SingleProduct = () => {
                                     }, height: 'auto', objectFit: 'cover'
                                 }} />
                             </Box>
-                            <Box px={10}>
-                                <Stack direction={{ xs: "column", sm: "row" }} sx={{ justifyContent: "space-between" }} mt={4}>
+                            <Box px={{md:2,lg:10}}>
+                                <Stack direction='row' sx={{ justifyContent: "space-between" }} mt={4}>
                                     {
                                         imageList?.filter(item => item.id !== mainImg.id)
                                             .map(item => (
@@ -117,10 +121,10 @@ const SingleProduct = () => {
                                                     sx={{
                                                         objectFit: "cover",
                                                         display: 'block',
-                                                        width: { sm: '150px', md: '200px' },
+                                                        width: { xs:'100px', sm: '150px', lg: '200px' },
 
                                                         aspectRatio: {
-                                                            xs: '4 / 3',
+                                                            // xs: '4 / 3',
                                                             sm: '1 / 1',
                                                         }, height: 'auto',
 
@@ -140,7 +144,7 @@ const SingleProduct = () => {
                         </Grid>
 
                         <Grid size={{ sm: 12, md: 5 }}>
-                            <Box px={5}>
+                            <Box px={{md:2,lg:5}}>
                                 <h1>{productDetails?.name}</h1>
 
                                 <Stack direction="row">
@@ -282,6 +286,19 @@ const SingleProduct = () => {
                     </Grid>
                 </Container>
             </Box>
+
+            <Container>
+                <Stack direction='column' alignItems={'flex-end'}>
+                    <Typography variant="overline">You may also like</Typography>
+                    <Typography variant="h4" fontWeight={600}>Related Product</Typography>
+                </Stack>
+
+                <Box mt={5} mb={10}>
+                    <Stack direction={{ sm: 'column', md: 'row' }}>
+
+                    </Stack>
+                </Box>
+            </Container>
 
         </>
     );

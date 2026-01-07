@@ -21,7 +21,6 @@ export const districtsByDivision = {
         "Munshiganj",
         "Narayanganj",
         "Narsingdi",
-        "Rajbari",
         "Shariatpur",
         "Tangail"
     ],
@@ -41,7 +40,7 @@ export const districtsByDivision = {
 
     Barisal: [
         "Barishal",
-        "Barguna",
+        "Boguna",
         "Bhola",
         "Jhalokathi",
         "Patuakhali",
@@ -54,10 +53,11 @@ export const districtsByDivision = {
         "Chuadanga",
         "Jashore",
         "Jhenaidah",
-        "Kushtia",
+        "Kusthia",
         "Magura",
         "Meherpur",
         "Narail",
+        "Rajbari",
         "Satkhira"
     ],
 
@@ -79,13 +79,13 @@ export const districtsByDivision = {
         "Kurigram",
         "Lalmonirhat",
         "Nilphamari",
-        "Panchagarh",
+        "Panchagrah",
         "Thakurgaon"
     ],
 
     Sylhet: [
         "Sylhet",
-        "Habiganj",
+        "Hobiganj",
         "Moulvibazar",
         "Sunamganj"
     ],

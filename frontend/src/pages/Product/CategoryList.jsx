@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 const CategoryList = () => {
     const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
-    const [searchVariable, setSearchVariable] = useState(null);
+    const [searchVariable, setSearchVariable] = useState('');
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
         totalRows: 0,
@@ -21,7 +21,8 @@ const CategoryList = () => {
 
     useEffect(() => {
         const body = {
-            pageNo: paginationDetails.pageNo
+            pageNo: paginationDetails.pageNo,
+            searchVariable: searchVariable,
         };
         ServerApi(`/category/list`, 'POST', null, body)
             .then(res => res.json())
@@ -35,7 +36,7 @@ const CategoryList = () => {
                     }
                 });
             })
-    }, [paginationDetails.pageNo]);
+    }, [searchVariable,paginationDetails.pageNo]);
 
     const handleDelete = (id) => {
         const tempArr = categoryList.filter(category => category.id !== id);
