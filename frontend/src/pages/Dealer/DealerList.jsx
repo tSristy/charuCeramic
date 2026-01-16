@@ -51,9 +51,9 @@ const DealerList = () => {
             })
     }
 
-    const handlePanel = (arg)=>{
-        if (typeof(arg) === "string") {
-                navigate(arg);
+    const handlePanel = (arg) => {
+        if (typeof (arg) === "string") {
+            navigate(arg);
         }
         else navigate(`/dealer-panel?id=${arg}`);
     };
@@ -68,11 +68,11 @@ const DealerList = () => {
                         <Typography variant="overline" color="text.secondary">System Database • {paginationDetails.totalRows} active entries</Typography>
                     </Box>
 
-                    <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
+                    <Box sx={{ width: { sm: "100%", md: "30%" }, display: "flex", gap: 1 }}>
                         <BtnAdminSearch
-                            onChange={(e) => setSearchVariable({find: e.target.value})}
+                            onChange={(e) => { setPaginationDetails(prev => ({ ...prev, pageNo: 1 })); setSearchVariable({ find: e.target.value }) }}
                         />
-                        <BtnAdminSubmit text="Create" onClick={(e) => {handlePanel('/dealer-panel')}} />
+                        <BtnAdminSubmit text="Create" onClick={(e) => { handlePanel('/dealer-panel') }} />
                     </Box>
                 </Stack>
 
@@ -101,7 +101,7 @@ const DealerList = () => {
                                     <TableCell> {item.division} </TableCell>
                                     <TableCell> {item.district} </TableCell>
                                     <TableCell> {item.thana} </TableCell>
-                                    <TableCell><Tooltip title="Edit"><IconButton  onClick={(e)=>handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell><Tooltip title="Edit"><IconButton onClick={(e) => handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
                                         <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>

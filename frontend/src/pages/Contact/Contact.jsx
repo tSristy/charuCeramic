@@ -13,17 +13,24 @@ const Contact = () => {
         <>
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ED1C24"
+                borderColor: "#ED1C24",
+                display: 'block',
+                aspectRatio: '16/5',
+                width: '100%',
+                height: "auto",
+                overflow: 'hidden',
+                bgcolor: '#f0f0f0'
             }}>
-                <Box sx={{
-                    display: 'block',
-                    aspectRatio: '16/5',
-                    objectFit: 'cover', width: '100%',
-                    height: "100%",
-                    filter: "grayscale(100%)"
-                }}
-                    component="img" src={bgImg} />
+                <Box
+                    component="img"
+                    src={bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%)' }}
+                />
             </Box>
+
+
             <Box sx={{ py: 10 }}>
                 <Container>
                     <Grid container spacing={4}>
@@ -63,7 +70,7 @@ const Contact = () => {
 
                         <Grid size={{ xs: 12, sm: 6 }}>
                             <Box component="form" noValidate autoComplete="off" sx={{ m: 5 }}>
-                                <Typography variant='uoverline' sx={{ mb: 2, color: "#ED1C24" }}>Please provide your full name</Typography>
+                                <Typography variant='uoverline' sx={{ mb: 2, color: "#ff0000" }}>Please provide your full name</Typography>
                                 <TextField
                                     label="Name"
                                     variant="outlined"
@@ -107,7 +114,7 @@ const Contact = () => {
                                     sx={{ mt: 1 }}
                                 />
 
-                                <Button variant="contained" sx={{ bgcolor: '#ED1C24', textTransform: 'none', minWidth: '200px', py: 1, mt: 2, '&:hover': { bgcolor: '#e60000ff' } }}
+                                <Button variant="contained" sx={{ bgcolor: '#ff0000', textTransform: 'none', minWidth: '200px', py: 1, mt: 2, '&:hover': { bgcolor: '#e60000ff' } }}
                                 >
                                     Send
                                 </Button>

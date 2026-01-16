@@ -5,7 +5,7 @@ const CTA = () => {
     const navigate = useNavigate();
     return (
         <Box sx={{
-            bgcolor: "#ff0000ff",
+            bgcolor: "#ff0000",
             py: 2,
         }}>
             <Container>

@@ -14,16 +14,24 @@ const CompanyInfo = () => {
     const [seeMore, setSeeMore] = useState(false);
     return (
         <Box sx={{ bgcolor: "#fff" }}>
-            <Box sx={{
-                borderBottom: 4,
-                borderColor: "#ED1C24",
-                display: 'block',
-                aspectRatio: '16/5',
-                objectFit: 'cover', width: '100%',
-                height: "100%",
-                objectFit: "cover"
-            }}
-                component="img" src={bgImg} />
+           <Box sx={{
+                           borderBottom: 4,
+                           borderColor: "#ff0000",
+                           display: 'block',
+                           aspectRatio: '16/5',
+                           width: '100%',
+                           height: "auto", 
+                           overflow: 'hidden',
+                           bgcolor: '#f0f0f0'
+                       }}>
+                           <Box 
+                               component="img" 
+                               src={bgImg} 
+                               fetchPriority="high" 
+                               loading="eager" 
+                               sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                           />
+                       </Box>
 
 
             <Box sx={{ py: 10 }}>
@@ -66,7 +74,9 @@ const CompanyInfo = () => {
                                         </Typography>}
                                     </Collapse>
                                     <Box>
-                                        <Button variant="contained" color="error" onClick={(e) => setSeeMore(!seeMore)}> {seeMore ? "See Less" : "See More"}
+                                        <Button variant="contained" sx={{
+                                            bgcolor: '#ff0000'
+                                        }} onClick={(e) => setSeeMore(!seeMore)}> {seeMore ? "See Less" : "See More"}
                                         </Button>
                                     </Box>
                                 </Grid>
@@ -96,7 +106,7 @@ const CompanyInfo = () => {
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 3 }}>
-                            <Box component='img' src={infoImg} sx={{ width: "100%" }} />
+                            <Box component='img' src={infoImg} sx={{ width: "100%" }} loading='eager' decoding="async" />
                         </Grid>
                     </Grid>
                 </Container>
@@ -147,23 +157,16 @@ const CompanyInfo = () => {
 
             <Box>
                 <video
-                    style={{
-                        display: 'block',
-                        aspectRatio: '16/7',
-                        objectFit: 'cover', width: '100%',
-                        height: "100%"
-                    }}
-                    autoPlay
-                    loop
-                    muted
-                // poster="" // Image shown before the video loads/starts
+                    poster={bgImg}
+                    preload="metadata"
+                    style={{ aspectRatio: '16/6.7', width: '100%', objectFit: 'cover' }}
+                    autoPlay loop muted playsInline
                 >
                     <source src={bannerVideo} type="video/mp4" />
-                    Your browser does not support the video tag.
                 </video>
             </Box>
 
-            <Box sx={{ py: 20, backgroundImage: `url(${bgInfo})` }}>
+            <Box sx={{ py: 20, backgroundImage: `url(${bgInfo})`, bgcolor: '#cccccc' }}>
                 <Container>
                     <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left', mb: 10 }}>
                         Our Innovation
@@ -184,14 +187,16 @@ const CompanyInfo = () => {
                                         </Typography>
                                     </Box>
                                 </Box>
-                                <Box component="img" src={imgCard1} sx={{ height: "298px", objectFit: "cover" }} />
+                                <Box component="img" src={imgCard1} loading="lazy"
+                                    decoding="async" sx={{ height: "298px", objectFit: "cover" }} />
                             </Stack>
                         </Grid>
 
 
                         <Grid size={{ sm: 12, md: 4 }}>
                             <Stack direction={{ sm: "row", md: "column" }} spacing={2}>
-                                <Box component="img" src={imgCard2} sx={{ height: "298px", objectFit: "cover" }} />
+                                <Box component="img" src={imgCard2} loading="lazy"
+                                    decoding="async" sx={{ height: "298px", objectFit: "cover" }} />
 
                                 <Box sx={{
                                     display: "flex",
@@ -222,7 +227,8 @@ const CompanyInfo = () => {
                                         </Typography>
                                     </Box>
                                 </Box>
-                                <Box component="img" src={imgCard3} sx={{ height: "298px", objectFit: "cover" }} />
+                                <Box component="img" src={imgCard3} loading="lazy"
+                                    decoding="async" sx={{ height: "298px", objectFit: "cover" }} />
                             </Stack>
                         </Grid>
                     </Grid>

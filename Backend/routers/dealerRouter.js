@@ -33,6 +33,7 @@ router.post('/list', (req, res) => {
         SELECT id, name, address, phone, division, district, thana, is_active
         FROM dealer_details 
         WHERE ${whereClause} 
+        ORDER BY id ASC
         LIMIT ? OFFSET ?;
 
         SELECT COUNT(*) AS totalRows 

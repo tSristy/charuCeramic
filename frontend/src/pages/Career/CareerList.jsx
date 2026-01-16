@@ -61,7 +61,7 @@ const CareerList = () => {
 
 					<Box sx={{ width: { sm: "100%", md: "30%" }, display: "flex", gap: 1 }}>
 						<BtnAdminSearch
-							onChange={(e) => setSearchVariable(e.target.value)}
+							onChange={(e) => {setPaginationDetails(prev=>({...prev, pageNo:1}));setSearchVariable(e.target.value)}}
 						/>
 					</Box>
 				</Stack>

@@ -2,9 +2,10 @@ import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Container
 import bgImg from '../../img/bgDealer.jpg';
 import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
+import { useNavigate } from "react-router-dom";
 
 const NewsArticle = () => {
-
+    const navigate = useNavigate();
     const [blogList, setBlogList] = useState([]);
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
@@ -19,7 +20,11 @@ const NewsArticle = () => {
         ServerApi(`/blog/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
-                setBlogList(res.items);
+                setBlogList(prev=>{
+                    const map = new Map();
+                     [...prev, ...res.items].forEach(item => map.set(item.id, item));
+                    return Array.from(map.values());
+                });
                 setPaginationDetails(previousState => {
                     return {
                         ...previousState,
@@ -39,13 +44,16 @@ const NewsArticle = () => {
 
                 <Grid container spacing={4}>
                     <Grid size={{ sm: 12, md: 8 }}>
-                        <Card
+                        <Card onClick={(e) => navigate(`/news-article/${blogList[0]?.slug}`)}
                             sx={{
                                 display: "flex",
                                 flexDirection: { xs: "column", md: "row" },
                                 borderRadius: 3,
                                 overflow: "hidden",
                                 boxShadow: 2,
+                                '&:hover': {
+                                    cursor: 'pointer'
+                                }
                             }}
                         >
                             <Box
@@ -55,11 +63,11 @@ const NewsArticle = () => {
                                 }}
                             >
                                 <CardMedia
-                                    component="img"
+                                    component="img" loading="eager" decoding="async"
                                     image={urlAPI + blogList[0]?.featured_image}
                                     alt="news"
                                     sx={{
-                                        width: "auto",
+                                        width: "100%",
                                         aspectRatio: '4/3',
                                         height: "100%",
                                         objectFit: "cover",
@@ -122,7 +130,7 @@ const NewsArticle = () => {
                                 >
                                     <div
                                         className="blog-post-content"
-                                        dangerouslySetInnerHTML={{ __html: blogList[0]?.content.slice(0,400) }}
+                                        dangerouslySetInnerHTML={{ __html: blogList[0]?.content.slice(0, 400) }}
                                     />
                                 </Typography>
 
@@ -148,7 +156,11 @@ const NewsArticle = () => {
                                 <Divider py={1} />
                                 {blogList?.filter((_, index) => index > 0 && index < 4)
                                     .map((item, index) => (
-                                        <Box px={2} pt={2} key={index}>
+                                        <Box sx={{
+                                            px: 2, pt: 2, '&:hover': {
+                                                cursor: 'pointer'
+                                            }
+                                        }} key={index} onClick={(e) => navigate(`/news-article/${item.slug}`)}>
                                             <Typography sx={{ fontSize: '1rem', fontWeight: 500 }}>
                                                 {item.title}
                                             </Typography>
@@ -177,15 +189,21 @@ const NewsArticle = () => {
                 </Typography>
                 <Grid container spacing={4}>
                     {
-                        blogList?.filter((_, index) => index > 3 )
+                        blogList?.filter((_, index) => index > 3)
                             .map((item, index) => (
-                                <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }}>
+                                <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }} onClick={(e) => navigate(`/news-article/${item.slug}`)} sx={{
+                                    '&:hover': {
+                                        cursor: 'pointer'
+                                    }
+                                }}>
                                     <Box>
-                                        <Box component="img" src={urlAPI + item.featured_image}
-                                alt={item.title} sx={{ width: '100%', height: 'auto',
-                                aspectRatio: '16/9', objectFit: 'cover' }} />
+                                        <Box component="img" src={urlAPI + item.featured_image} loading="lazy" decoding="async"
+                                            alt={item.title} sx={{
+                                                width: '100%', height: 'auto',
+                                                aspectRatio: '16/9', objectFit: 'cover'
+                                            }} />
                                         <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                           {item.title}
+                                            {item.title}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -193,17 +211,17 @@ const NewsArticle = () => {
                     }
                 </Grid>
 
-                {/* <Stack py={4} alignItems="center">
-                                {paginationDetails.totalPages > paginationDetails.pageNo ? (
-                                    <Button variant='outlined' color='error' disabled={loading} onClick={() => {
-                                        setPaginationDetails(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
-                                    }}>
-                                        {loading ? "Loading..." : "Load More"}
-                                    </Button>
-                                ) : (
-                                    productList.length > 0 && <Typography variant='overline' color='textDisabled'>End of results</Typography>
-                                )}
-                            </Stack> */}
+                <Stack py={4} alignItems="center">
+                    {paginationDetails.totalPages > paginationDetails.pageNo ? (
+                        <Button variant='outlined' color='error' onClick={() => {
+                            setPaginationDetails(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
+                        }}>
+                            Load More
+                        </Button>
+                    ) : (
+                        blogList.length > 0 && <Typography variant='overline' color='textDisabled'>End of results</Typography>
+                    )}
+                </Stack>
             </Container>
         </>
     );

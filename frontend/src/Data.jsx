@@ -12,9 +12,9 @@ export const tempMenuList = [
 
   // Water Closet
   { id: 7, title: 'Water Closet', link: '/product/water-closet', parentId: 3 },
-  { id: 11, title: 'Wall Hung Toilet', link: '/product/wall-hung-toilet', parentId: 7 },
-  { id: 12, title: 'One Piece Toilet', link: '/product/one-piece-toilet', parentId: 7 },
-  { id: 13, title: 'Two Piece Toilet', link: '/product/two-piece-toilet', parentId: 7 },
+  { id: 11, title: 'One Piece Toilet', link: '/product/one-piece-toilet', parentId: 7 },
+  { id: 12, title: 'Two Piece Toilet', link: '/product/two-piece-toilet', parentId: 7 },
+  { id: 13, title: 'Wall Hung Toilet', link: '/product/wall-hung-toilet', parentId: 7 },
   { id: 14, title: 'Squat Asian Pan', link: '/product/squat-asian-pan', parentId: 7 },
 
   // Wash Basin
@@ -27,17 +27,17 @@ export const tempMenuList = [
 
   // Public Area
   { id: 9, title: 'Public Area', link: '/product/public-area', parentId: 3 },
-  { id: 20, title: 'Flush Valve Toilet', link: '/product/flush-valve-toilet', parentId: 9 },
-  { id: 21, title: 'Wall Hung Toilet', link: '/product/wall-hung-toilet', parentId: 9 },
-  { id: 22, title: 'Urinal', link: '/product/urinal', parentId: 9 },
-  { id: 23, title: 'Concealed Tank', link: '/product/concealed-tank', parentId: 9 },
+  { id: 20, title: 'Wall Hung Toilet', link: '/product/wall-hung-toilet', parentId: 9 },
+  { id: 21, title: 'Flush Valve Toilet', link: '/product/flush-valve-toilet', parentId: 9 },
+  { id: 22, title: 'Concealed Tank', link: '/product/concealed-tank', parentId: 9 },
+  { id: 23, title: 'Urinal', link: '/product/urinal', parentId: 9 },
 
   // Bathware
   { id: 10, title: 'Bathware', link: '/product/bathware', parentId: 3 },
   { id: 24, title: 'Faucet', link: '/product/faucet', parentId: 10 },
   { id: 25, title: 'Shower Mixer', link: '/product/shower-mixer', parentId: 10 },
-  { id: 26, title: 'Fixed Shower Head', link: '/product/fixed-shower-head', parentId: 10 },
-  { id: 27, title: 'Hand Shower', link: '/product/hand-shower', parentId: 10 },
+  { id: 26, title: 'Hand Shower', link: '/product/hand-shower', parentId: 10 },
+  { id: 27, title: 'Fixed Shower Head', link: '/product/fixed-shower-head', parentId: 10 },
   { id: 28, title: 'Bath Accessories', link: '/product/accessories', parentId: 10 },
 ];
 
@@ -189,27 +189,3 @@ export const faqQuestions = [
     }
 ]
 
-
-import pdf1 from "./assets/pdf/pdf1.pdf";
-import pdf2 from "./assets/pdf/pdf2.pdf";
-import pdf3 from "./assets/pdf/pdf3.pdf";
-export const buyingGuideList = [{
-    id: 1,
-    title: "High Commode Price in Bangladesh: A Water Closets Buying Guide",
-    tag: "Buying Guide",
-    header: "High Commode",
-    pdf: pdf1
-},{
-    id: 2,
-    title: "A Guide to Choosing the Perfect Wash Basin in Bangladesh",
-    tag: "Buying Guide",
-    header: "Wash Basin",
-    pdf: pdf2
-},
-{
-    id: 3,
-    title: "Ultimate Water Closet Buying Guide in Bangladesh",
-    tag: "Buying Guide",
-    header: "Water Closet",
-    pdf: pdf3
-}]

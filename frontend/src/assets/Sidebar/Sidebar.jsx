@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import InboxIcon from '@mui/icons-material/Inbox';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
@@ -14,7 +14,7 @@ import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 
 const Sidebar = () => {
     const menuList = [
@@ -24,8 +24,10 @@ const Sidebar = () => {
         { title: "Catalogues", url: "/catalogue-list", icon: <WebStoriesIcon /> },
         { title: "Dealers", url: "/dealer-list", icon: <CreditCardIcon /> },
         { title: "Blogs", url: "/blog-list", icon: <NewspaperIcon /> },
+        { title: "Buying Guide", url: "/buying-guide-list", icon: <MenuBookIcon /> },
         { title: "Projects", url: "/project-list", icon: <ApartmentIcon /> },
         { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
+        { title: "Resume", url: "/career-list", icon: <WorkHistoryIcon /> },
     ];
     const [open, setOpen] = useState(true);
     const navigate = useNavigate();

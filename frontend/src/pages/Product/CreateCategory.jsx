@@ -229,7 +229,7 @@ const CreateCategory = () => {
 
                                         {/* Image Field */}
                                         <Grid size={{ xs: 12, sm: 8 }}>
-                                            <FormLabel text="Featured Image" icon={<AttachFileIcon />} />
+                                            <FormLabel text="Featured Image || 524 × 360" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
                                                 <TextField
                                                     fullWidth
@@ -338,6 +338,12 @@ const CreateCategory = () => {
                     </Grid>
 
                     <Grid item size={{ sm: 12, md: 4 }}>
+                        {/* --------------------------Info Section------------------------- */}
+                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
+                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
+                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Ensuring the category name is unique and Add image or homepage sequence only when you turn on add to homepage options.</Typography>
+                        </Box>
+                        
                         {/* --------------------------Image Preview------------------------- */}
                         <Box>
                             {previewSrc ? (
@@ -350,11 +356,7 @@ const CreateCategory = () => {
                                 </Box>
                             )}
                         </Box>
-                        {/* --------------------------Info Section------------------------- */}
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
-                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Ensuring the category name is unique and Add image or homepage sequence only when you turn on add to homepage options.</Typography>
-                        </Box>
+                        
                     </Grid>
 
 

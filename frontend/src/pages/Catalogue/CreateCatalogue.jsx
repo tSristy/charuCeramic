@@ -231,7 +231,7 @@ const CreateCatalogue = () => {
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormLabel text="Featured Image || 370*520" icon={<AttachFileIcon />} />
+                                            <FormLabel text="Featured Image || 370 × 520" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
                                                 <TextField
                                                     fullWidth
@@ -310,6 +310,12 @@ const CreateCatalogue = () => {
                     </Grid>
 
                     <Grid item size={{ sm: 12, md: 4 }}>
+                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
+                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }}>Pro Tip</Typography>
+                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Upload a PDF file for the catalogue and an optional featured image.</Typography>
+                        </Box>
+
+
                         <Box>
                             {previewImg ? (
                                 <Box component="img" src={previewImg} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
@@ -326,10 +332,6 @@ const CreateCatalogue = () => {
                             <BtnOpenInTab fileUrl={catalogue.file_path}><Box sx={{ mb: 3, py: 1, textAlign: 'center', borderRadius: 2, width: '100%', color: "#fff", bgcolor: "#333" }}>{catalogue.title}.pdf</Box> </BtnOpenInTab>
                         }
 
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
-                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }}>Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Upload a PDF file for the catalogue and an optional featured image.</Typography>
-                        </Box>
                     </Grid>
                 </Grid>
             </Container>

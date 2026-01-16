@@ -27,12 +27,20 @@ import { homePagePropsList } from "../../Data.jsx";
 const Homepage = () => {
     const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
+    const [blogList, setBlogList] = useState([]);
 
     useEffect(() => {
         ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
                 setCategoryList(res);
+            });
+
+        ServerApi(`/blog/show`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                console.log(res)
+                setBlogList(res);
             });
     }, [])
 
@@ -43,28 +51,23 @@ const Homepage = () => {
             <Box>
                 <Carousel>
                     <video
-                        style={{
-                            // filter: 'grayscale(10%)', 
-                        aspectRatio: '16/7',
-                        height: "auto",
-                             objectFit: 'cover', width: '100%'
-                        }}
-                        autoPlay
-                        loop
-                        muted
-                    // poster="" // Image shown before the video loads/starts
+                        poster={bannerImg}
+                        preload="metadata"
+                        style={{ aspectRatio: '16/6.7', width: '100%', objectFit: 'cover' }}
+                        autoPlay loop muted playsInline
                     >
                         <source src={bannerVideo} type="video/mp4" />
-                        Your browser does not support the video tag.
                     </video>
 
                     <Box sx={{
                         display: 'block',
                         width: "100%",
-                        aspectRatio: '16/7',
+                        aspectRatio: '16/6.7',
                         height: "auto",
                         objectFit: "cover"
                     }}
+                        loading="eager"
+                        fetchPriority="high"
                         component="img" src={bannerImg} />
                 </Carousel>
             </Box>
@@ -96,6 +99,7 @@ const Homepage = () => {
 
             {/* ABOUTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT */}
             <Box sx={{
+                bgcolor: '#c5c5c5',
                 backgroundImage: `url(${bannerImg})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
@@ -135,13 +139,13 @@ const Homepage = () => {
                                     border: '1px solid #eee',
                                     cursor: 'pointer',
                                     '&:hover .hoverEffect': {
-                                        borderBottom: '5px solid  #ED1C24',
+                                        borderBottom: '5px solid  #ff0000',
                                         filter: 'grayscale(0%)',
                                         transform: 'scale(1.02)',
                                     }
                                 }} onClick={(e) => navigate(`/product/${product.slug}`)}>
-                                    <Box component="img" src={urlAPI + product.featured_image} alt={product.name} className="hoverEffect" sx={{
-                                        display: 'block', filter: 'grayscale(100%)', width: '100%', aspectRatio: '4/3', height: '180px', objectFit: 'cover',
+                                    <Box component="img" loading="lazy" decoding="async" src={urlAPI + product.featured_image} alt={product.name} className="hoverEffect" sx={{
+                                        display: 'block', filter: 'grayscale(100%)', width: '100%', aspectRatio: '4/3', height: { sm: 'auto', md: '180px' }, objectFit: 'cover',
                                         transition: "all .3s ease", borderBottom: '5px solid #ffffffff'
                                     }} />
 
@@ -163,14 +167,14 @@ const Homepage = () => {
             <Box sx={{ py: 5 }}>
                 {/* <Container> */}
                 <Stack sx={{ alignItems: 'stratch', justifyContent: 'center' }} direction={{ sm: 'column', md: 'row' }}>
-                    <Box sx={{ bgcolor: '#ED1C24', py: 10, px: 5, alignContent: "center" }}>
+                    <Box sx={{ bgcolor: '#ff0000', py: 10, px: 5, alignContent: "center" }}>
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left', color: 'white' }}>
                             Our Technologies
                         </Typography>
                     </Box>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#000000ff', p: 10, px: 2 }}>
+                        <Box sx={{ bgcolor: '#000000ff', p: 10, px: 2, width: '50%' }}>
                             <Box component="img" src={imgOt1} alt="rimless" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Rimless Design
@@ -180,7 +184,7 @@ const Homepage = () => {
                             </Typography>
                         </Box>
 
-                        <Box sx={{ bgcolor: '#2b2b2b', p: 10, px: 2 }}>
+                        <Box sx={{ bgcolor: '#2b2b2b', p: 10, px: 2, width: '50%' }}>
                             <Box component="img" src={imgOt2} alt="jet" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Rimless Siphon Jet
@@ -192,7 +196,7 @@ const Homepage = () => {
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#4a4a4a', p: 10, px: 2 }}>
+                        <Box sx={{ bgcolor: '#4a4a4a', p: 10, px: 2, width: '50%' }}>
                             <Box component="img" src={imgOt3} alt="hygigenic" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Hygienic Glaze
@@ -203,7 +207,7 @@ const Homepage = () => {
                         </Box>
 
 
-                        <Box sx={{ bgcolor: '#676767', p: 10, px: 2 }}>
+                        <Box sx={{ bgcolor: '#676767', p: 10, px: 2, width: '50%' }}>
                             <Box component="img" src={imgOt4} alt="hygigenic" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Click Release
@@ -239,7 +243,8 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={img3in1} />
+                                }} loading="lazy"
+                                    decoding="async" component="img" src={img3in1} />
 
                                 <Box sx={{
                                     borderRadius: 3,
@@ -254,7 +259,8 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={img3in2} />
+                                }} loading="lazy"
+                                    decoding="async" component="img" src={img3in2} />
 
                                 <Box sx={{
                                     borderRadius: 3,
@@ -269,7 +275,8 @@ const Homepage = () => {
                                         transform: 'scale(1.05)',
                                         transition: 'all 0.5s ease-in-out',
                                     }
-                                }} component="img" src={img3in3} />
+                                }} loading="lazy"
+                                    decoding="async" component="img" src={img3in3} />
                             </Box>
                         </Grid>
 
@@ -279,7 +286,7 @@ const Homepage = () => {
                                 pb: { sm: 0, md: 10 },
                             }}>
                                 <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
-                                    Bangladesh’s Benchmark for Premium Sanitaryware 
+                                    Bangladesh’s Benchmark for Premium Sanitaryware
                                 </Typography>
                                 <Typography sx={{ fontSize: '.9rem', fontWeight: 400, textAlign: 'left', my: 2 }}>
                                     Charu Ceramic has set the benchmark for premium sanitaryware and bath ware in Bangladesh through innovative design, superior quality, advanced manufacturing, and an unwavering commitment to customer satisfaction.
@@ -297,18 +304,12 @@ const Homepage = () => {
             {/* VIDEOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */}
             <Box sx={{ py: { md: 4, lg: 10 } }}>
                 <video
-                    style={{
-                         aspectRatio: '16/7',
-                        height: "auto",
-                             objectFit: 'cover', width: '100%'
-                    }}
-                    autoPlay
-                    loop
-                    muted
-                // poster="" // Image shown before the video loads/starts
+                    poster={bannerImg}
+                    preload="metadata"
+                    style={{ aspectRatio: '16/7', width: '100%', objectFit: 'cover' }}
+                    autoPlay loop muted playsInline
                 >
                     <source src={bannerVideo} type="video/mp4" />
-                    Your browser does not support the video tag.
                 </video>
             </Box>
 
@@ -320,42 +321,22 @@ const Homepage = () => {
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
                             Read About CHARU
                         </Typography>
-                        <Button variant="none" sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ED1C24" }} />}>Explore All</Button>
+                        <Button variant="none" onClick={(e) => navigate('/news-article')} sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ff0000" }} />}>Explore All</Button>
                     </Stack>
 
                     <Grid container spacing={4}>
-                        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Box>
-                                <Box component="img" src={bannerImg} alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                                <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                    The Evolution of Sanitaryware: A Look into Charu Ceramic's Journey
-                                </Typography>
-                                {/* <Typography sx={{ fontSize: '.9rem', textAlign: 'left' }}>
-                                    Explore the transformative journey of Charu Ceramic in the sanitaryware industry, highlighting key milestones.
-                                </Typography> */}
-                            </Box>
-                        </Grid><Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Box>
-                                <Box component="img" src={bannerImg} alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                                <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                    The Evolution of Sanitaryware: A Look into Charu Ceramic's Journey
-                                </Typography>
-                                {/* <Typography sx={{ fontSize: '.9rem', textAlign: 'left' }}>
-                                    Explore the transformative journey of Charu Ceramic in the sanitaryware industry, highlighting key milestones.
-                                </Typography> */}
-                            </Box>
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Box>
-                                <Box component="img" src={bannerImg} alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                                <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
-                                    The Evolution of Sanitaryware: A Look into Charu Ceramic's Journey
-                                </Typography>
-                                {/* <Typography sx={{ fontSize: '.9rem', textAlign: 'left' }}>
-                                    Explore the transformative journey of Charu Ceramic in the sanitaryware industry, highlighting key milestones.
-                                </Typography> */}
-                            </Box>
-                        </Grid>
+                        {blogList.length > 0 && blogList.map(item => (
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} onClick={(e) => navigate(`/news-article/${item.slug}`)}>
+                                <Box>
+                                    <Box component="img" src={urlAPI + item.featured_image} loading="lazy"
+                                    decoding="async" alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
+                                        {item.title}
+                                    </Typography>
+
+                                </Box>
+                            </Grid>)
+                        )}
                     </Grid>
                 </Container>
             </Box>

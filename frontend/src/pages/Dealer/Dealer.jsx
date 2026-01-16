@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Pagination, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Pagination, Stack, TextField, Typography } from "@mui/material";
 import bgImg from '../../img/Dealer_page.jpg';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -28,8 +28,15 @@ const Dealer = () => {
         ServerApi(`/dealer/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
-                if(res){
-                setDealerList(res.items);
+                setDealerList(prev=>{
+                    if (paginationDetails.pageNo === 1) {
+                    return res.items;
+                }
+                
+                    const map = new Map();
+                    [...prev, ...res.items].forEach(item => map.set(item.id, item));
+                    return Array.from(map.values());
+                });
                 setPaginationDetails(previousState => {
                     return {
                         ...previousState,
@@ -37,23 +44,30 @@ const Dealer = () => {
                         totalPages: Math.ceil(res.totalRows / 12)
                     }
                 });
-            }
-            else return;
     })
     }, [searchVariable,paginationDetails.pageNo]);
 
     return (
         <>
-            <Box sx={{
+           <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ED1C24",
+                borderColor: "#ff0000",
                 display: 'block',
                 aspectRatio: '16/5',
-                objectFit: 'cover', width: '100%',
-                height: "100%",
-                objectFit: "cover"
-            }}
-                component="img" src={bgImg} />
+                width: '100%',
+                height: "auto", 
+                overflow: 'hidden',
+                bgcolor: '#f0f0f0'
+            }}>
+                <Box 
+                    component="img" 
+                    src={bgImg} 
+                    fetchPriority="high" 
+                    loading="eager" 
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+            </Box>
+
 
             <Box sx={{ py: 10 }}>
                 <Container>
@@ -62,17 +76,17 @@ const Dealer = () => {
                     </Typography>
 
                     <Stack direction={{ sm: "column", md: "row" }} spacing={4}>
-                       <TextField  fullWidth size="small" onChange={(e)=>setSearchVariable(prev=>({...prev, find: e.target.value }))} label="Search" />
+                       <TextField  fullWidth size="small" onChange={(e)=>{setPaginationDetails(prev => ({ ...prev, pageNo: 1 }));setSearchVariable(prev=>({...prev, find: e.target.value }))} } label="Search" />
                        
-                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>setSearchVariable(prev=>({...prev, division: newVal }))} 
+                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>{setPaginationDetails(prev => ({ ...prev, pageNo: 1 }));setSearchVariable(prev=>({...prev, division: newVal }))}} 
                         options={divisions} renderInput={(params) => <TextField {...params} label="Search Divison" />} />
 
-                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>setSearchVariable(prev=>({...prev, district: newVal }))} 
+                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>{setPaginationDetails(prev => ({ ...prev, pageNo: 1 }));setSearchVariable(prev=>({...prev, district: newVal }))}}
                          options={searchVariable.division ? districtsByDivision[searchVariable.division] || [] : []}
                                                  renderInput={(params) => <TextField {...params} label="Search District" />} freeSolo/>
                     </Stack>
 
-                    <Box sx={{ m: 5 }}>
+                    <Box sx={{ my: 5 }}>
                         <Grid container spacing={4}
                             direction="row"
                             sx={{
@@ -97,11 +111,11 @@ const Dealer = () => {
                                         <Typography className="hoverEffect" sx={{ fontWeight: 600, textAlign: "center", mb: 2 }}>{item.name}</Typography>
                                         <Stack direction="column" spacing={2}>
                                             <Stack direction="row" spacing={1}>
-                                                <LocationOnIcon sx={{ color: "#ED1C24" }} />
+                                                <LocationOnIcon sx={{ color: "#ff0000" }} />
                                                 <Typography className="hoverEffect" sx={{ fontSize: '.9rem' }}> {item.address}</Typography>
                                             </Stack>
                                             <Stack direction="row" spacing={1}>
-                                                <PhoneIcon sx={{ color: "#ED1C24" }} />
+                                                <PhoneIcon sx={{ color: "#ff0000" }} />
                                                 <Typography className="hoverEffect" sx={{ fontSize: '.9rem' }}>{item.phone}</Typography>
                                             </Stack>
                                         </Stack>
@@ -111,7 +125,7 @@ const Dealer = () => {
                         </Grid>
                     </Box>
 
-                    <Pagination color="error" shape="rounded" hidePrevButton hideNextButton siblingCount={0}
+                    {/* <Pagination color="error" shape="rounded" hidePrevButton hideNextButton siblingCount={0}
                         boundaryCount={3}
                         count={paginationDetails.totalPages}
                         page={paginationDetails.pageNo}
@@ -120,7 +134,21 @@ const Dealer = () => {
                             setPaginationDetails(previousState => {
                                 return { ...previousState, pageNo: value }
                             })
-                        }} />
+                        }} /> */}
+
+
+
+                         <Stack py={4} alignItems="center">
+                    {paginationDetails.totalPages > paginationDetails.pageNo ? (
+                        <Button variant='outlined' color='error' onClick={() => {
+                            setPaginationDetails(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
+                        }}>
+                            Load More
+                        </Button>
+                    ) : (
+                        dealerList.length > 0 && <Typography variant='overline' color='textDisabled'>End of results</Typography>
+                    )}
+                </Stack>
                 </Container>
             </Box>
         </>

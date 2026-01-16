@@ -15,6 +15,13 @@ const SingleProduct = () => {
     const { number } = useParams();
     const navigate = useNavigate();
 
+    const [productDetails, setProductDetails] = useState("");
+    const [mainImg, setMainImg] = useState(null);
+    const [imageList, setImageList] = useState([]);
+    const [specList, setSpecList] = useState([]);
+    const [testVar, setTestVar] = useState({});
+    const [relatedList, setRelatedList] = useState([]);
+    
     const [detailTab, setDetailTab] = useState({
         featureTab: true,
         specTab: false,
@@ -31,12 +38,6 @@ const SingleProduct = () => {
         })
         )
     }
-
-    const [productDetails, setProductDetails] = useState("");
-    const [mainImg, setMainImg] = useState(null);
-    const [imageList, setImageList] = useState([]);
-    const [specList, setSpecList] = useState([]);
-    const [testVar, setTestVar] = useState({});
 
     const mainImageHanlde = (imgList, seq) => {
         if (!imgList || !Array.isArray(imgList)) return; // Safety check
@@ -65,16 +66,21 @@ const SingleProduct = () => {
                     return label !== "feature" && label !== 'technology';
                 }).map(spec => (
                     setTestVar(p => ({ ...p, [spec.spec_label]: spec.spec_value }))
-                ))
+                ));
+                relatedProduct(res.product.category.cID);
             })
     }, [number])
 
 
-    useEffect(()=>{
-       if(productDetails.id){
-        ServerApi
-       }
-    },[])
+    const relatedProduct = async (id) => {
+        await ServerApi(`/product/list-related/`+id, 'GET', null, null)
+            .then((res) => res.json())
+            .then(res => {
+                setRelatedList(res);
+            })
+    }
+
+
 
     if (!productDetails || !mainImg) {
         return <Typography align="center" variant="overline" py={10}>Loading Product...</Typography>;
@@ -101,8 +107,8 @@ const SingleProduct = () => {
 
                     <Grid container spacing={5} sx={{ alignItems: "stretch" }}>
                         <Grid size={{ sm: 9, md: 7 }}>
-                            <Box mt={5} px={{md:2,lg:10}} sx={{ borderRight: '1px solid #d0d0d094' }}>
-                                <Box component="img" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{
+                            <Box mt={5} px={{ md: 2, lg: 10 }} sx={{ borderRight: '1px solid #d0d0d094' }}>
+                                <Box component="img" loading="eager" fetchPriority="high" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{
                                     display: 'block', width: '100%',
                                     aspectRatio: {
                                         xs: '1 / 1',
@@ -110,18 +116,18 @@ const SingleProduct = () => {
                                     }, height: 'auto', objectFit: 'cover'
                                 }} />
                             </Box>
-                            <Box px={{md:2,lg:10}}>
+                            <Box px={{ md: 2, lg: 10 }}>
                                 <Stack direction='row' sx={{ justifyContent: "space-between" }} mt={4}>
                                     {
                                         imageList?.filter(item => item.id !== mainImg.id)
                                             .map(item => (
-                                                <Box key={item.id}
+                                                <Box key={item.id} loading="lazy" decoding="async"
                                                     component="img"
                                                     src={urlAPI + item.image_url}
                                                     sx={{
                                                         objectFit: "cover",
                                                         display: 'block',
-                                                        width: { xs:'100px', sm: '150px', lg: '200px' },
+                                                        width: { xs: '100px', sm: '150px', lg: '200px' },
 
                                                         aspectRatio: {
                                                             // xs: '4 / 3',
@@ -144,7 +150,7 @@ const SingleProduct = () => {
                         </Grid>
 
                         <Grid size={{ sm: 12, md: 5 }}>
-                            <Box px={{md:2,lg:5}}>
+                            <Box px={{ md: 2, lg: 5 }}>
                                 <h1>{productDetails?.name}</h1>
 
                                 <Stack direction="row">
@@ -288,15 +294,26 @@ const SingleProduct = () => {
             </Box>
 
             <Container>
-                <Stack direction='column' alignItems={'flex-end'}>
+                <Stack direction='column' alignItems={'center'}>
                     <Typography variant="overline">You may also like</Typography>
                     <Typography variant="h4" fontWeight={600}>Related Product</Typography>
                 </Stack>
 
-                <Box mt={5} mb={10}>
-                    <Stack direction={{ sm: 'column', md: 'row' }}>
-
-                    </Stack>
+                <Box my={10}>
+                    <Grid container spacing={4}>
+                        { relatedList.map(product => (
+                                            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                                                <Box onClick={() => navigate(`/${product.url_path}`)} sx={{ border: '1px solid #eee', cursor: 'pointer', transition: '0.3s', '&:hover': { boxShadow: 3 } }}>
+                                                    <Box component="img" src={urlAPI + product.image_url} loading="lazy" decoding="async" alt={product.name} sx={{ display: 'block', width: '100%', aspectRatio: '1/1', objectFit: 'cover' }} />
+                                                    <Box p={2}>
+                                                        <Typography sx={{ fontSize: '1.1rem', fontWeight: 500, textAlign: 'center' }}>{product.name}</Typography>
+                                                        <Typography sx={{ fontSize: '.8rem', color: 'text.secondary', textAlign: 'center' }}>{product.category_name} / {product.color}</Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Grid>
+                                        ))
+                                    }
+                    </Grid>
                 </Box>
             </Container>
 

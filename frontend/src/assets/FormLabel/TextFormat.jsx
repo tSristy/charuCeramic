@@ -29,24 +29,37 @@ const theme = {
 
 function InitialStatePlugin({ initialValue }) {
   const [editor] = useLexicalComposerContext();
+
   useEffect(() => {
-    if (initialValue && initialValue !== "") {
-      editor.update(() => {
-        const root = $getRoot();
-        const isEmpty = root.getTextContentSize() === 0;
-        if (isEmpty) {
+    editor.update(() => {
+      const root = $getRoot();
+      
+      // CASE 1: The form was reset (initialValue is empty)
+      // We check for "" or " " (based on your previous reset logic)
+      if (!initialValue || initialValue.trim() === "") {
+        if (root.getTextContentSize() !== 0) {
           root.clear();
-          const parser = new DOMParser();
-          const dom = parser.parseFromString(initialValue, 'text/html');
-          const nodes = $generateNodesFromDOM(editor, dom);
-          root.append(...nodes);
+          // Lexical needs at least one empty paragraph to stay functional
+          const paragraph = $createParagraphNode();
+          root.append(paragraph);
         }
-      });
-    }
+        return;
+      }
+
+      // CASE 2: Initializing with content (Existing logic)
+      const isEmpty = root.getTextContentSize() === 0;
+      if (isEmpty) {
+        root.clear();
+        const parser = new DOMParser();
+        const dom = parser.parseFromString(initialValue, "text/html");
+        const nodes = $generateNodesFromDOM(editor, dom);
+        root.append(...nodes);
+      }
+    });
   }, [editor, initialValue]);
+
   return null;
 }
-
 function MyOnChangePlugin({ onChange }) {
   const [editor] = useLexicalComposerContext();
   return (

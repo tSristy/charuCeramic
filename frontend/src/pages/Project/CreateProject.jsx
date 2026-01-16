@@ -200,7 +200,7 @@ const CreateProject = () => {
                                         </Grid>
                                         {/* Image Field */}
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormLabel text="Featured Image || 330*210" icon={<AttachFileIcon />} />
+                                            <FormLabel text="Featured Image || 330 × 210" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
                                                 <TextField
                                                     fullWidth
@@ -282,6 +282,11 @@ const CreateProject = () => {
                     </Grid>
 
                     <Grid item size={{ sm: 12, md: 4 }}>
+                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
+                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
+                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Provide an URL only if it has external link.</Typography>
+                        </Box>
+
                         <Box>
                             {previewSrc ? (
                                 <Box component="img" src={previewSrc} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
@@ -291,13 +296,7 @@ const CreateProject = () => {
                                 </Box>
                             )}
                         </Box>
-
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
-                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Provide an URL only if it has external link.</Typography>
-                        </Box>
                     </Grid>
-
                 </Grid>
             </Container>
         </Box>

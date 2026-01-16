@@ -40,7 +40,7 @@ router.get('/:id', (req, res) => {
 // Change upload.single to upload.fields
 const uploadFields = upload.fields([
     { name: 'featured_image', maxCount: 1 },
-    { name: 'file_path', maxCount: 1 } // This is for your PDF
+    { name: 'file_path', maxCount: 1 } 
 ]);
 
 router.post('/add', uploadFields, (req, res) => {

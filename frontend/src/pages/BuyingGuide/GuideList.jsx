@@ -9,50 +9,46 @@ import BtnAdminSearch from "../../assets/Button/BtnAdminSearch";
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
 import { useNavigate } from "react-router-dom";
 
-const BlogList = () => {
+const GuideList = () => {
     const navigate = useNavigate();
-    const [blogList, setBlogList] = useState([]);
+    const [guideList, setGuideList] = useState([]);
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
         totalRows: 0,
         totalPages: 0
     });
-    const [searchVariable, setSearchVariable] = useState(null);
+    const [searchVariable, setSearchVariable] = useState('');
 
     useEffect(() => {
-        const body = {
-            pageNo: paginationDetails.pageNo,
+        const body = { pageNo: paginationDetails.pageNo,
             searchVariable: searchVariable
-        };
-        ServerApi(`/blog/list`, 'POST', null, body)
+         };
+        ServerApi(`/guide/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
-                setBlogList(res.items);
-                setPaginationDetails(previousState => {
-                    return {
-                        ...previousState,
-                        totalRows: res.totalRows,
-                        totalPages: Math.ceil(res.totalRows / 10)
-                    }
-                });
+                setGuideList(res.items);
+                setPaginationDetails(prev => ({
+                    ...prev,
+                    totalRows: res.totalRows,
+                    totalPages: Math.ceil(res.totalRows / 10)
+                }));
             })
+            .catch(err => console.error(err));
     }, [searchVariable, paginationDetails.pageNo]);
 
-
     const HandleDelete = (id) => {
-        const tempArr = blogList.filter(blog => blog.id !== id);
-        ServerApi(`/blog/delete/${id}`, 'DELETE', null, null)
+        const tempArr = guideList.filter(c => c.id !== id);
+        ServerApi(`/guide/delete/${id}`, 'DELETE', null, null)
             .then(res => res.json())
-            .then(res => {
-                setBlogList(tempArr);
-            })
+            .then(() => setGuideList(tempArr))
+            .catch(err => console.error(err));
     }
 
     const handlePanel = (arg)=>{
         if (typeof(arg) === "string") {
                 navigate(arg);
         }
-        else navigate(`/blog-panel?id=${arg}`);
+        else navigate(`/buying-guide-panel?id=${arg}`);
     };
 
     return (
@@ -60,73 +56,56 @@ const BlogList = () => {
             <Container>
                 <Stack direction={{sm: "column", md: "row"}} justifyContent="space-between" alignItems="center">
                     <Box mb={3}>
-                        <Typography variant="h5" fontWeight={600} mt={5} mb={1}>Records Explorer  <Chip label="Category" color="error" /></Typography>
+                        <Typography variant="h5" fontWeight={600} mt={5} mb={1}>Records Explorer  <Chip label="Buying Guide" color="error" /></Typography>
                         <Typography variant="overline" color="text.secondary">System Database • {paginationDetails.totalRows} active entries</Typography>
                     </Box>
 
                     <Box sx={{ width: {sm:"100%", md:"30%"}, display: "flex", gap: 1 }}>
-                         <BtnAdminSearch
-                            onChange={(e) => {setPaginationDetails(prev=>({...prev, pageNo:1}));setSearchVariable(e.target.value)}}
-                        />
-                        <BtnAdminSubmit text="Create" onClick={(e) => {handlePanel('/blog-panel') }} />
+                         <BtnAdminSearch onChange={(e) => {setPaginationDetails(prev=>({...prev, pageNo:1}));setSearchVariable(e.target.value)}} />
+                        <BtnAdminSubmit text="Create" onClick={(e)=>handlePanel('/buying-guide-panel')} />
                     </Box>
                 </Stack>
 
-
-
                 <TableContainer component={Paper}>
-                    <Table size="small" aria-label="a dense table">
+                    <Table size="small" aria-label="guide table">
                         <TableHead sx={{ bgcolor: "#000" }}>
                             <TableRow>
                                 <TableCell><SquareIcon fontSize="small" sx={{ color: "#ff0000" }} /></TableCell>
-                                <TableCell>Content Title</TableCell>
+                                <TableCell>Title</TableCell>
+                                <TableCell>Summary</TableCell>
                                 <TableCell>Image</TableCell>
-                                {/* <TableCell>Url Path</TableCell> */}
-                                <TableCell>Content</TableCell>
-                                <TableCell>Displaying in Homepage</TableCell>
-                                <TableCell>Published Date</TableCell>
                                 <TableCell colSpan={3} sx={{ textAlign: "center" }}> Actions</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {blogList.map((item, index) => (
+                            {guideList.map((item, index) => (
                                 <TableRow key={item.id}>
                                     <TableCell> <Typography variant="overline">{index + 1}</Typography> </TableCell>
                                     <TableCell> {item.title} </TableCell>
-                                    <TableCell> <img src={urlAPI + item.featured_image} alt={item.title} width="50" /> </TableCell>
-                                    {/* <TableCell> {item.slug} </TableCell> */}
-                                    <TableCell><div
+                                      <TableCell><div
                                         className="blog-post-content"
                                         dangerouslySetInnerHTML={{ __html: item.content.slice(0,200) }}
                                     /> </TableCell>
-                                    <TableCell>{item.add_homepage === 1 ? <span style={{ fontWeight:500 }}>Yes</span> : "No"}</TableCell>
-                                    <TableCell>{item.published_at.slice(0, 10)}</TableCell>
-                                    <TableCell><Tooltip title="Edit"><IconButton onClick={(e) => handlePanel(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell>
+                                        {item.featured_image ? <img src={urlAPI + item.featured_image} alt={item.title} width="50" /> : "-"}
+                                    </TableCell>
+                                    <TableCell><Tooltip title="Edit"><IconButton onClick={(e)=>handlePanel(parseInt(item.id))} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><EditRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                     <TableCell><Tooltip title="Info"><IconButton sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><InfoIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
-                                    <TableCell><Tooltip title="Delete"><IconButton onClick={(e) => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}>
-                                        <DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
+                                    <TableCell><Tooltip title="Delete"><IconButton onClick={() => HandleDelete(item.id)} sx={{ color: "#94a3b8", '&:hover': { color: "#ff0000" } }}><DeleteForeverRoundedIcon sx={{ fontSize: '1rem' }} /></IconButton></Tooltip></TableCell>
                                 </TableRow>
                             ))}
 
-                            {/* -----------------------------pagination row----------------------------- */}
                             <TableRow>
                                 <TableCell colSpan={3}>
-                                    <Typography variant="overline" sx={{ fontWeight: 500, color: "#94a3b8" }}>
-                                        Page No.
-                                    </Typography>
+                                    <Typography variant="overline" sx={{ fontWeight: 500, color: "#94a3b8" }}>Page No.</Typography>
                                 </TableCell>
                                 <TableCell colSpan={10} align="right">
-
                                     <Pagination color="error" shape="rounded" hidePrevButton hideNextButton
                                         count={paginationDetails.totalPages}
                                         page={paginationDetails.pageNo}
                                         sx={{ display: 'flex', justifyContent: 'flex-end' }}
-                                        onChange={(e, value) => {
-                                            setPaginationDetails(previousState => {
-                                                return { ...previousState, pageNo: value }
-                                            })
-                                        }} />
+                                        onChange={(e, value) => setPaginationDetails(prev => ({ ...prev, pageNo: value }))} />
                                 </TableCell>
                             </TableRow>
                         </TableBody>
@@ -134,9 +113,8 @@ const BlogList = () => {
                 </TableContainer>
 
             </Container>
-
         </Box>
     );
 };
 
-export default BlogList;
+export default GuideList;

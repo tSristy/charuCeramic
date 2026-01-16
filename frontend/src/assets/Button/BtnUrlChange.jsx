@@ -10,7 +10,7 @@ const BtnUrlChange = ({ btnTitle, url }) => {
     }
 
     return (
-        <Button variant="contained" sx={{ bgcolor: '#ED1C24', textTransform: "uppercase", minWidth: '200px', py: 1, '&:hover': { bgcolor: '#f0141bff' } }} onClick={url ? (e) => handleClick(url) : null}>{btnTitle}</Button>
+        <Button variant="contained" sx={{ bgcolor: '#ff0000', textTransform: "uppercase", minWidth: '200px', py: 1, '&:hover': { bgcolor: '#f0141bff' } }} onClick={url ? (e) => handleClick(url) : null}>{btnTitle}</Button>
     );
 };
 

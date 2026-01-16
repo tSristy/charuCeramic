@@ -21,17 +21,20 @@ const CreateBlogs = () => {
     const navigate = useNavigate();
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
-const [loading, setLoading] = useState(false);
-
+    const [loading, setLoading] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [msgText, setMsgText] = useState({});
 
-    const handleAlertClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpenAlert(false);
-    };
+    // 1. Image Refs & Preview State
+    const imgRef1 = useRef(null);
+    const imgRef2 = useRef(null);
+    const imgRef3 = useRef(null);
+
+    const [previews, setPreviews] = useState({
+        featured_image: null,
+        featured_image_2: null,
+        featured_image_3: null
+    });
 
     const [blogDetails, setBlogDetails] = useState({
         title: "",
@@ -40,254 +43,178 @@ const [loading, setLoading] = useState(false);
         content: "",
         add_homepage: 0,
         published_at: "",
-        featured_image: ""
+        featured_image: "",
+        featured_image_2: "",
+        featured_image_3: ""
     });
 
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setOpenAlert(false);
+    };
 
-    const imgTriggerClick = useRef(null);
-    const [previewSrc, setPreviewSrc] = useState("");
-
-    const handleImagePreview = (file) => {
-        if (typeof file === "string") {
-            setPreviewSrc(file);
-            return;
-        }
-        const url = URL.createObjectURL(file);
-        setPreviewSrc(url);
-        return () => {
-            URL.revokeObjectURL(url);
-        };
-    }
-
-
-    const handleSubmit = (e) => {
-        setLoading(true);
-        e.preventDefault();
-        if (ID) {
-            handleUpdate();
-            return;
-        } else {
-            const formData = new FormData();
-            formData.append("title", blogDetails.title);
-            formData.append("slug", blogDetails.slug);
-            formData.append("add_homepage", blogDetails.add_homepage);
-            formData.append("summary", blogDetails.content.slice(0, 100));
-            formData.append("content", blogDetails.content);
-            formData.append("published_at", blogDetails.published_at);
-            if (blogDetails.featured_image && blogDetails.featured_image instanceof File) {
-                formData.append("featured_image", blogDetails.featured_image);
-            }
-
-            ServerApi(`/blog/add`, "POST", null, formData, true)
-                .then((res) => res.json())
-                .then((res) => {
-                    setOpenAlert(true);
-                setLoading(false);
-                setMsgText(res);
-
-                if (res.itemId) {
-                    setBlogDetails({title: "",
-        slug: "",
-        summary: "",
-        content: "",
-        add_homepage: 0,
-        published_at: "",
-        featured_image: ""});
-        setPreviewSrc('');
-                }
-                })
-                .catch((err) => console.error(err));
+    // 2. Handle Image Selection
+    const handleImageChange = (file, fieldName) => {
+        if (file) {
+            setBlogDetails(p => ({ ...p, [fieldName]: file }));
+            const url = URL.createObjectURL(file);
+            setPreviews(prev => ({ ...prev, [fieldName]: url }));
         }
     };
 
-    const handleUpdate = () => {
+    // 3. Submit/Update Logic
+    const handleSubmit = (e) => {
+        e.preventDefault();
         setLoading(true);
+
         const formData = new FormData();
         formData.append("title", blogDetails.title);
-        formData.append("slug", blogDetails.slug);
+        formData.append("slug", blogDetails.slug.replace(/\s+/g, "-").toLowerCase());
         formData.append("add_homepage", blogDetails.add_homepage);
-        formData.append("summary", blogDetails.summary);
+        formData.append("summary", blogDetails.content.slice(0, 100));
         formData.append("content", blogDetails.content);
         formData.append("published_at", blogDetails.published_at);
-        if (blogDetails.featured_image && blogDetails.featured_image instanceof File) {
-            formData.append("featured_image", blogDetails.featured_image);
-        }
 
-        ServerApi(`/blog/update/` + ID, "PUT", null, formData, true)
+        // Append images only if they are new File objects
+        if (blogDetails.featured_image instanceof File) formData.append("featured_image", blogDetails.featured_image);
+        if (blogDetails.featured_image_2 instanceof File) formData.append("featured_image_2", blogDetails.featured_image_2);
+        if (blogDetails.featured_image_3 instanceof File) formData.append("featured_image_3", blogDetails.featured_image_3);
+
+        const method = ID ? "PUT" : "POST";
+        const endpoint = ID ? `/blog/update/${ID}` : `/blog/add`;
+
+        ServerApi(endpoint, method, null, formData, true)
             .then((res) => res.json())
             .then((res) => {
                 setOpenAlert(true);
                 setLoading(false);
                 setMsgText(res);
-            })
-            .catch((err) => console.error(err));
-    };
 
-    const handleDelete = () => {
-        if (ID === null) {
-            navigate('/blog-list');
-        } else {
-            ServerApi(`/blog/delete/` + ID, "DELETE", null, null)
-                .then((res) => res.json())
-                .then((res) => console.log("delete response:", res))
-                .catch((err) => console.error(err));
-        }
+                if (!ID && res.itemId) {
+                    setBlogDetails({
+                        title: "", slug: "", summary: "", content: "",
+                        add_homepage: 0, published_at: "",
+                        featured_image: "", featured_image_2: "", featured_image_3: ""
+                    });
+                    setPreviews({ featured_image: null, featured_image_2: null, featured_image_3: null });
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setLoading(false);
+            });
     };
 
     useEffect(() => {
         if (ID !== null) {
             ServerApi(`/blog/${ID}`, "GET", null, null)
                 .then((res) => res.json())
-                .then((res) => {
-                    setBlogDetails(res);
-                });
-        } else return;
+                .then((res) => setBlogDetails(res));
+        }
     }, [ID]);
 
-
-    
+    const handleDelete = () => {
+        if (!ID) navigate('/blog-list');
+        else {
+            ServerApi(`/blog/delete/` + ID, "DELETE", null, null)
+                .then((res) => res.json())
+                .then(() => navigate('/blog-list'))
+                .catch((err) => console.error(err));
+        }
+    };
 
     return (
         <Box bgcolor={"#f8fafc"} py={5}>
             {loading && <UploadingLoader loading={true} />}
-            <Snackbar
-                open={openAlert}
-                autoHideDuration={3000}
-                onClose={handleAlertClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                {msgText && typeof msgText === "object" && Object.keys(msgText).length > 0 && (
-                    <Alert
-                        onClose={handleAlertClose}
-                        severity={
-                            Object.keys(msgText)[0] === "message"
-                                ? "success"
-                                : "error"
-                        }
-                        variant="filled"
-                        sx={{ width: '100%' }}
-                    >
-                        {Object.values(msgText)[0]}
-                    </Alert>
-                )}
+            <Snackbar open={openAlert} autoHideDuration={3000} onClose={handleAlertClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <Alert onClose={handleAlertClose} severity={msgText?.message ? "success" : "error"} variant="filled">
+                    {msgText?.message || msgText?.error || "Action completed"}
+                </Alert>
             </Snackbar>
-             <Container>
-                {/* ------------------------Title and Description------------------------ */}
-                <Box mb={3}>
-                    <Typography variant="h5" fontWeight={600} mt={5} mb={1}> News & Article Management</Typography>
-                    <Typography variant="overline" color="text.secondary"> Keep updating people with the latest news and articles.</Typography>
-                </Box>
 
+            <Container>
+                <Box mb={3}>
+                    <Typography variant="h5" fontWeight={600} mt={5} mb={1}>News & Article Management</Typography>
+                    <Typography variant="overline" color="text.secondary">Upload up to 3 images for your articles.</Typography>
+                </Box>
 
                 <Grid container spacing={2} mb={3}>
                     <Grid item size={{ sm: 12, md: 8 }}>
-                        {/* --------------------------Form Section------------------------- */}
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Blog" : "Register New Blog"}</Typography>
-                                <IconButton>
-                                    <SyncIcon color="disabled" />
-                                </IconButton>
+                                <IconButton><SyncIcon color="disabled" /></IconButton>
                             </Stack>
                             <Divider />
 
-
-                            {/* ----------------------------Form Inputs------------------------- */}
                             <form onSubmit={handleSubmit}>
                                 <Box p={3}>
                                     <Grid container spacing={2}>
-                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                        <Grid size={{ xs: 12, sm: 8 }}>
                                             <FormLabel text="Blog Title" icon={<CategoryIcon />} />
                                             <TextField required fullWidth size="small" value={blogDetails.title} onChange={(e) => setBlogDetails(p => ({ ...p, title: e.target.value }))} />
                                         </Grid>
-
+                                        <Grid size={{ xs: 12, sm: 4 }}>
+                                            <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end", pb: 1 }}>
+                                                <Switch checked={blogDetails.add_homepage === 1} onChange={(e) => setBlogDetails(p => ({ ...p, add_homepage: e.target.checked ? 1 : 0 }))} />
+                                                <FormLabel text="Add to Homepage" />
+                                            </Box>
+                                        </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Url Path" icon={<LanguageIcon />} />
                                             <TextField fullWidth size="small" value={blogDetails.slug} onChange={(e) => setBlogDetails(p => ({ ...p, slug: e.target.value }))} />
                                         </Grid>
-
-                                        <Grid size={{ xs: 12, sm: 4 }}>
+                                        <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Publish Date" icon={<CalendarTodayIcon />} />
                                             <TextField type="date" fullWidth size="small" value={blogDetails.published_at ? blogDetails.published_at.split('T')[0] : ''} onChange={(e) => setBlogDetails(p => ({ ...p, published_at: e.target.value }))} />
                                         </Grid>
 
-                                        <Grid size={{ xs: 12, sm: 4 }}>
-                                            <Tooltip title="If enabled, the blog will be displayed on the homepage.">
-                                                <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end" }}>
-                                                    <Stack direction="row" alignItems={"center"} spacing={1}>
-                                                        <Switch
-                                                            checked={blogDetails.add_homepage === 1}
-                                                            onChange={(e) => setBlogDetails(p => ({ ...p, add_homepage: e.target.checked ? 1 : 0 }))}
-                                                            slotProps={{ input: { 'aria-label': 'controlled' } }}
-                                                        />
-                                                        <FormLabel text="Add to Homepage" />
-                                                    </Stack>
-                                                </Box>
-                                            </Tooltip>
-                                        </Grid>
+                                        {/* Image Inputs */}
+                                        {[
+                                            { name: 'featured_image', label: 'First Image || 860 × 640', ref: imgRef1 },
+                                            { name: 'featured_image_2', label: 'Second Image || 860 × 640', ref: imgRef2 },
+                                            { name: 'featured_image_3', label: 'Third Image || 860 × 640', ref: imgRef3 }
+                                        ].map((img) => (
+                                            <Grid size={{ xs: 12, sm: 4 }} key={img.name}>
+                                                <FormLabel text={img.label} icon={<AttachFileIcon />} />
+                                                <Stack direction="row">
+                                                    <TextField
+                                                        fullWidth size="small" readOnly
+                                                        onClick={() => img.ref.current.click()}
+                                                        placeholder={blogDetails[img.name]?.name || "Select File"}
+                                                        slotProps={{
+                                                            input: {
+                                                                sx: { cursor: 'pointer' },
+                                                                endAdornment: blogDetails[img.name]?.name ? (
+                                                                    <InputAdornment position="end">
+                                                                        <IconButton
+                                                                            size="small"
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                setBlogDetails(p => ({ ...p, [img.name]: "" }));
+                                                                                setPreviews(prev => ({ ...prev, [img.name]: "" }));
 
+                                                                                if (img.ref.current) img.ref.current.value = "";
+                                                                            }}
+                                                                        >
+                                                                            <CloseIcon fontSize="small" />
+                                                                        </IconButton>
+                                                                    </InputAdornment>
+                                                                ) : null,
+                                                            },
+                                                        }}
+                                                    />
+                                                    <input ref={img.ref} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleImageChange(e.target.files[0], img.name)} />
+                                                    <InputAdornment position="end">
+                                                        <IconButton size="small" onClick={() => img.ref.current.click()}><PhotoCamera /></IconButton>
+                                                    </InputAdornment>
+                                                </Stack>
+                                            </Grid>
+                                        ))}
 
-                                        {/* Image Field */}
-                                        <Grid size={{ xs: 12, sm: 4 }}>
-                                            <FormLabel text="Featured Image || 430*320" icon={<AttachFileIcon />} />
-                                            <Stack direction="row">
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    // Opens picker when clicking anywhere on the bar
-                                                    onClick={() => imgTriggerClick.current.click()}
-                                                    placeholder={blogDetails.featured_image?.name || (typeof blogDetails.featured_image === 'string' ? blogDetails.featured_image : "No file selected")}
-                                                    readOnly
-                                                    slotProps={{
-                                                        input: {
-                                                            endAdornment: blogDetails.featured_image ? (
-                                                                <InputAdornment position="end">
-                                                                    <IconButton
-                                                                        size="small"
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation(); // Prevents re-opening the file dialog
-                                                                            setBlogDetails(p => ({ ...p, featured_image: "" }));
-                                                                            setPreviewSrc("");
-                                                                            if (imgTriggerClick.current) imgTriggerClick.current.value = "";
-                                                                        }}
-                                                                    >
-                                                                        <CloseIcon fontSize="small" />
-                                                                    </IconButton>
-                                                                </InputAdornment>
-                                                            ) : null,
-                                                        },
-                                                    }}
-                                                />
-                                                <input
-                                                    ref={imgTriggerClick}
-                                                    accept="image/*"
-                                                    style={{ display: 'none' }}
-                                                    type="file"
-                                                    onChange={(e) => {
-                                                        const file = e.target.files[0];
-                                                        if (file) {
-                                                            setBlogDetails(p => ({ ...p, featured_image: file }));
-                                                            handleImagePreview(file);
-                                                        }
-                                                    }}
-                                                />
-                                                <IconButton
-                                                    color="primary"
-                                                    onClick={() => imgTriggerClick.current.click()}
-                                                >
-                                                    <PhotoCamera color={"disabled"} />
-                                                </IconButton>
-                                            </Stack>
-                                        </Grid>
-
-
-                                                    {/* EDITABLE TEXTFIELD*/}
                                         <Grid size={{ xs: 12 }}>
                                             <FormLabel text="Content" icon={<DescriptionIcon />} />
-                                            <TextFormat
-                                                onChange={(html) => setBlogDetails(p => ({ ...p, content: html }))}
-                                                initialValue={blogDetails.content} // This must be the string from your database
-                                            />
+                                            <TextFormat onChange={(html) => setBlogDetails(p => ({ ...p, content: html }))} initialValue={blogDetails.content} />
                                         </Grid>
 
                                         <Grid size={{ xs: 12 }}>
@@ -302,32 +229,40 @@ const [loading, setLoading] = useState(false);
                         </Box>
                     </Grid>
 
-
+                    {/* Image Preview Sidebar */}
                     <Grid item size={{ sm: 12, md: 4 }}>
-
-                        {/* --------------------------Image Preview------------------------- */}
-                        <Box>
-                            {previewSrc ? (
-                                <Box component="img" src={previewSrc} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
-                            ) : blogDetails.featured_image ? (
-                                <Box component="img" src={urlAPI + blogDetails.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
-                            ) : (
-                                <Box sx={{ mb: 3, width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
-                                    <Typography color="text.secondary">No image selected</Typography>
-                                </Box>
-                            )}
-                        </Box>
-                        {/* --------------------------Info Section------------------------- */}
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
+                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>{"Provide URL Path only if the content has the official URL in the external source. The form will hold upto one single image for your news & article data."}</Typography>
+                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Ensuring the URL name is unique and it will add to homepage only when you turn on add to homepage options.</Typography>
                         </Box>
+
+                        <Stack spacing={2}>
+                            {[
+                                { key: 'featured_image', label: 'Main Preview' },
+                                { key: 'featured_image_2', label: 'Second Preview' },
+                                { key: 'featured_image_3', label: 'Third Preview' }
+                            ].map((item) => {
+                                const preview = previews[item.key];
+                                const existing = blogDetails[item.key];
+                                const src = preview || (existing && typeof existing === 'string' ? urlAPI + existing : null);
+
+                                return (
+                                    <Box key={item.key}>
+                                        {src ? (
+                                            <Box component="img" src={src} sx={{ width: '100%', height: 180, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                                        ) : (
+                                            <Box sx={{ width: '100%', height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
+                                                <Typography variant="caption" color="text.disabled">No Image</Typography>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                );
+                            })}
+                        </Stack>
                     </Grid>
-
-
                 </Grid>
             </Container>
-        </Box >
+        </Box>
     );
 };
 

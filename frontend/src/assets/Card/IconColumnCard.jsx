@@ -6,7 +6,7 @@ const IconColumnCard = ({ item }) => {
     return (
         <Box p={3}>
             <Typography sx={{
-                color: '#ED1C24'
+                color: '#ff0000'
                 // color: hoverVar ? 'white' : myTheme.palette.yellow
             }}>
                 {item.icon}

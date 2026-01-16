@@ -34,6 +34,10 @@ import Login from "../pages/Layout/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import NoPage from "../pages/NoPage";
 import CareerList from "../pages/Career/CareerList";
+import SingleNews from "../pages/News&Article/SingleNews";
+import CreateGuide from "../pages/BuyingGuide/CreateGuide";
+import GuideList from "../pages/BuyingGuide/GuideList";
+import SingleGuide from "../pages/BuyingGuide/SingleGuide";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -57,7 +61,9 @@ export const RouterConfig = createBrowserRouter([
             { path: "career", Component: Career },
             { path: "certification", Component: Certification },
             { path: "news-article", Component: NewsArticle },
+            { path: "news-article/:path", Component: SingleNews },
             { path: "buying-guide", Component: BuyingGuide },
+            { path: "buying-guide/:path", Component: SingleGuide },
             { path: "faq", Component: FAQ },
             { path: "privacy-policy", Component: Policy },
             { path: "terms-conditions", Component: TandC },
@@ -92,6 +98,9 @@ export const RouterConfig = createBrowserRouter([
 
                 { path: "career-list", Component: CareerList },
                 { path: "career-view", Component: CatalogueList },
+
+                { path: "buying-guide-panel", Component: CreateGuide },
+                { path: "buying-guide-list", Component: GuideList },
             ]
         }],
     },

@@ -50,6 +50,9 @@ router.get('/show', (req, res) => {
     if (displayVar === "all") {
         queryExtended = "SELECT A.id AS cID, A.name AS cName, A.slug FROM category_details AS A WHERE is_active = 1";
     }
+    else if ( displayVar === "child") {
+        queryExtended = "SELECT A.id AS cID, A.name AS cName, A.slug FROM category_details AS A WHERE is_active = 1 AND (parent_id IS NOT NULL AND parent_id NOT IN (0))";
+    }
     else queryExtended = `SELECT * FROM category_details WHERE is_active = 1 AND ${displayVar} = 1 ORDER BY homepage_sequence ASC`;
 
     db.query(queryExtended, (err, results) => {

@@ -79,7 +79,6 @@ const Header = () => {
     const MenuItems = ({ items }) => (
         items.map((item, index) => {
             const hasChildren = item.children && item.children.length > 0;
-
             // Desktop Mega Menu Logic
             if (!isMobile) {
                 return (
@@ -101,14 +100,14 @@ const Header = () => {
             // Mobile Menu Logic (simpler nested list items)
             return (
                 <Box key={item.id}>
-                    <ListItemButton component="a" href={item.link} onClick={() => hasChildren ? null : setIsMobileOpen(false)}>
-                        <ListItemText primary={item.title} sx={{ fontWeight: hasChildren ? 'bold' : 'normal' }} />
-                        {hasChildren && <KeyboardArrowDownIcon />}
+                    <ListItemButton component="box">
+                        <ListItemText primary={item.title} sx={{ fontWeight: hasChildren ? 'bold' : 'normal' }} onClick={(e)=>{setIsMobileOpen(false),navigate(item.link)}}/>
+                        {hasChildren && <KeyboardArrowDownIcon sx={{ width: "30%"}} onClick={(e)=>{subMenuList.length <1 ? setSubMenuList(menuList[2].children): setSubMenuList([])}}/>}
                     </ListItemButton>
-                    {hasChildren && (
+                    {hasChildren && subMenuList && (
                         <List component="div" disablePadding sx={{ pl: 2, borderLeft: '2px solid #eee' }}>
-                            {item.children.map((child) => (
-                                <ListItemButton key={child.id} component="a" href={child.link} onClick={() => setIsMobileOpen(false)}>
+                            {subMenuList.map((child) => (
+                                <ListItemButton key={child.id} component="a" href={child.link} onClick={() => {setSubMenuList([]); setIsMobileOpen(false)}}>
                                     <ListItemText primary={child.title} sx={{ fontSize: '.87rem'}}/>
                                 </ListItemButton>
                             ))}
@@ -139,7 +138,7 @@ const Header = () => {
                                 <MenuItems items={menuList} />
                             </Stack>
                         )}
-                        <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ED1C24', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button>
+                        <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ff0000', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button>
 
                         {/* --- MOBILE ICON --- */}
                         {isMobile && (

@@ -76,15 +76,24 @@ const Career = () => {
             </Snackbar>
 
 
-            <Box sx={{
+           <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ED1C24",
                 display: 'block',
-                width: "100%",
-                height: "350px",
-                objectFit: "cover"
-            }}
-                component="img" src={bgImg} />
+                aspectRatio: '16/4',
+                width: '100%',
+                height: "auto", 
+                overflow: 'hidden',
+                bgcolor: '#f0f0f0'
+            }}>
+                <Box 
+                    component="img" 
+                    src={bgImg} 
+                    fetchPriority="high" 
+                    loading="eager" 
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+            </Box>
 
             <Box sx={{ py: 10 }}>
                 <Container>

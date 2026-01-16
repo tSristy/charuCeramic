@@ -104,6 +104,22 @@ router.post('/list-by-cat', (req, res) => {
 });
 
 
+router.get('/list-related/:id', (req, res) => {
+    const id = req.params.id
+    const sql = `SELECT P.id, P.name, P.model_number, P.url_path,
+               C.name AS category_name, C.slug AS category_slug, 
+               I.image_url, I.alt_text 
+        FROM products AS P 
+        INNER JOIN product_images AS I ON P.id = I.product_id AND P.single_image = I.sort_order 
+        INNER JOIN category_details AS C ON P.category_id = C.id 
+        WHERE P.is_active = 1 AND I.is_active = 1 AND C.id =? ORDER BY RAND()
+LIMIT 3;`
+    db.query(sql, [id], (err, result) => {
+        res.json(result);
+    })
+})
+
+
 const getDataFunc = (itemId, res) => {
     const sql = `SELECT A.*, B.id AS cID, B.name AS cName, B.slug FROM products AS A INNER JOIN category_details AS B ON A.category_id = B.id WHERE A.is_active = 1 AND A.id = ?;SELECT * FROM product_images WHERE is_active = 1 AND product_id = ?;SELECT A.id AS spec_id, A.spec_label, A.spec_value, T.feature_image FROM  product_spec AS A LEFT JOIN technology AS T ON A.spec_value = T.name WHERE A.product_id =? AND A.is_active = 1`;
     db.query(sql, [itemId, itemId, itemId], (err, result) => {
@@ -187,7 +203,7 @@ router.post('/add', uploadFields, (req, res) => {
 
     const productSql = 'INSERT INTO products (category_id, name, description, model_number, SKU, url_path, spec_pdf, brand_name, single_image, first_image, drawing_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
 
-    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile, brand_name, single_image, first_image, drawing_image], (err, result) => {
+    db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile || "", brand_name, single_image, first_image, drawing_image], (err, result) => {
         if (err) {
             console.error('Error adding product:', err);
             return res.status(500).json({ error: 'Failed to add product' });
@@ -253,7 +269,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
         existing_images, existing_sort_order, delValues,
         specId, specLabel, specValue, specDel
     } = req.body;
-    console.log(delValues, specId, specLabel, specValue, specDel);
+   
     const specIDList = Array.isArray(specId) ? specId : [specId];
     const specDelList = Array.isArray(specDel) ? specDel : [specDel];
     const specLabelList = Array.isArray(specLabel) ? specLabel : [specLabel];

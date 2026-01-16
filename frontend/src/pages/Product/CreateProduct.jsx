@@ -75,8 +75,8 @@ const CreateProduct = () => {
         const newImages = files.map((file, index) => ({
             file: file,
             preview: URL.createObjectURL(file),
-            sort_order: images.length + index + 1 // Auto-assign next sequence
-        })).filter(img => img.sort_order <= 5); // Limit to 8
+            sort_order: images.length + index + 1 
+        })).filter(img => img.sort_order <= 5); 
 
         setImages(prev => [...prev, ...newImages].slice(0, 5));
     };
@@ -292,8 +292,8 @@ const CreateProduct = () => {
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Brand Name" icon={<LanguageIcon />} />
                                             {/* <TextField fullWidth size="small" value={product.brand_name} onChange={(e) => setProduct(p => ({ ...p, brand_name: e.target.value }))} /> */}
-                                         <Autocomplete size="small"
-                                                options={["CHARU",'COTTO']}
+                                            <Autocomplete size="small"
+                                                options={["CHARU", 'COTTO']}
                                                 value={product.brand_name || null}
                                                 onChange={(_, newVal) => setProduct(p => ({ ...p, brand_name: newVal }))}
                                                 renderInput={(params) => <TextField required {...params} />}
@@ -355,7 +355,7 @@ const CreateProduct = () => {
                                         </Grid>
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormLabel text="Images" icon={<AttachFileIcon />} />
+                                            <FormLabel text="Images || 600 × 600" icon={<AttachFileIcon />} />
                                             <Tooltip title="All images will be saved at once.First image will be the main image that will be shown in product page">
                                                 <Stack direction="row">
                                                     <TextField required={images.length > 0 ? false : true}
@@ -524,6 +524,11 @@ const CreateProduct = () => {
 
                     <Grid item size={{ sm: 12, md: 4 }}>
 
+                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
+                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
+                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Provide accurate images sequence for your own benefits.</Typography>
+                        </Box>
+
                         <Grid container spacing={2} sx={{ bgcolor: "#fff", borderRadius: 2, boxShadow: 1, p: 2, mb: 2 }}>
                             {images.length !== 0 ? images.map((img, index) => (
                                 <Grid size={6} sx={{ position: "relative" }}>
@@ -557,14 +562,7 @@ const CreateProduct = () => {
                         {ID && product.spec_pdf &&
                             <BtnOpenInTab fileUrl={product.spec_pdf}><Box sx={{ mb: 3, py: 1, textAlign: 'center', borderRadius: 2, width: '100%', color: "#fff", bgcolor: "#333" }}>{product.model_number}_specification.pdf</Box> </BtnOpenInTab>
                         }
-
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
-                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Provide accurate images sequence for your own benefits.</Typography>
-                        </Box>
                     </Grid>
-
-
                 </Grid>
             </Container>
         </Box>
