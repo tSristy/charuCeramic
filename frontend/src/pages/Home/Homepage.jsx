@@ -174,7 +174,7 @@ const Homepage = () => {
                     </Box>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#000000ff', p: 10, px: 2, width: '50%' }}>
+                        <Box sx={{ bgcolor: '#000000ff', py: 10, px: 2, width: { sm: '50%'} }}>
                             <Box component="img" src={imgOt1} alt="rimless" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Rimless Design
@@ -184,7 +184,7 @@ const Homepage = () => {
                             </Typography>
                         </Box>
 
-                        <Box sx={{ bgcolor: '#2b2b2b', p: 10, px: 2, width: '50%' }}>
+                        <Box sx={{ bgcolor: '#2b2b2b', py: 10, px: 2, width: { sm: '50%'} }}>
                             <Box component="img" src={imgOt2} alt="jet" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Rimless Siphon Jet
@@ -196,7 +196,7 @@ const Homepage = () => {
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#4a4a4a', p: 10, px: 2, width: '50%' }}>
+                        <Box sx={{ bgcolor: '#4a4a4a', py: 10, px: 2, width: { sm: '50%'} }}>
                             <Box component="img" src={imgOt3} alt="hygigenic" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Hygienic Glaze
@@ -207,7 +207,7 @@ const Homepage = () => {
                         </Box>
 
 
-                        <Box sx={{ bgcolor: '#676767', p: 10, px: 2, width: '50%' }}>
+                        <Box sx={{ bgcolor: '#676767', py: 10, px: 2, width: { sm: '50%'} }}>
                             <Box component="img" src={imgOt4} alt="hygigenic" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Click Release
