@@ -3,35 +3,54 @@ import bgImg from '../../img/bg2.png';
 import bgInfo from '../../img/bgInfo.jpg';
 import infoImg from '../../img/infoImg.jpg';
 import bannerVideo from '../../img/dummyVideo.mp4';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import imgCard1 from '../../img/Image-01.png';
 import imgCard2 from '../../img/Image-02.png';
 import imgCard3 from '../../img/Image-03.png';
 import CTA from '../../assets/Button/CTA';
+import { ServerApi, urlAPI } from '../../route/ServerAPI';
 
 const CompanyInfo = () => {
     const [seeMore, setSeeMore] = useState(false);
+    const [sideImg, setSideImg] = useState(null);
+    const [primeVideo, setPrimeVideo] = useState(null);
+    const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=ABOUT&sectionValue=CI01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+
+                ServerApi(`/banner?pageName=ABOUT&sectionValue=CI03`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setPrimeVideo(res[0]);
+                });
+        }, [])
+
     return (
         <Box sx={{ bgcolor: "#fff" }}>
-           <Box sx={{
-                           borderBottom: 4,
-                           borderColor: "#ff0000",
-                           display: 'block',
-                           aspectRatio: '16/5',
-                           width: '100%',
-                           height: "auto", 
-                           overflow: 'hidden',
-                           bgcolor: '#f0f0f0'
-                       }}>
-                           <Box 
-                               component="img" 
-                               src={bgImg} 
-                               fetchPriority="high" 
-                               loading="eager" 
-                               sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                           />
-                       </Box>
+            <Box sx={{
+                borderBottom: 4,
+                borderColor: "#ff0000",
+                display: 'block',
+                aspectRatio: '16/5',
+                width: '100%',
+                height: "auto",
+                overflow: 'hidden',
+                bgcolor: '#f0f0f0'
+            }}>
+                <Box
+                    component="img"
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+            </Box>
 
 
             <Box sx={{ py: 10 }}>

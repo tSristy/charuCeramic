@@ -33,9 +33,9 @@ const SingleNews = () => {
                     <Typography variant="h2" sx={{ textAlign: 'center', fontWeight: 600, color: '#868686' }}>{newsDetail.title}</Typography>
 
 
-                    <Box sx={{ mt: 5, fontSize: '1.25rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
+                    <Box sx={{ mt: 5, fontSize: '.925rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
                         <div
-                            className="blog-post-content"
+                           className="rendered-content" 
                             dangerouslySetInnerHTML={{ __html: newsDetail.content?.split('.').slice(0, 3).join('.') }}
                         />
                     </Box>
@@ -52,12 +52,9 @@ const SingleNews = () => {
 
 
                 <Box sx={{ px: { sm: 5, md: 10 } }}>
-                    <Box sx={{ mt: 5, fontSize: '1.25rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
-                        <div
-                            className="blog-post-content"
-                            dangerouslySetInnerHTML={{ __html: newsDetail.content?.split('.').slice(3).join('.') }}
-                        />
-                    </Box>
+                    <Box sx={{ mt: 5, fontSize: '.925rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
+                    <div className="rendered-content" dangerouslySetInnerHTML={{ __html:newsDetail.content?.split('.').slice(3).join('.') }} />
+                </Box>
                 </Box>
 
 

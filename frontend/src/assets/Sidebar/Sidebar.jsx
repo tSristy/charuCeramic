@@ -15,10 +15,14 @@ import WebStoriesIcon from '@mui/icons-material/WebStories';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import PolicyIcon from '@mui/icons-material/Policy';
+import GavelIcon from '@mui/icons-material/Gavel';
+import ImageIcon from '@mui/icons-material/Image';
 
 const Sidebar = () => {
     const menuList = [
         // { title: "Dashboard", url: "/dashboard", icon: <DashboardIcon /> },
+        { title: "Banner", url: "/banner-list", icon: <ImageIcon /> },
         { title: "Categories", url: "/category-list", icon: <CategoryIcon /> },
         { title: "Products", url: "/product-list", icon: <WarehouseIcon /> },
         { title: "Catalogues", url: "/catalogue-list", icon: <WebStoriesIcon /> },
@@ -26,8 +30,10 @@ const Sidebar = () => {
         { title: "Blogs", url: "/blog-list", icon: <NewspaperIcon /> },
         { title: "Buying Guide", url: "/buying-guide-list", icon: <MenuBookIcon /> },
         { title: "Projects", url: "/project-list", icon: <ApartmentIcon /> },
-        { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
         { title: "Resume", url: "/career-list", icon: <WorkHistoryIcon /> },
+        { title: "Policy", url: "/policy-panel", icon: <PolicyIcon /> },
+        { title: "Terms & Condition", url: "/terms-condition-panel", icon: <GavelIcon /> },
+        { title: "FAQs", url: "/faq-list", icon: <LiveHelpIcon /> },
     ];
     const [open, setOpen] = useState(true);
     const navigate = useNavigate();

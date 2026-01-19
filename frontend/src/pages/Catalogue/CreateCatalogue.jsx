@@ -166,11 +166,13 @@ const CreateCatalogue = () => {
                 </Box>
 
                 <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
+                    <Grid size={{ sm: 12, md: 8 }}>
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Catalogue" : "Register New Catalogue"}</Typography>
-                                <IconButton><SyncIcon color="disabled" /></IconButton>
+                                <IconButton onClick={(e)=>window.location.reload()}>
+                                    <SyncIcon color="disabled" />
+                                </IconButton>
                             </Stack>
                             <Divider />
                             <form onSubmit={handleSubmit}>
@@ -309,7 +311,7 @@ const CreateCatalogue = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item size={{ sm: 12, md: 4 }}>
+                    <Grid size={{ sm: 12, md: 4 }}>
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }}>Pro Tip</Typography>
                             <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Upload a PDF file for the catalogue and an optional featured image.</Typography>

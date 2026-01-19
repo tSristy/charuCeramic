@@ -110,10 +110,8 @@ const SingleProduct = () => {
                             <Box mt={5} px={{ md: 2, lg: 10 }} sx={{ borderRight: '1px solid #d0d0d094' }}>
                                 <Box component="img" loading="eager" fetchPriority="high" src={urlAPI + mainImg?.image_url} alt={mainImg?.alt_text} className="hoverEffect" sx={{
                                     display: 'block', width: '100%',
-                                    aspectRatio: {
-                                        xs: '1 / 1',
-                                        md: '1 / 1',
-                                    }, height: 'auto', objectFit: 'cover'
+                                    aspectRatio: '1 / 1',
+                                    height: 'auto', objectFit: 'cover'
                                 }} />
                             </Box>
                             <Box px={{ md: 2, lg: 10 }}>
@@ -129,10 +127,7 @@ const SingleProduct = () => {
                                                         display: 'block',
                                                         width: { xs: '100px', sm: '150px', lg: '200px' },
 
-                                                        aspectRatio: {
-                                                            // xs: '4 / 3',
-                                                            sm: '1 / 1',
-                                                        }, height: 'auto',
+                                                        aspectRatio: '1 / 1', height: 'auto',
 
                                                         bgcolor: '#444',
                                                         '&:hover': {

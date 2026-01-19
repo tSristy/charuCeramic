@@ -38,6 +38,11 @@ import SingleNews from "../pages/News&Article/SingleNews";
 import CreateGuide from "../pages/BuyingGuide/CreateGuide";
 import GuideList from "../pages/BuyingGuide/GuideList";
 import SingleGuide from "../pages/BuyingGuide/SingleGuide";
+import Dashboard from "../pages/Home/Dashboard";
+import CreatePolicy from "../pages/FAQ/CreatePolicy";
+import CreateTerms from "../pages/FAQ/CreateTerms";
+import CreateBanner from "../pages/Banner/CreateBanner";
+import BannerList from "../pages/Banner/BannerList";
 
 export const RouterConfig = createBrowserRouter([
     {
@@ -75,14 +80,13 @@ export const RouterConfig = createBrowserRouter([
         children: [{
             Component: AdminLayout,
             children: [
+                {path: "dashboard", Component: Dashboard},
+
                 { path: "dealer-panel", Component: CreateDealer },
                 { path: "dealer-list", Component: DealerList },
 
                 { path: "category-panel", Component: CreateCategory },
                 { path: "category-list", Component: CategoryList },
-
-                { path: "faq-panel", Component: CreateFAQ },
-                { path: "faq-list", Component: FAQList },
 
                 { path: "blog-panel", Component: CreateBlogs },
                 { path: "blog-list", Component: BlogList },
@@ -101,6 +105,15 @@ export const RouterConfig = createBrowserRouter([
 
                 { path: "buying-guide-panel", Component: CreateGuide },
                 { path: "buying-guide-list", Component: GuideList },
+
+                { path: "faq-panel", Component: CreateFAQ },
+                { path: "faq-list", Component: FAQList },
+
+                { path: "policy-panel", Component: CreatePolicy },
+                { path: "terms-condition-panel", Component: CreateTerms },
+
+                 { path: "banner-panel", Component: CreateBanner },
+                { path: "banner-list", Component: BannerList },
             ]
         }],
     },

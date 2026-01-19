@@ -2,7 +2,6 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
-import BtnOpenInTab from "../../assets/Button/BtnDownload";
 
 const SingleGuide = () => {
     const { path } = useParams();
@@ -23,30 +22,27 @@ const SingleGuide = () => {
     return (
         <Box py={10}>
             <Container>
-                <Typography sx={{ fontSize: '2.7rem', fontWeight: 600, color: '#2b2b2b' }}>{guideDetail.title}</Typography>
-                 <Box my={4}>
-                 <BtnOpenInTab fileUrl={guideDetail.file_path}><Box sx={{ py: 1.5, textAlign: 'center', borderRadius: 2, width: '100%', color: "#fff", bgcolor: "#ff0000" }}>DOWNLOAD GUIDE</Box> </BtnOpenInTab>
-                 </Box>
-                        
-                <Box
-                    component="img"
-                    src={urlAPI + guideDetail.featured_image}
-                    sx={{
-                        width: { xs: '100%', md: '50%' },
-                        float: { md: 'left' },
-                        mr: { md: 4 },
-                        mb: 4,
-                        borderRadius: 2,
-                        aspectRatio: '16/9',
-                        objectFit: 'cover'
-                    }}
-                />
+                <Grid container direction='row' sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Grid size={{ xs: 12, md: 7 }}>
+                        <Typography sx={{ fontSize: '3rem', fontWeight: 600, color: '#6c6c6c', mb: 3 }}>{guideDetail.title}</Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 5 }}>
+                        <Box
+                            component="img" fetchPriority="high"
+                            src={urlAPI + guideDetail.featured_image}
+                            sx={{
+                                width: '100%',
+                                borderRadius: 2,
+                                aspectRatio: '43/32',
+                                objectFit: 'cover'
+                            }}
+                        />
+                    </Grid>
+                </Grid>
 
-                <div
-                    className="blog-post-content"
-                    dangerouslySetInnerHTML={{ __html: guideDetail.content }}
-                />
-
+                <Box sx={{ mt: 5, fontSize: '.925rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
+                    <div className="rendered-content" dangerouslySetInnerHTML={{ __html: guideDetail.content }} />
+                </Box>
             </Container>
         </Box>
     );

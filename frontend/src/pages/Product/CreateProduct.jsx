@@ -247,11 +247,11 @@ const CreateProduct = () => {
 
 
                 <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
+                    <Grid size={{ sm: 12, md: 8 }}>
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Product" : "Register New Product"}</Typography>
-                                <IconButton>
+                                <IconButton onClick={(e)=>window.location.reload()}>
                                     <SyncIcon color="disabled" />
                                 </IconButton>
                             </Stack>
@@ -291,8 +291,7 @@ const CreateProduct = () => {
 
                                         <Grid size={{ xs: 12, sm: 6 }}>
                                             <FormLabel text="Brand Name" icon={<LanguageIcon />} />
-                                            {/* <TextField fullWidth size="small" value={product.brand_name} onChange={(e) => setProduct(p => ({ ...p, brand_name: e.target.value }))} /> */}
-                                            <Autocomplete size="small"
+                                             <Autocomplete size="small"
                                                 options={["CHARU", 'COTTO']}
                                                 value={product.brand_name || null}
                                                 onChange={(_, newVal) => setProduct(p => ({ ...p, brand_name: newVal }))}
@@ -522,7 +521,7 @@ const CreateProduct = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item size={{ sm: 12, md: 4 }}>
+                    <Grid size={{ sm: 12, md: 4 }}>
 
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>

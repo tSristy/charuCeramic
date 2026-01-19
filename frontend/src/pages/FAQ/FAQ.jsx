@@ -24,17 +24,36 @@ const FAQ = () => {
                 })
         }, []);
 
+   const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=FAQ&sectionValue=FQ01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+        }, [])
+
     return (
-        <Box>
+        <Box sx={{ bgcolor: "#fff" }}>
             <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
-                width: "100%",
-                height: "350px",
-                objectFit: "cover"
-            }}
-                component="img" src={bgImg} />
+                aspectRatio: '16/4',
+                width: '100%',
+                height: "auto",
+                overflow: 'hidden',
+                bgcolor: '#f0f0f0'
+            }}>
+                <Box
+                    component="img"
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+            </Box>
 
             <Box py={10}>
                 <Container>

@@ -56,8 +56,7 @@ router.get('/', (req, res) => {
 
 
 const uploadFields = upload.fields([
-    { name: 'featured_image', maxCount: 1 },
-    { name: 'file_path', maxCount: 1 } 
+    { name: 'featured_image', maxCount: 1 }
 ]);
 
 //-------------------------- Add a new item ---------------------------------
@@ -67,15 +66,13 @@ router.post('/add', uploadFields, (req, res) => {
     const featured_image = req.files['featured_image'] 
         ? `/images/${req.files['featured_image'][0].filename}` 
         : null;
-    const file_path = req.files['file_path'] 
-        ? `/pdf/${req.files['file_path'][0].filename}` 
-        : null;
+   
 
     const sql = `INSERT INTO buying_guide 
-                (title, slug, content, featured_image, file_path) 
+                (title, slug, content, featured_image) 
                 VALUES (?, ?, ?, ?, ?)`;
 
-    const values = [title, slug, content, featured_image, file_path];
+    const values = [title, slug, content, featured_image];
 
     db.query(sql, values, (err, result) => {
         if (err) {
@@ -97,14 +94,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
     let sql = 'UPDATE buying_guide SET title = ?, slug = ?, content = ?';
     let params = [title, slug, content];
 
-    // 2. Check for a new PDF file
-    if (req.files && req.files['file_path']) {
-        const newFilePath = `/pdf/${req.files['file_path'][0].filename}`;
-        sql += ', file_path = ?';
-        params.push(newFilePath);
-    }
-
-    // 3. Check for a new Featured Image
+    
     if (req.files && req.files['featured_image']) {
         const newImagePath = `/images/${req.files['featured_image'][0].filename}`;
         sql += ', featured_image = ?';

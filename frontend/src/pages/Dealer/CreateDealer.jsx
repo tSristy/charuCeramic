@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TextField, Autocomplete, Stack, Container, Typography, Box, IconButton, Divider, Grid } from "@mui/material";
+import { TextField, Autocomplete, Stack, Container, Typography, Box, IconButton, Divider, Grid, Snackbar, Alert } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi } from "../../route/ServerAPI";
@@ -13,11 +13,23 @@ import LanguageIcon from '@mui/icons-material/Language';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
+import UploadingLoader from "../../assets/Modal/UploadingLoader";
 
 const CreateDealer = () => {
+    const navigate = useNavigate();
     const [searchParam] = useSearchParams();
     const [ID] = useState(searchParam.get("id") || null);
-    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+    const [openAlert, setOpenAlert] = useState(false);
+    const [msgText, setMsgText] = useState({});
+
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
     const [dealer, setDealer] = useState({
         name: "",
@@ -38,7 +50,9 @@ const CreateDealer = () => {
             ServerApi(`/dealer/add`, "POST", null, dealer)
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log("create response:", res);
+                    setOpenAlert(true);
+                setLoading(false);
+                setMsgText(res);
                 })
                 .catch((err) => console.error(err));
         }
@@ -47,7 +61,11 @@ const CreateDealer = () => {
     const handleUpdate = () => {
         ServerApi(`/dealer/update/` + ID, "PUT", null, dealer)
             .then((res) => res.json())
-            .then((res) => console.log("update response:", res))
+            .then((res) => {
+                setOpenAlert(true);
+                setLoading(false);
+                setMsgText(res);
+            })
             .catch((err) => console.error(err));
     };
 
@@ -82,6 +100,28 @@ const CreateDealer = () => {
 
     return (
         <Box bgcolor={"#f8fafc"} py={5}>
+             {loading && <UploadingLoader loading={true} />}
+                        <Snackbar
+                            open={openAlert}
+                            autoHideDuration={3000}
+                            onClose={handleAlertClose}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        >
+                            {msgText && typeof msgText === "object" && Object.keys(msgText).length > 0 && (
+                                <Alert
+                                    onClose={handleAlertClose}
+                                    severity={
+                                        Object.keys(msgText)[0] === "message"
+                                            ? "success"
+                                            : "error"
+                                    }
+                                    variant="filled"
+                                    sx={{ width: '100%' }}
+                                >
+                                    {Object.values(msgText)[0]}
+                                </Alert>
+                            )}
+                        </Snackbar>
             <Container>
                 {/* ------------------------Title and Description------------------------ */}
                 <Box mb={3}>
@@ -91,12 +131,12 @@ const CreateDealer = () => {
 
 
                 <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
+                    <Grid size={{ sm: 12, md: 8 }}>
                         {/* --------------------------Form Section------------------------- */}
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Dealer" : "Register New Dealer"}</Typography>
-                                <IconButton>
+                                <IconButton onClick={(e)=>window.location.reload()}>
                                     <SyncIcon color="disabled" />
                                 </IconButton>
                             </Stack>
@@ -163,7 +203,7 @@ const CreateDealer = () => {
                     </Grid>
 
 
-                    <Grid item size={{ sm: 12, md: 4 }}>
+                    <Grid size={{ sm: 12, md: 4 }}>
                         {/* --------------------------Info Section------------------------- */}
                         <Box sx={{ bgcolor: "#ff0000ff", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>

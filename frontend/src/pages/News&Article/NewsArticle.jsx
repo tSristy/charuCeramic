@@ -63,7 +63,7 @@ const NewsArticle = () => {
                                 }}
                             >
                                 <CardMedia
-                                    component="img" loading="eager" decoding="async"
+                                    component="img" loading="eager" fetchPriority="high"
                                     image={urlAPI + blogList[0]?.featured_image}
                                     alt="news"
                                     sx={{
@@ -199,6 +199,7 @@ const NewsArticle = () => {
                                     <Box>
                                         <Box component="img" src={urlAPI + item.featured_image} loading="lazy" decoding="async"
                                             alt={item.title} sx={{
+                                                borderRadius: 2,
                                                 width: '100%', height: 'auto',
                                                 aspectRatio: '16/9', objectFit: 'cover'
                                             }} />

@@ -28,6 +28,8 @@ const Homepage = () => {
     const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
     const [blogList, setBlogList] = useState([]);
+    const [bannerList, setBannerList] = useState([]);
+    const [primeVideo, setPrimeVideo] = useState(null);
 
     useEffect(() => {
         ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
@@ -39,10 +41,24 @@ const Homepage = () => {
         ServerApi(`/blog/show`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
-                console.log(res)
                 setBlogList(res);
             });
-    }, [])
+
+        ServerApi(`/banner?pageName=HOMEPAGE&sectionValue=HP01`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                console.log(res);
+                setBannerList(res);
+            })
+
+
+        ServerApi(`/banner?pageName=HOMEPAGE&sectionValue=HP04`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                setPrimeVideo(res[0]);
+            });
+    }, []);
+
 
     return (
         <>
@@ -50,25 +66,44 @@ const Homepage = () => {
             {/* HEROSECTIONNNNNNNNNNNNNNNNNNNNNNNNNNNN */}
             <Box>
                 <Carousel>
-                    <video
-                        poster={bannerImg}
-                        preload="metadata"
-                        style={{ aspectRatio: '16/6.7', width: '100%', objectFit: 'cover' }}
-                        autoPlay loop muted playsInline
-                    >
-                        <source src={bannerVideo} type="video/mp4" />
-                    </video>
+                    {bannerList.map((banner) => (
+                        banner?.content_type === "Video" ? (
+                            <Box
+                                key={banner.id}
+                                component="video"
+                                src={urlAPI + banner.featured_image}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                loading="eager"
+                                fetchPriority="high"
+                                sx={{
+                                    display: 'block',
+                                    width: "100%",
+                                    aspectRatio: '16/6.7',
+                                    height: "auto",
+                                    objectFit: "cover"
+                                }}
+                            />
+                        ) : (
+                            <Box
+                                key={banner.id}
+                                component="img"
+                                src={urlAPI + banner.featured_image}
+                                loading="eager"
+                                fetchPriority="high"
+                                sx={{
+                                    display: 'block',
+                                    width: "100%",
+                                    aspectRatio: '16/6.7',
+                                    height: "auto",
+                                    objectFit: "cover"
+                                }}
+                            />
+                        )
+                    ))}
 
-                    <Box sx={{
-                        display: 'block',
-                        width: "100%",
-                        aspectRatio: '16/6.7',
-                        height: "auto",
-                        objectFit: "cover"
-                    }}
-                        loading="eager"
-                        fetchPriority="high"
-                        component="img" src={bannerImg} />
                 </Carousel>
             </Box>
 
@@ -174,7 +209,7 @@ const Homepage = () => {
                     </Box>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#000000ff', py: 10, px: 2, width: { sm: '50%'} }}>
+                        <Box sx={{ bgcolor: '#000000ff', py: 10, px: 2, width: { sm: '50%' } }}>
                             <Box component="img" src={imgOt1} alt="rimless" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Rimless Design
@@ -184,7 +219,7 @@ const Homepage = () => {
                             </Typography>
                         </Box>
 
-                        <Box sx={{ bgcolor: '#2b2b2b', py: 10, px: 2, width: { sm: '50%'} }}>
+                        <Box sx={{ bgcolor: '#2b2b2b', py: 10, px: 2, width: { sm: '50%' } }}>
                             <Box component="img" src={imgOt2} alt="jet" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Rimless Siphon Jet
@@ -196,7 +231,7 @@ const Homepage = () => {
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }}>
-                        <Box sx={{ bgcolor: '#4a4a4a', py: 10, px: 2, width: { sm: '50%'} }}>
+                        <Box sx={{ bgcolor: '#4a4a4a', py: 10, px: 2, width: { sm: '50%' } }}>
                             <Box component="img" src={imgOt3} alt="hygigenic" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Hygienic Glaze
@@ -207,7 +242,7 @@ const Homepage = () => {
                         </Box>
 
 
-                        <Box sx={{ bgcolor: '#676767', py: 10, px: 2, width: { sm: '50%'} }}>
+                        <Box sx={{ bgcolor: '#676767', py: 10, px: 2, width: { sm: '50%' } }}>
                             <Box component="img" src={imgOt4} alt="hygigenic" sx={{ filter: "grayscale(100%)", objectFit: "cover", height: "50px", mb: 2 }} />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, textAlign: 'left', color: 'white', mb: 2 }}>
                                 Click Release
@@ -302,16 +337,19 @@ const Homepage = () => {
 
 
             {/* VIDEOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO */}
-            <Box sx={{ py: { md: 4, lg: 10 } }}>
-                <video
-                    poster={bannerImg}
-                    preload="metadata"
-                    style={{ aspectRatio: '16/7', width: '100%', objectFit: 'cover' }}
-                    autoPlay loop muted playsInline
-                >
-                    <source src={bannerVideo} type="video/mp4" />
-                </video>
-            </Box>
+            {primeVideo && (<Box sx={{ py: { md: 4, lg: 10 } }}>
+                <Box sx={{
+                    display: 'block',
+                    width: "100%",
+                    aspectRatio: '16/7',
+                    height: "auto",
+                    objectFit: "cover"
+                }} autoPlay loop muted playsInline
+                    onCanPlay={(e) => e.currentTarget.muted = true}
+                    loading="loading"
+                    decoding="async"
+                    component="video" src={urlAPI + primeVideo?.featured_image} />
+            </Box>)}
 
 
             {/* BLOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG */}
@@ -326,10 +364,10 @@ const Homepage = () => {
 
                     <Grid container spacing={4}>
                         {blogList.length > 0 && blogList.map(item => (
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} onClick={(e) => navigate(`/news-article/${item.slug}`)}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} onClick={(e) => navigate(`/news-article/${item.slug}`)} sx={{ '&:hover': { cursor: 'pointer' } }}>
                                 <Box>
                                     <Box component="img" src={urlAPI + item.featured_image} loading="lazy"
-                                    decoding="async" alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                                        decoding="async" alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                                     <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
                                         {item.title}
                                     </Typography>

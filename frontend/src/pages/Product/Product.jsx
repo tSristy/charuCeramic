@@ -122,6 +122,15 @@ const Product = () => {
                 setLoading(false);
             });
     }, [category, debouncedSearch, paginationDetails.pageNo]);
+const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=PRODUCT&sectionValue=PP01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+        }, [])
 
     return (
         <>
@@ -131,16 +140,16 @@ const Product = () => {
                 display: 'block',
                 aspectRatio: '16/5',
                 width: '100%',
-                height: "auto", 
+                height: "auto",
                 overflow: 'hidden',
                 bgcolor: '#f0f0f0'
             }}>
-                <Box 
-                    component="img" 
-                    src={bgImg} 
-                    fetchPriority="high" 
-                    loading="eager" 
-                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                <Box
+                    component="img"
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
             </Box>
 

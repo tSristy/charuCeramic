@@ -2,7 +2,7 @@
   font-family: "Poppins", sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: "#2b2b2b";
+  color: #2b2b2b;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -44,7 +44,7 @@ img {
 
 .MuiOutlinedInput-input::placeholder {
       font-size: "12px";
-      color: "#94a3b8";
+      color: #94a3b8;
       opacity: 1
     }
 
@@ -64,4 +64,44 @@ img {
   font-size: .75rem;
   color: #444;
   padding:10px 14px;
+}
+
+
+/* Style for the rendered content from the database */
+
+
+.rendered-content table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.rendered-content table td, 
+.rendered-content table th {
+  border: 1px solid #ced4da; /* This adds the border */
+  padding: 8px 12px;
+  min-width: 1em;
+  vertical-align: top;
+  text-align: left;
+}
+
+.rendered-content table th {
+  background-color: #f1f5f9;
+  font-weight: bold;
+}
+
+/* Ensure bullet points look correct too */
+.rendered-content ul {
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rendered-content h1, 
+.rendered-content h2, 
+.rendered-content h3 
+.rendered-content h4 {
+  font-weight: 500;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }

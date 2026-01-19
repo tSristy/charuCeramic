@@ -33,14 +33,21 @@ const Catalogue = () => {
             });
     }, [paginationDetails.pageNo]);
 
-    
+    const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=CATALOGUE&sectionValue=CL01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+        }, [])
 
     return (
         <Box sx={{ bgcolor: "#fff" }}>
-            {/* LCP OPTIMIZATION: High priority banner */}
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ED1C24",
+                borderColor: "#ff0000",
                 display: 'block',
                 aspectRatio: '16/5',
                 width: '100%',
@@ -48,12 +55,12 @@ const Catalogue = () => {
                 overflow: 'hidden',
                 bgcolor: '#f0f0f0'
             }}>
-                <Box 
-                    component="img" 
-                    src={bgImg} 
-                    fetchPriority="high" 
-                    loading="eager" 
-                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                <Box
+                    component="img"
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
             </Box>
 
@@ -81,12 +88,12 @@ const Catalogue = () => {
                                                     <Box className="hoverEffectImg"
                                                         component="img"
                                                         src={urlAPI + item.featured_image}
-                                                        loading="lazy"
-                                                        decoding="async"
+                                                        loading="eager"
+                                                        fetchPriority="high" 
                                                         sx={{
                                                             display: 'block',
                                                             width: "100%",
-                                                            height: "470px",
+                                                            aspectRatio: '37/52',
                                                             objectFit: "cover",
                                                         }} />
                                                     <Box sx={{ p: 2 }}>
@@ -112,7 +119,7 @@ const Catalogue = () => {
                 </Container>
             </Box>
 
-            <Box sx={{ py: 10, bgcolor: '#ffffff' }}>
+            <Box sx={{ pb: 10, bgcolor: '#ffffff' }}>
                 <Container>
                     <Typography sx={{ fontSize: { xs: '1.8rem', md: '2.5rem' }, fontWeight: 600, mb: 5, textAlign: 'center' }}>
                         Product Series
@@ -138,10 +145,11 @@ const Catalogue = () => {
                                                         decoding="async"
                                                         src={urlAPI + item.featured_image}
                                                         sx={{
-                                                            filter: "grayscale(100%)",
+                                                            borderRadius:2,
+                                                            // filter: "grayscale(50%)",
                                                             display: 'block',
                                                             width: "100%",
-                                                            height: "350px",
+                                                            aspectRatio: '37/52',
                                                             objectFit: "cover",
                                                         }} />
                                                     <Box sx={{ p: 2 }}>

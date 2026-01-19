@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Switch, Tooltip, Snackbar, Alert } from "@mui/material";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Switch, Snackbar, Alert } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
@@ -15,7 +15,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import TextFormat from "../../assets/FormLabel/TextFormat";
+import TiptapEditor from "../../assets/FormLabel/TiptapEditor";
 
 const CreateBlogs = () => {
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ const CreateBlogs = () => {
     const [openAlert, setOpenAlert] = useState(false);
     const [msgText, setMsgText] = useState({});
 
-    // 1. Image Refs & Preview State
+    
     const imgRef1 = useRef(null);
     const imgRef2 = useRef(null);
     const imgRef3 = useRef(null);
@@ -53,7 +53,7 @@ const CreateBlogs = () => {
         setOpenAlert(false);
     };
 
-    // 2. Handle Image Selection
+
     const handleImageChange = (file, fieldName) => {
         if (file) {
             setBlogDetails(p => ({ ...p, [fieldName]: file }));
@@ -62,7 +62,7 @@ const CreateBlogs = () => {
         }
     };
 
-    // 3. Submit/Update Logic
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -139,11 +139,13 @@ const CreateBlogs = () => {
                 </Box>
 
                 <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
+                    <Grid size={{ sm: 12, md: 8 }}>
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Blog" : "Register New Blog"}</Typography>
-                                <IconButton><SyncIcon color="disabled" /></IconButton>
+                                <IconButton onClick={(e)=>window.location.reload()}>
+                                    <SyncIcon color="disabled" />
+                                </IconButton>
                             </Stack>
                             <Divider />
 
@@ -214,8 +216,10 @@ const CreateBlogs = () => {
 
                                         <Grid size={{ xs: 12 }}>
                                             <FormLabel text="Content" icon={<DescriptionIcon />} />
-                                            <TextFormat onChange={(html) => setBlogDetails(p => ({ ...p, content: html }))} initialValue={blogDetails.content} />
-                                        </Grid>
+                                             <TiptapEditor
+                                                                            initialValue={blogDetails.content}
+                                                                            onChange={(html) => setBlogDetails(p => ({ ...p, content: html }))}
+                                                                        /></Grid>
 
                                         <Grid size={{ xs: 12 }}>
                                             <Stack direction="row" spacing={2} justifyContent="space-between">
@@ -230,7 +234,7 @@ const CreateBlogs = () => {
                     </Grid>
 
                     {/* Image Preview Sidebar */}
-                    <Grid item size={{ sm: 12, md: 4 }}>
+                    <Grid size={{ sm: 12, md: 4 }}>
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
                             <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Ensuring the URL name is unique and it will add to homepage only when you turn on add to homepage options.</Typography>

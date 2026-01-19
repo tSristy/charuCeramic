@@ -1,10 +1,7 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Chip, Container, Divider, Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Chip, Container, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ClearIcon from '@mui/icons-material/Clear';
 
-import AllPagePdf from "../../assets/pdf/AllPagePdf";
-import bgImg from '../../img/bgDealer.jpg';
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 
 const BuyingGuide = () => {
@@ -64,8 +61,8 @@ const BuyingGuide = () => {
                                     height: "100%"
                                 }}
                             >
-                                <CardMedia loading="lazy" decoding="async"
-                                    sx={{ height: 140 }}
+                                <CardMedia decoding="async"
+                                    sx={{ width: '100%', aspectRatio: '43/32', objectFit: 'cover' }}
                                     image={urlAPI + item.featured_image}
                                     title={item.title}
                                 />

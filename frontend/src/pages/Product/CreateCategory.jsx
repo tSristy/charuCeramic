@@ -83,7 +83,9 @@ const CreateCategory = () => {
             ServerApi(`/category/add`, "POST", null, formData, true)
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log("create response:", res);
+                   setOpenAlert(true);
+                setLoading(false);
+                setMsgText(res);
                 })
                 .catch((err) => console.error(err));
         }
@@ -104,7 +106,11 @@ const CreateCategory = () => {
 
         ServerApi(`/category/update/` + ID, "PUT", null, formData, true)
             .then((res) => res.json())
-            .then((res) => console.log("update response:", res))
+            .then((res) => {
+                setOpenAlert(true);
+                setLoading(false);
+                setMsgText(res);
+            })
             .catch((err) => console.error(err));
     };
 
@@ -172,12 +178,12 @@ const CreateCategory = () => {
 
 
                 <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
+                    <Grid size={{ sm: 12, md: 8 }}>
                         {/* --------------------------Form Section------------------------- */}
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Category" : "Register New Category"}</Typography>
-                                <IconButton>
+                                <IconButton onClick={(e)=>window.location.reload()}>
                                     <SyncIcon color="disabled" />
                                 </IconButton>
                             </Stack>
@@ -235,7 +241,6 @@ const CreateCategory = () => {
                                                     fullWidth
                                                     size="small"
                                                     // Logical check for disabled/required
-                                                    required={category.add_homepage === 1}
                                                     disabled={category.add_homepage !== 1}
                                                     // Opens picker when clicking anywhere on the bar
                                                     onClick={() => category.add_homepage === 1 && imgTriggerClick.current.click()}
@@ -337,7 +342,7 @@ const CreateCategory = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item size={{ sm: 12, md: 4 }}>
+                    <Grid size={{ sm: 12, md: 4 }}>
                         {/* --------------------------Info Section------------------------- */}
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>

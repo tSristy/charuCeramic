@@ -48,11 +48,13 @@ const Footer = () => {
                                         .map((item, index) => (
                                             <Box onClick={(e) => handleBtn(item.permalink, '_blank')} key={index} component="img" src={
                                                 item.media_url
-                                            } sx={{
-                                                display: 'block', width: { xs: '100%', sm: '22%' }, aspectRatio: {
-                                                    md: '1/1'
-                                                }, height: 'auto', objectFit: 'cover', bgcolor: '#444'
-                                            }} />
+                                            } loading="lazy"
+                                                fetchPriority="low"
+                                                decoding="async" alt={item.permalink} sx={{
+                                                    display: 'block', width: { xs: '100%', sm: '22%' }, aspectRatio: {
+                                                        md: '1/1'
+                                                    }, height: 'auto', objectFit: 'cover', bgcolor: '#444'
+                                                }} />
                                         ))
                                 }
                             </Stack>

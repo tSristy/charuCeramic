@@ -112,8 +112,7 @@ const CreateProject = () => {
 
         ServerApi(`/project/update/` + ID, 'Put', null, formData, true)
             .then((res) => res.json())
-            .then((res) => 
-                {
+            .then((res) => {
                 setOpenAlert(true);
                 setLoading(false);
                 setMsgText(res);
@@ -175,11 +174,11 @@ const CreateProject = () => {
                 </Box>
 
                 <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
+                    <Grid size={{ sm: 12, md: 8 }}>
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Project" : "Register New Project"}</Typography>
-                                <IconButton>
+                                <IconButton onClick={(e)=>window.location.reload()}>
                                     <SyncIcon color="disabled" />
                                 </IconButton>
                             </Stack>
@@ -281,7 +280,7 @@ const CreateProject = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item size={{ sm: 12, md: 4 }}>
+                    <Grid size={{ sm: 12, md: 4 }}>
                         <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
                             <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Provide an URL only if it has external link.</Typography>

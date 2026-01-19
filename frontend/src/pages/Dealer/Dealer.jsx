@@ -3,7 +3,7 @@ import bgImg from '../../img/Dealer_page.jpg';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useEffect, useState } from "react";
-import { ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import { districtsByDivision, divisions } from "./data";
 
 const Dealer = () => {
@@ -47,27 +47,36 @@ const Dealer = () => {
     })
     }, [searchVariable,paginationDetails.pageNo]);
 
+const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=DEALER&sectionValue=DL01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+        }, [])
+
     return (
         <>
-           <Box sx={{
+            <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
                 aspectRatio: '16/5',
                 width: '100%',
-                height: "auto", 
+                height: "auto",
                 overflow: 'hidden',
                 bgcolor: '#f0f0f0'
             }}>
-                <Box 
-                    component="img" 
-                    src={bgImg} 
-                    fetchPriority="high" 
-                    loading="eager" 
-                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                <Box
+                    component="img"
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
             </Box>
-
 
             <Box sx={{ py: 10 }}>
                 <Container>

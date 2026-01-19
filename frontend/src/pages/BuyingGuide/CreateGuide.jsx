@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Switch, Tooltip, Snackbar, Alert, Button } from "@mui/material";
+import { TextField, Stack, Container, Box, Typography, Grid, IconButton, Divider, InputAdornment, Snackbar, Alert } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
@@ -11,12 +11,10 @@ import SyncIcon from '@mui/icons-material/Sync';
 import CategoryIcon from '@mui/icons-material/Category';
 import LanguageIcon from '@mui/icons-material/Language';
 import DescriptionIcon from '@mui/icons-material/Description';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import TextFormat from "../../assets/FormLabel/TextFormat";
-import BtnOpenInTab from "../../assets/Button/BtnDownload";
+import TiptapEditor from "../../assets/FormLabel/TiptapEditor";
 
 const CreateGuide = () => {
     const navigate = useNavigate();
@@ -38,8 +36,7 @@ const CreateGuide = () => {
         title: "",
         slug: "",
         content: "",
-        featured_image: "",
-         file_path: ""
+        featured_image: ""
     });
 
 
@@ -70,8 +67,8 @@ const CreateGuide = () => {
             formData.append("title", guideDetails.title);
             formData.append("slug", guideDetails.slug.replace(/\s+/g, "-").toLowerCase());
             formData.append("content", guideDetails.content);
-              if (guideDetails.file_path && guideDetails.file_path instanceof File) formData.append("file_path", guideDetails.file_path);
-        if (guideDetails.featured_image && guideDetails.featured_image instanceof File) formData.append("featured_image", guideDetails.featured_image);
+            //   if (guideDetails.file_path && guideDetails.file_path instanceof File) formData.append("file_path", guideDetails.file_path);
+            if (guideDetails.featured_image && guideDetails.featured_image instanceof File) formData.append("featured_image", guideDetails.featured_image);
 
 
             ServerApi(`/guide/add`, "POST", null, formData, true)
@@ -87,7 +84,7 @@ const CreateGuide = () => {
                             slug: "",
                             content: " ",
                             featured_image: "",
-                             file_path: ""
+                            file_path: ""
                         });
                         setPreviewSrc('');
                     }
@@ -102,7 +99,7 @@ const CreateGuide = () => {
         formData.append("title", guideDetails.title);
         formData.append("slug", guideDetails.slug.replace(/\s+/g, "-").toLowerCase());
         formData.append("content", guideDetails.content);
-         if (guideDetails.file_path && guideDetails.file_path instanceof File) formData.append("file_path", guideDetails.file_path);
+        //  if (guideDetails.file_path && guideDetails.file_path instanceof File) formData.append("file_path", guideDetails.file_path);
         if (guideDetails.featured_image && guideDetails.featured_image instanceof File) formData.append("featured_image", guideDetails.featured_image);
 
 
@@ -172,21 +169,21 @@ const CreateGuide = () => {
                 </Box>
 
 
-                <Grid container spacing={2} mb={3}>
-                    <Grid item size={{ sm: 12, md: 8 }}>
-                        {/* --------------------------Form Section------------------------- */}
-                        <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
-                            <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
-                                <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Buying Guide" : "Register New Buying Guide"}</Typography>
-                                <IconButton>
-                                    <SyncIcon color="disabled" />
-                                </IconButton>
-                            </Stack>
-                            <Divider />
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2} mb={3}>
+                        <Grid size={{ sm: 12, md: 8 }}>
+                            {/* --------------------------Form Section------------------------- */}
+                            <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
+                                <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
+                                    <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Buying Guide" : "Register New Buying Guide"}</Typography>
+                                    <IconButton onClick={(e)=>window.location.reload()}>
+                                        <SyncIcon color="disabled" />
+                                    </IconButton>
+                                </Stack>
+                                <Divider />
 
 
-                            {/* ----------------------------Form Inputs------------------------- */}
-                            <form onSubmit={handleSubmit}>
+                                {/* ----------------------------Form Inputs------------------------- */}
                                 <Box p={3}>
                                     <Grid container spacing={2}>
                                         <Grid size={{ xs: 12, sm: 6 }}>
@@ -199,9 +196,9 @@ const CreateGuide = () => {
                                             <TextField fullWidth size="small" value={guideDetails.slug} onChange={(e) => setGuideDetails(p => ({ ...p, slug: e.target.value }))} />
                                         </Grid>
 
-                                       
+
                                         {/* Image Field */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
+                                        <Grid size={{ xs: 12 }}>
                                             <FormLabel text="Featured Image || 860*640" icon={<AttachFileIcon />} />
                                             <Stack direction="row">
                                                 <TextField
@@ -252,103 +249,50 @@ const CreateGuide = () => {
                                                 </IconButton>
                                             </Stack>
                                         </Grid>
-
- <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormLabel text="Specification File" icon={<DescriptionIcon />} />
-
-                                            <Tooltip title="Provide PDF that has size of under 3Mb ">
-                                                <Button color={guideDetails.file_path ? "disable" : "error"}
-                                                    component="label"
-                                                    variant={
-                                                        guideDetails.file_path ? "outlined" : "contained"
-                                                    }
-
-                                                    startIcon={<AttachFileIcon />}
-                                                    sx={{ textTransform: 'none', width: "100%", py: 1 }}
-                                                    endIcon={guideDetails.file_path ? <IconButton sx={{ p: 0, bgcolor: "#23232365" }}
-                                                        size="small"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            e.preventDefault();
-                                                            setGuideDetails(p => ({ ...p, file_path: "" }))
-                                                        }}
-                                                    >
-                                                        <CloseIcon fontSize="small" sx={{ color: "white" }} />
-                                                    </IconButton> : null}
-
-                                                >
-                                                    {guideDetails.file_path ? (guideDetails.file_path instanceof File ? guideDetails.file_path.name : guideDetails.file_path) : "Specification PDF"}
-                                                    <input
-                                                        type="file"
-                                                        accept="application/pdf"
-                                                        hidden
-                                                        onChange={(e) => {
-                                                            const file = e.target.files[0];
-                                                            if (file) {
-                                                                if (file.size > 4 * 1024 * 1024) {
-                                                                    setOpenAlert(true);
-                                                                    window.scrollTo({
-                                                                        top: 100,
-                                                                        left: 100,
-                                                                        behavior: "smooth",
-                                                                    });
-                                                                    setMsgText({ error: "The file is too large. Max(3MB" });
-                                                                    return;
-                                                                }
-                                                                setGuideDetails(p => ({ ...p, file_path: file }));
-                                                            }
-                                                        }}
-                                                    />
-                                                </Button>
-                                            </Tooltip>
-                                        </Grid>
-
-                                        {/* EDITABLE TEXTFIELD*/}
-                                        <Grid size={{ xs: 12 }}>
-                                            <FormLabel text="Content" icon={<DescriptionIcon />} />
-                                            <TextFormat
-                                                onChange={(html) => setGuideDetails(p => ({ ...p, content: html }))}
-                                                initialValue={guideDetails.content}
-                                            />
-                                        </Grid>
-
-                                        <Grid size={{ xs: 12 }}>
-                                            <Stack direction="row" spacing={2} justifyContent="space-between">
-                                                <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
-                                                <BtnAdminSubmit type={"submit"} text={ID ? "Update" : "Create"} />
-                                            </Stack>
-                                        </Grid>
                                     </Grid>
                                 </Box>
-                            </form>
-                        </Box>
+                            </Box>
+                        </Grid>
+
+
+                        <Grid size={{ sm: 12, md: 4 }}>
+                            {/* --------------------------Info Section------------------------- */}
+                            <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3 }}>
+                                <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
+                                <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>{"Buying Guide will have Unique URL."}</Typography>
+                            </Box>
+                            {/* --------------------------Image Preview------------------------- */}
+                            <Box>
+                                {previewSrc ? (
+                                    <Box component="img" src={previewSrc} alt="Preview" sx={{ width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                                ) : guideDetails.featured_image ? (
+                                    <Box component="img" src={urlAPI + guideDetails.featured_image} alt="Preview" sx={{ width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
+                                ) : (
+                                    <Box sx={{ width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
+                                        <Typography color="text.secondary">No image selected</Typography>
+                                    </Box>
+                                )}
+                            </Box>
+                        </Grid>
+
+                        {/* EDITABLE TEXTFIELD*/}
+                        <Grid size={{ xs: 12 }}>
+                            <FormLabel text="Content" icon={<DescriptionIcon />} />
+
+                            <TiptapEditor
+                                initialValue={guideDetails.content}
+                                onChange={(html) => setGuideDetails(p => ({ ...p, content: html }))}
+                            />
+                        </Grid>
+
+                        <Grid size={{ xs: 12 }}>
+                            <Stack direction="row" spacing={2} justifyContent="space-between">
+                                <BtnAdminSubmit onClick={handleDelete} text={ID ? "Delete" : "Go Back"} />
+                                <BtnAdminSubmit type={"submit"} text={ID ? "Update" : "Create"} />
+                            </Stack>
+                        </Grid>
                     </Grid>
-
-
-                    <Grid item size={{ sm: 12, md: 4 }}>
-                        {/* --------------------------Info Section------------------------- */}
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
-                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>{" The form will hold upto one single image for your buying guide data."}</Typography>
-                        </Box>
-                        {/* --------------------------Image Preview------------------------- */}
-                        <Box>
-                            {previewSrc ? (
-                                <Box component="img" src={previewSrc} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
-                            ) : guideDetails.featured_image ? (
-                                <Box component="img" src={urlAPI + guideDetails.featured_image} alt="Preview" sx={{ mb: 3, width: '100%', height: 200, objectFit: 'cover', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }} />
-                            ) : (
-                                <Box sx={{ mb: 3, width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
-                                    <Typography color="text.secondary">No image selected</Typography>
-                                </Box>
-                            )}
-                        </Box>
-
-                        {ID && guideDetails.file_path &&
-                                                    <BtnOpenInTab fileUrl={guideDetails.file_path}><Box sx={{ mb: 3, py: 1, textAlign: 'center', borderRadius: 2, width: '100%', color: "#fff", bgcolor: "#333" }}>Buying_guide.pdf</Box> </BtnOpenInTab>
-                                                }
-                    </Grid>
-                </Grid>
+                </form>
             </Container>
         </Box >
     );

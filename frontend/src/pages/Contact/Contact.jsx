@@ -1,6 +1,7 @@
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 import bgImg from '../../img/bgContact.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ServerApi, urlAPI } from '../../route/ServerAPI';
 
 const Contact = () => {
     const [subject, setSubject] = useState('');
@@ -8,12 +9,21 @@ const Contact = () => {
     const handleSubjectChange = (event) => {
         setSubject(event.target.value);
     };
+const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=CONTACT&sectionValue=CT01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+        }, [])
 
     return (
         <>
             <Box sx={{
                 borderBottom: 4,
-                borderColor: "#ED1C24",
+                borderColor: "#ff0000",
                 display: 'block',
                 aspectRatio: '16/5',
                 width: '100%',
@@ -23,10 +33,10 @@ const Contact = () => {
             }}>
                 <Box
                     component="img"
-                    src={bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
                     fetchPriority="high"
                     loading="eager"
-                    sx={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%)' }}
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
             </Box>
 

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Container, Grid, TextField, Typography, IconButton, Snackbar, Alert } from "@mui/material";
 import bgImg from '../../img/bgDealer.jpg';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import BtnAdminSubmit from "../../assets/Button/BtnAdminSubmit";
-import { ServerApi } from "../../route/ServerAPI";
+import { ServerApi, urlAPI } from "../../route/ServerAPI";
 
 const Career = () => {
 
@@ -54,9 +54,38 @@ const Career = () => {
                 }
             })
     }
+const [bannerImg, setBannerImg] = useState(null);
+
+    useEffect(() => { 
+        ServerApi(`/banner?pageName=CAREER&sectionValue=CR01`, "GET", null, null)
+                .then((res) => res.json())
+                .then((res) => {
+                    setBannerImg(res[0]);
+                });
+        }, [])
 
     return (
         <>
+            <Box sx={{
+                borderBottom: 4,
+                borderColor: "#ff0000",
+                display: 'block',
+                aspectRatio: '16/4',
+                width: '100%',
+                height: "auto",
+                overflow: 'hidden',
+                bgcolor: '#f0f0f0'
+            }}>
+                <Box
+                    component="img"
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    fetchPriority="high"
+                    loading="eager"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+            </Box>
+            
+            
             <Snackbar
                 open={openAlert}
                 autoHideDuration={3000}
@@ -75,25 +104,6 @@ const Career = () => {
                 </Alert>
             </Snackbar>
 
-
-           <Box sx={{
-                borderBottom: 4,
-                borderColor: "#ED1C24",
-                display: 'block',
-                aspectRatio: '16/4',
-                width: '100%',
-                height: "auto", 
-                overflow: 'hidden',
-                bgcolor: '#f0f0f0'
-            }}>
-                <Box 
-                    component="img" 
-                    src={bgImg} 
-                    fetchPriority="high" 
-                    loading="eager" 
-                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                />
-            </Box>
 
             <Box sx={{ py: 10 }}>
                 <Container>
