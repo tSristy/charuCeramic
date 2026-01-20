@@ -68,8 +68,8 @@ const NewsArticle = () => {
                                     alt="news"
                                     sx={{
                                         width: "100%",
-                                        aspectRatio: '4/3',
                                         height: "100%",
+                                        aspectRatio: '4/3',
                                         objectFit: "cover",
                                     }}
                                 />
@@ -121,7 +121,7 @@ const NewsArticle = () => {
                                     {blogList[0]?.title}
                                 </Typography>
 
-                                <Typography
+                                <Box
                                     sx={{
                                         fontSize: ".9rem",
                                         mb: 2,
@@ -130,9 +130,9 @@ const NewsArticle = () => {
                                 >
                                     <div
                                         className="blog-post-content"
-                                        dangerouslySetInnerHTML={{ __html: blogList[0]?.content.slice(0, 400) }}
+                                        dangerouslySetInnerHTML={{ __html: blogList[0]?.content.slice(0, 300) }}
                                     />
-                                </Typography>
+                                </Box>
 
                                 <Typography
                                     variant="caption"

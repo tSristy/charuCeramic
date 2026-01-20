@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import viteImagemin from 'vite-plugin-imagemin';
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
@@ -19,5 +18,8 @@ export default defineConfig({
         plugins: [{ name: 'removeViewBox' }, { name: 'removeEmptyAttrs', active: false }],
       },
     }),
-  ]
+  ],
+  build: {
+    chunkSizeWarningLimit: 1000, 
+  }
 })

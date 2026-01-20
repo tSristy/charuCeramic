@@ -6,7 +6,6 @@ import BtnUrlChange from "../../assets/Button/BtnUrlChange";
 import CTA from "../../assets/Button/CTA.jsx";
 import Carousel from "../../assets/Slide/Carousel.jsx";
 
-import bannerVideo from '../../img/dummyVideo.mp4';
 import bannerImg from '../../img/bg1.jpg';
 
 import img3in1 from '../../img/3img1.jpg';
@@ -28,8 +27,11 @@ const Homepage = () => {
     const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
     const [blogList, setBlogList] = useState([]);
+
     const [bannerList, setBannerList] = useState([]);
-    const [primeVideo, setPrimeVideo] = useState(null);
+    const [imgList, setImgList] = useState([]);
+    const [primeVideo, setPrimeVideo] = useState("");
+    const [bgImg, setBgImg] = useState("");
 
     useEffect(() => {
         ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
@@ -47,10 +49,20 @@ const Homepage = () => {
         ServerApi(`/banner?pageName=HOMEPAGE&sectionValue=HP01`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
-                console.log(res);
                 setBannerList(res);
             })
 
+        ServerApi(`/banner?pageName=HOMEPAGE&sectionValue=HP02`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                setBgImg(res[0]);
+            });
+
+        ServerApi(`/banner?pageName=HOMEPAGE&sectionValue=HP03`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                setImgList(res);
+            })
 
         ServerApi(`/banner?pageName=HOMEPAGE&sectionValue=HP04`, "GET", null, null)
             .then((res) => res.json())
@@ -135,7 +147,7 @@ const Homepage = () => {
             {/* ABOUTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT */}
             <Box sx={{
                 bgcolor: '#c5c5c5',
-                backgroundImage: `url(${bannerImg})`,
+                backgroundImage: bgImg ? `url(${urlAPI + bgImg.featured_image})` : `url(${bannerImg})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
@@ -264,54 +276,28 @@ const Homepage = () => {
                     <Grid container spacing={4}>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <Box sx={{ position: 'relative', height: { xs: '350px', md: '500px' } }}>
-                                <Box sx={{
-                                    borderRadius: 3,
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    boxShadow: 2,
-                                    width: '55%',
-                                    height: '60%',
-                                    objectFit: 'cover',
-                                    "&:hover": {
-                                        zIndex: 2,
-                                        transform: 'scale(1.05)',
-                                        transition: 'all 0.5s ease-in-out',
-                                    }
-                                }} loading="lazy"
-                                    decoding="async" component="img" src={img3in1} />
 
-                                <Box sx={{
-                                    borderRadius: 3,
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: "10%",
-                                    boxShadow: 2,
-                                    width: "50%",
-                                    height: "50%",
-                                    "&:hover": {
-                                        zIndex: 2,
-                                        transform: 'scale(1.05)',
-                                        transition: 'all 0.5s ease-in-out',
-                                    }
-                                }} loading="lazy"
-                                    decoding="async" component="img" src={img3in2} />
+                                {imgList.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+                                    .map(banner => (
+                                        <Box sx={{
+                                            borderRadius: 3,
+                                            position: 'absolute',
+                                            top: banner.sort_order == 1 ? 0 : banner.sort_order == 2 ? "50%" : "15%",
+                                            left: banner.sort_order == 1 ? 0 : banner.sort_order == 2 ? "10%" : "49%",
+                                            boxShadow: 2,
+                                            aspectRatio: banner.sort_order == 1 ? '31/30' : banner.sort_order == 2 ? '28/25' : '28/35',
+                                            width: banner.sort_order == 1 ? '55%' : banner.sort_order == 2 ? "50%" : "50%",
+                                            // height: '60%',
+                                            objectFit: 'cover',
+                                            "&:hover": {
+                                                zIndex: 2,
+                                                transform: 'scale(1.05)',
+                                                transition: 'all 0.5s ease-in-out',
+                                            }
+                                        }} loading="lazy"
+                                            decoding="async" component="img" src={banner.featured_image ? urlAPI + banner.featured_image : bannerImg} />
+                                    ))}
 
-                                <Box sx={{
-                                    borderRadius: 3,
-                                    position: 'absolute',
-                                    top: '15%',
-                                    left: "49%",
-                                    boxShadow: 2,
-                                    width: "50%",
-                                    height: "70%",
-                                    objectFit: "cover",
-                                    "&:hover": {
-                                        transform: 'scale(1.05)',
-                                        transition: 'all 0.5s ease-in-out',
-                                    }
-                                }} loading="lazy"
-                                    decoding="async" component="img" src={img3in3} />
                             </Box>
                         </Grid>
 

@@ -127,20 +127,17 @@ const Header = () => {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters sx={{ p: 0, m: 0, justifyContent: 'space-between' }}>
 
-                        {/* Logo Area */}
                         <Box>
                             <Box component='img' src={logo} alt="Charu Ceramic Logo" sx={{ '&:hover': { cursor: "pointer"}, height: '50px' }} onClick={(e)=>handleClick('/')}/>
                         </Box>
 
-                        {/* --- DESKTOP MENU --- */}
                         {!isMobile && (
-                            <Stack direction="row" sx={{ width: 'auto', justifyContent: "space-around", alignItems: "center" }}>
+                            <Stack direction="row" sx={{ width: 'auto', justifyContent: "center", alignItems: "center" }}>
                                 <MenuItems items={menuList} />
                             </Stack>
                         )}
-                        <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ff0000', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button>
+                        {/* <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ff0000', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button> */}
 
-                        {/* --- MOBILE ICON --- */}
                         {isMobile && (
                             <IconButton
                                 color="inherit"

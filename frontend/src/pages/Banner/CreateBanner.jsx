@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import FormLabel from "../../assets/FormLabel/FormLabel";
 import UploadingLoader from "../../assets/Modal/UploadingLoader";
 import { sizeList, pageList, sectionList } from "./Data";
+import img_3 from '../../img/3Img.png';
 
 import SyncIcon from '@mui/icons-material/Sync';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -284,12 +285,17 @@ const CreateBanner = () => {
                         </Box>
                     </Grid>
                     <Grid size={{ sm: 12, md: 4 }}>
-                        <Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
-                            <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
-                            <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>The slider is avaiable only in HOMEPAGE Banner.</Typography>
-                        </Box>
+                        {imgDetails.sectionCode.section_value !== 'HP03' ?
+                            (<Box sx={{ bgcolor: "#ff0000", border: 1, borderColor: "#e2e8f0", borderRadius: 2, p: 3, mb: 2 }}>
+                                <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
+                                <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>The slider is avaiable only in HOMEPAGE Banner.</Typography>
+                            </Box>)
+                            : (<Box sx={{ mb: 2 }}>
+                                <Box component='img' src={img_3} sx={{ width: '100%', aspectRatio: '1/1' }} />
+                            </Box>)
+                        }
 
-                        <Grid container spacing={2} sx={{ bgcolor: "#fff", borderRadius: 2, boxShadow: 1, p: 2, mb: 2 }}>
+                        <Grid container spacing={2} sx={{ bgcolor: "#fff", borderRadius: 2, boxShadow: 1, mb: 2 }}>
                             {imgDetails.featured_image ? (
                                 <Grid size={12} sx={{ position: "relative" }}>
                                     {imgDetails.content_type === "Video" ? (
@@ -315,7 +321,10 @@ const CreateBanner = () => {
                                             fetchPriority="high"
                                             component="img" src={previewSrc ? previewSrc : urlAPI + imgDetails.featured_image} />)}
                                 </Grid>
-                            ) : <Typography variant="overline">No Images is selected</Typography>}
+                            ) : <Box p={3}>
+                                <Typography variant="overline">No Images is selected</Typography>
+                            </Box>
+                            }
                         </Grid>
 
                     </Grid>

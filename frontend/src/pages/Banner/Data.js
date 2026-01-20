@@ -29,13 +29,13 @@ export const sectionList = {
         section_title: 'Hero Section',
         section_value: 'HP01'
     },
-    // {
-    //     section_title: 'Brand Purpose',
-    //     section_value: 'HP02'
-    // }, {
-    //     section_title: 'Benchmark',
-    //     section_value: 'HP03'
-    // }, 
+    {
+        section_title: 'Brand Purpose',
+        section_value: 'HP02'
+    }, {
+        section_title: 'Benchmark',
+        section_value: 'HP03'
+    }, 
     {
         section_title: 'Single Video',
         section_value: 'HP04'
@@ -44,10 +44,10 @@ export const sectionList = {
         section_title: 'Hero Section',
         section_value: 'CI01'
     },
-    // {
-    //     section_title: 'Leading Sanitary',
-    //     section_value: 'CI02'
-    // },
+    {
+        section_title: 'Leading Sanitary',
+        section_value: 'CI02'
+    },
      {
         section_title: 'Single Video',
         section_value: 'CI03'

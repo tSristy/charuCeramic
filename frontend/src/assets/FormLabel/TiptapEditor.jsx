@@ -7,12 +7,25 @@ import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
 import { TableHeader } from '@tiptap/extension-table-header';
 import { Box, Button, ButtonGroup, Stack, Divider } from '@mui/material';
+import Link from '@tiptap/extension-link';
+
 
 const TiptapEditor = ({ onChange, initialValue }) => {
+
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3, 4] },
+      }),
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        defaultProtocol: 'https',
+        HTMLAttributes: {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        },
       }),
       Table.configure({ resizable: true }),
       TableRow,
@@ -25,14 +38,32 @@ const TiptapEditor = ({ onChange, initialValue }) => {
     },
   });
 
-  // Sync with database data when it loads
+
+  const setLink = () => {
+    const previousUrl = editor.getAttributes('link').href;
+    let url = window.prompt('URL', previousUrl);
+
+    if (url === null) return;
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+
+    if (url && !url.startsWith('http') && !url.startsWith('/') && !url.startsWith('mailto')) {
+      url = `https://${url}`;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  };
+
+  
   useEffect(() => {
     if (editor && initialValue !== editor.getHTML()) {
       editor.commands.setContent(initialValue || '');
     }
   }, [initialValue, editor]);
 
-  // Force focus when clicking anywhere in the container
+
   const handleContainerClick = () => {
     if (editor) {
       editor.chain().focus().run();
@@ -42,71 +73,76 @@ const TiptapEditor = ({ onChange, initialValue }) => {
   if (!editor) return null;
 
   return (
-    <Box 
-      sx={{ 
-        border: '1px solid #e2e8f0', 
-        borderRadius: 2, 
-        mt: 1, 
-        bgcolor: '#fff', 
-        // overflow: 'hidden',
+    <Box
+      sx={{
+        border: '1px solid #e2e8f0',
+        borderRadius: 2,
+        mt: 1,
+        bgcolor: '#fff',
         display: 'flex',
         flexDirection: 'column'
       }}
     >
-      {/* TOOLBAR */}
-      <Stack 
-        direction="row" 
-        spacing={1} 
-        sx={{ 
+
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
           position: 'sticky',
           zIndex: 9,
-          top:0,
-          left:0,
-          p: 1, 
-          borderBottom: '1px solid #e2e8f0', 
-          flexWrap: 'wrap', 
-          gap: 1, 
-          bgcolor: '#f8fafc' 
+          top: 0,
+          left: 0,
+          p: 1,
+          borderBottom: '1px solid #e2e8f0',
+          flexWrap: 'wrap',
+          gap: 1,
+          bgcolor: '#f8fafc'
         }}
       >
-        {/* Text Styles */}
+
         <ButtonGroup size="small" variant="outlined">
-          <Button 
-            onClick={() => editor.chain().focus().toggleBold().run()} 
+          <Button
+            onClick={() => editor.chain().focus().toggleBold().run()}
             variant={editor.isActive('bold') ? 'contained' : 'outlined'}
             sx={{ fontWeight: 'bold' }}
           >B</Button>
-          <Button 
-            onClick={() => editor.chain().focus().toggleItalic().run()} 
+          <Button
+            onClick={() => editor.chain().focus().toggleItalic().run()}
             variant={editor.isActive('italic') ? 'contained' : 'outlined'}
             sx={{ fontStyle: 'italic' }}
           >I</Button>
+          <Button
+            onClick={setLink}
+            variant={editor.isActive('link') ? 'contained' : 'outlined'}
+          >
+            Link
+          </Button>
         </ButtonGroup>
 
         {/* Headings */}
         <ButtonGroup size="small" variant="outlined">
-          <Button 
+          <Button
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             variant={editor.isActive('heading', { level: 1 }) ? 'contained' : 'outlined'}
           >H1</Button>
-          <Button 
+          <Button
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             variant={editor.isActive('heading', { level: 2 }) ? 'contained' : 'outlined'}
           >H2</Button>
-          <Button 
+          <Button
             onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
             variant={editor.isActive('heading', { level: 3 }) ? 'contained' : 'outlined'}
           >H3</Button>
-           <Button 
+          <Button
             onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
             variant={editor.isActive('heading', { level: 4 }) ? 'contained' : 'outlined'}
           >H4</Button>
         </ButtonGroup>
 
         {/* Lists */}
-        <Button 
-          size="small" 
-          variant={editor.isActive('bulletList') ? 'contained' : 'outlined'} 
+        <Button
+          size="small"
+          variant={editor.isActive('bulletList') ? 'contained' : 'outlined'}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >• List</Button>
 
@@ -129,11 +165,11 @@ const TiptapEditor = ({ onChange, initialValue }) => {
       </Stack>
 
       {/* EDITABLE AREA */}
-      <Box 
+      <Box
         onClick={handleContainerClick}
-        sx={{ 
-          p: 2, 
-          minHeight: '300px', 
+        sx={{
+          p: 2,
+          minHeight: '300px',
           cursor: 'text',
           '& .tiptap': {
             outline: 'none',

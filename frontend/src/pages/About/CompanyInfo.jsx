@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Collapse, Container, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import bgImg from '../../img/bg2.png';
 import bgInfo from '../../img/bgInfo.jpg';
 import infoImg from '../../img/infoImg.jpg';
@@ -17,19 +17,26 @@ const CompanyInfo = () => {
     const [primeVideo, setPrimeVideo] = useState(null);
     const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => { 
+    useEffect(() => {
         ServerApi(`/banner?pageName=ABOUT&sectionValue=CI01`, "GET", null, null)
-                .then((res) => res.json())
-                .then((res) => {
-                    setBannerImg(res[0]);
-                });
+            .then((res) => res.json())
+            .then((res) => {
+                setBannerImg(res[0]);
+            });
 
-                ServerApi(`/banner?pageName=ABOUT&sectionValue=CI03`, "GET", null, null)
+        ServerApi(`/banner?pageName=ABOUT&sectionValue=CI02`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                setSideImg(res[0]);
+            });
+
+         ServerApi(`/banner?pageName=ABOUT&sectionValue=CI03`, "GET", null, null)
                 .then((res) => res.json())
                 .then((res) => {
                     setPrimeVideo(res[0]);
                 });
-        }, [])
+
+    }, [])
 
     return (
         <Box sx={{ bgcolor: "#fff" }}>
@@ -57,20 +64,21 @@ const CompanyInfo = () => {
                 <Container>
                     <Grid container direction="row" spacing={2}>
                         <Grid size={{ xs: 12, sm: 9 }} >
-                            <Box width={"70%"}>
+                            <Box width={{xs: '100%', md: '70%'}}>
                                 <Typography sx={{ fontSize: '1.15rem', fontWeight: 600, mb: 1, textAlign: 'left' }}>
                                     CHARU Ceramic Industries Limited
                                 </Typography>
-                                <Typography sx={{ fontSize: '2.5rem', fontWeight: 500, textAlign: 'left' }}>Leading Sanitary Ware Manufacturer in Bangladesh
+                                <Typography sx={{ fontSize: {xs: '2rem', sm: '2.5rem'}, fontWeight: 500, textAlign: 'left', whiteSpace: {xs:'pre-line', sm: 'normal'} }}>{`Leading \n Sanitary Ware Manufacturer \n in Bangladesh`}
                                 </Typography>
                             </Box>
 
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: seeMore ? 12 : 8 }} sx={{
-                                    transition: 'all 0.5s ease-in-out', py: 3
+                                    transition: 'all 0.5s ease-in-out'
                                 }}>
                                     <Box py={3}>
                                         <Typography sx={{
+                                            textAlign: "justify",
                                             whiteSpace: "pre-line",
                                             fontSize: ".85rem"
                                         }}>
@@ -81,6 +89,7 @@ const CompanyInfo = () => {
                                     <Collapse in={seeMore} timeout={500} unmountOnExit>
                                         {seeMore && <Typography sx={{
                                             mb: 3,
+                                            textAlign: "justify",
                                             whiteSpace: "pre-line",
                                             fontSize: ".85rem"
                                         }}>
@@ -116,7 +125,7 @@ const CompanyInfo = () => {
                                                 +
                                             </Typography>
                                         </Box>
-                                        <Box sx={{ position: "absolute", top: 150, left: 60 }}>
+                                        <Box sx={{ position: "absolute", top: 150, width: "100%", textAlign: "center" }}>
                                             Years of experience
                                         </Box>
                                     </Box>
@@ -125,7 +134,7 @@ const CompanyInfo = () => {
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 3 }}>
-                            <Box component='img' src={infoImg} sx={{ width: "100%" }} loading='eager' decoding="async" />
+                            <Box component='img' src={sideImg ? urlAPI + sideImg.featured_image : infoImg} sx={{ width: "100%" }} loading='eager' decoding="async" />
                         </Grid>
                     </Grid>
                 </Container>
@@ -175,14 +184,17 @@ const CompanyInfo = () => {
             </Box>
 
             <Box>
-                <video
-                    poster={bgImg}
-                    preload="metadata"
-                    style={{ aspectRatio: '16/6.7', width: '100%', objectFit: 'cover' }}
-                    autoPlay loop muted playsInline
-                >
-                    <source src={bannerVideo} type="video/mp4" />
-                </video>
+                <Box sx={{
+                    display: 'block',
+                    width: "100%",
+                    aspectRatio: '16/6.7',
+                    height: "auto",
+                    objectFit: "cover"
+                }} autoPlay loop muted playsInline
+                    onCanPlay={(e) => e.currentTarget.muted = true}
+                    loading="loading"
+                    decoding="async"
+                    component="video" src={urlAPI + primeVideo?.featured_image} />
             </Box>
 
             <Box sx={{ py: 20, backgroundImage: `url(${bgInfo})`, bgcolor: '#cccccc' }}>

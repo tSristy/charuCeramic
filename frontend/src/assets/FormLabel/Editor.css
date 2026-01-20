@@ -41,3 +41,13 @@
   background-color: #adf;
   cursor: col-resize;
 }
+
+.tiptap a {
+  color: #1976d2; 
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tiptap a:hover {
+  color: #115293;
+}

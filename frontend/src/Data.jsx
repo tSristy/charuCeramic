@@ -7,7 +7,7 @@ export const tempMenuList = [
   { id: 2, title: 'Company Information', link: '/company-information', parentId: null },
   { id: 3, title: 'Product', link: '/product', parentId: null },
   { id: 4, title: 'Catalogues', link: '/catalogues', parentId: null },
-  { id: 5, title: 'Dealer', link: '/dealer', parentId: null },
+  { id: 5, title: 'Find a store', link: '/dealer', parentId: null },
   { id: 6, title: 'Contact', link: '/contact', parentId: null },
 
   // Water Closet

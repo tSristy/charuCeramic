@@ -173,7 +173,7 @@ const CreateBlogs = () => {
 
                                         {/* Image Inputs */}
                                         {[
-                                            { name: 'featured_image', label: 'First Image || 860 × 640', ref: imgRef1 },
+                                            { name: 'featured_image', label: 'First Image || 860 × 540', ref: imgRef1 },
                                             { name: 'featured_image_2', label: 'Second Image || 860 × 640', ref: imgRef2 },
                                             { name: 'featured_image_3', label: 'Third Image || 860 × 640', ref: imgRef3 }
                                         ].map((img) => (

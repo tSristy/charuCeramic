@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ServerApi } from "../../route/ServerAPI";
 
@@ -16,10 +16,14 @@ const TandC = () => {
   return (
     <Box>
       <Container sx={{ py: 10, textAlign: 'justify' }}>
-        <div
-          className="rendered-content"
-          dangerouslySetInnerHTML={{ __html: details }}
-        />
+        <Box px={{ sm: 5, md: 10 }}>
+           <Typography sx={{ fontSize: '3rem', fontWeight: 600, color: '#6c6c6c', mb: 3, textAlign: 'center' }}>Terms & Conditions</Typography>
+
+          <div
+            className="rendered-content"
+            dangerouslySetInnerHTML={{ __html: details }}
+          />
+        </Box>
       </Container>
     </Box>
   )

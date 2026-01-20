@@ -22,26 +22,28 @@ const SingleGuide = () => {
     return (
         <Box py={10}>
             <Container>
-                <Grid container direction='row' sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Grid size={{ xs: 12, md: 7 }}>
-                        <Typography sx={{ fontSize: '3rem', fontWeight: 600, color: '#6c6c6c', mb: 3 }}>{guideDetail.title}</Typography>
+                <Box px={{ sm: 5, md: 10 }}>
+                    <Grid container direction='row' sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Grid size={{ xs: 12, md: 7 }}>
+                            <Typography sx={{ fontSize: '3rem', fontWeight: 600, color: '#6c6c6c', mb: 3 }}>{guideDetail.title}</Typography>
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 5 }}>
+                            <Box
+                                component="img" fetchPriority="high"
+                                src={urlAPI + guideDetail.featured_image}
+                                sx={{
+                                    width: '100%',
+                                    borderRadius: 2,
+                                    aspectRatio: '43/32',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid size={{ xs: 12, md: 5 }}>
-                        <Box
-                            component="img" fetchPriority="high"
-                            src={urlAPI + guideDetail.featured_image}
-                            sx={{
-                                width: '100%',
-                                borderRadius: 2,
-                                aspectRatio: '43/32',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    </Grid>
-                </Grid>
 
-                <Box sx={{ mt: 5, fontSize: '.925rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
-                    <div className="rendered-content" dangerouslySetInnerHTML={{ __html: guideDetail.content }} />
+                    <Box sx={{ mt: 5, fontSize: '.925rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
+                        <div className="rendered-content" dangerouslySetInnerHTML={{ __html: guideDetail.content }} />
+                    </Box>
                 </Box>
             </Container>
         </Box>

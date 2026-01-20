@@ -9,15 +9,16 @@ const Contact = () => {
     const handleSubjectChange = (event) => {
         setSubject(event.target.value);
     };
-const [bannerImg, setBannerImg] = useState(null);
+    const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => { 
+    useEffect(() => {
         ServerApi(`/banner?pageName=CONTACT&sectionValue=CT01`, "GET", null, null)
-                .then((res) => res.json())
-                .then((res) => {
-                    setBannerImg(res[0]);
-                });
-        }, [])
+            .then((res) => res.json())
+            .then((res) => {
+                console.log()
+                setBannerImg(res[0]);
+            });
+    }, [])
 
     return (
         <>

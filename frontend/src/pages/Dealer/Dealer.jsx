@@ -1,5 +1,5 @@
-import { Autocomplete, Box, Button, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Pagination, Stack, TextField, Typography } from "@mui/material";
-import bgImg from '../../img/Dealer_page.jpg';
+import { Autocomplete, Box, Button, Container, Grid, Stack, TextField, Typography } from "@mui/material";
+import bgImg from '../../img/Dealer_page.png';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useEffect, useState } from "react";
@@ -28,11 +28,11 @@ const Dealer = () => {
         ServerApi(`/dealer/list`, 'POST', null, body)
             .then(res => res.json())
             .then(res => {
-                setDealerList(prev=>{
+                setDealerList(prev => {
                     if (paginationDetails.pageNo === 1) {
-                    return res.items;
-                }
-                
+                        return res.items;
+                    }
+
                     const map = new Map();
                     [...prev, ...res.items].forEach(item => map.set(item.id, item));
                     return Array.from(map.values());
@@ -44,18 +44,18 @@ const Dealer = () => {
                         totalPages: Math.ceil(res.totalRows / 12)
                     }
                 });
-    })
-    }, [searchVariable,paginationDetails.pageNo]);
+            })
+    }, [searchVariable, paginationDetails.pageNo]);
 
-const [bannerImg, setBannerImg] = useState(null);
+    const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => { 
+    useEffect(() => {
         ServerApi(`/banner?pageName=DEALER&sectionValue=DL01`, "GET", null, null)
-                .then((res) => res.json())
-                .then((res) => {
-                    setBannerImg(res[0]);
-                });
-        }, [])
+            .then((res) => res.json())
+            .then((res) => {
+                setBannerImg(res[0]);
+            });
+    }, [])
 
     return (
         <>
@@ -81,18 +81,18 @@ const [bannerImg, setBannerImg] = useState(null);
             <Box sx={{ py: 10 }}>
                 <Container>
                     <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, mb: 5, textAlign: 'center' }}>
-                        Find Yourself A Dealer
+                        FIND A STORE
                     </Typography>
 
                     <Stack direction={{ sm: "column", md: "row" }} spacing={4}>
-                       <TextField  fullWidth size="small" onChange={(e)=>{setPaginationDetails(prev => ({ ...prev, pageNo: 1 }));setSearchVariable(prev=>({...prev, find: e.target.value }))} } label="Search" />
-                       
-                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>{setPaginationDetails(prev => ({ ...prev, pageNo: 1 }));setSearchVariable(prev=>({...prev, division: newVal }))}} 
-                        options={divisions} renderInput={(params) => <TextField {...params} label="Search Divison" />} />
+                        <TextField fullWidth size="small" onChange={(e) => { setPaginationDetails(prev => ({ ...prev, pageNo: 1 })); setSearchVariable(prev => ({ ...prev, find: e.target.value })) }} label="Search" />
 
-                        <Autocomplete fullWidth size="small" onChange={(e,newVal)=>{setPaginationDetails(prev => ({ ...prev, pageNo: 1 }));setSearchVariable(prev=>({...prev, district: newVal }))}}
-                         options={searchVariable.division ? districtsByDivision[searchVariable.division] || [] : []}
-                                                 renderInput={(params) => <TextField {...params} label="Search District" />} freeSolo/>
+                        <Autocomplete fullWidth size="small" onChange={(e, newVal) => { setPaginationDetails(prev => ({ ...prev, pageNo: 1 })); setSearchVariable(prev => ({ ...prev, division: newVal })) }}
+                            options={divisions} renderInput={(params) => <TextField {...params} label="Search Divison" />} />
+
+                        <Autocomplete fullWidth size="small" onChange={(e, newVal) => { setPaginationDetails(prev => ({ ...prev, pageNo: 1 })); setSearchVariable(prev => ({ ...prev, district: newVal })) }}
+                            options={searchVariable.division ? districtsByDivision[searchVariable.division] || [] : []}
+                            renderInput={(params) => <TextField {...params} label="Search District" />} freeSolo />
                     </Stack>
 
                     <Box sx={{ my: 5 }}>
@@ -106,11 +106,11 @@ const [bannerImg, setBannerImg] = useState(null);
                                 dealerList?.map(item => (
                                     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} sx={{
                                         // border: '1px solid #ddd', \
-                                        '&:hover':{
+                                        '&:hover': {
 
                                             bgcolor: '#000000ff',
                                         },
-                                        '&:hover .hoverEffect':{
+                                        '&:hover .hoverEffect': {
                                             cursor: "pointer",
                                             color: '#fff',
                                         },
@@ -133,31 +133,17 @@ const [bannerImg, setBannerImg] = useState(null);
                             }
                         </Grid>
                     </Box>
-
-                    {/* <Pagination color="error" shape="rounded" hidePrevButton hideNextButton siblingCount={0}
-                        boundaryCount={3}
-                        count={paginationDetails.totalPages}
-                        page={paginationDetails.pageNo}
-                        sx={{ '& .MuiPagination-ul': { gap: 3 }, display: 'flex', justifyContent: 'center' }}
-                        onChange={(e, value) => {
-                            setPaginationDetails(previousState => {
-                                return { ...previousState, pageNo: value }
-                            })
-                        }} /> */}
-
-
-
-                         <Stack py={4} alignItems="center">
-                    {paginationDetails.totalPages > paginationDetails.pageNo ? (
-                        <Button variant='outlined' color='error' onClick={() => {
-                            setPaginationDetails(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
-                        }}>
-                            Load More
-                        </Button>
-                    ) : (
-                        dealerList.length > 0 && <Typography variant='overline' color='textDisabled'>End of results</Typography>
-                    )}
-                </Stack>
+                    <Stack py={4} alignItems="center">
+                        {paginationDetails.totalPages > paginationDetails.pageNo ? (
+                            <Button variant='outlined' color='error' onClick={() => {
+                                setPaginationDetails(prev => ({ ...prev, pageNo: prev.pageNo + 1 }));
+                            }}>
+                                Load More
+                            </Button>
+                        ) : (
+                            dealerList.length > 0 && <Typography variant='overline' color='textDisabled'>End of results</Typography>
+                        )}
+                    </Stack>
                 </Container>
             </Box>
         </>
