@@ -16,9 +16,13 @@ const Footer = () => {
     const apiUrl = `https://graph.instagram.com/me/media?fields=25275126222110613,media_url,permalink&access_token=${accessToken}`;
 
     const handleBtn = (url, tab) => {
-        tab ?
+        if(tab){
             window.open(url, '_blank')
-            : navigate(url)
+        } 
+        else{
+            window.scrollTo(0, 0);
+            navigate(url)
+        }
     }
 
     useEffect(() => {

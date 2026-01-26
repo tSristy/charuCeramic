@@ -46,7 +46,7 @@ router.post('/list', (req, res) => {
     db.query(sql, finalParams, (err, results) => {
         if (err) {
             console.error('Error fetching dealers:', err);
-            return res.status(500).json({ error: 'Failed to fetch dealers' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({ 
             items: results[0], 
@@ -80,7 +80,7 @@ router.post('/add', (req, res) => {
     db.query(sql, [name, address, phone, division, district, thana], (err, result) => {
         if (err) {
             console.error('Error adding dealer:', err);
-            res.status(500).json({ error: 'Failed to add dealer' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Dealer added successfully', dealerId: result.insertId });
@@ -98,7 +98,7 @@ router.put('/update/:id', (req, res) => {
     db.query(sql, [name, address, phone, division, district, thana, dealerId], (err, result) => {
         if (err) {
             console.error('Error updating dealer:', err);
-            res.status(500).json({ error: 'Failed to update dealer' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Dealer updated successfully' });
@@ -115,7 +115,7 @@ router.delete('/delete/:id', (req, res) => {
     db.query(sql, [dealerId], (err, result) => {
         if (err) {
             console.error('Error deleting dealer:', err);
-            res.status(500).json({ error: 'Failed to delete dealer' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Dealer deleted successfully' });

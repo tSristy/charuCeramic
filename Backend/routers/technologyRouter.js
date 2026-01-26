@@ -8,7 +8,7 @@ router.get('/show', (req, res) => {
 	db.query(sql, (err, results) => {
 		if (err) {
 			console.error('Error fetching technology items:', err);
-			return res.status(500).json({ error: 'Failed to fetch technology items' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.json(results);
 	});

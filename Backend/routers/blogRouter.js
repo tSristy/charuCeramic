@@ -19,7 +19,7 @@ router.post('/list', (req, res) => {
 	db.query(sql,[searchVariable, searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable, searchVariable], (err, results) => {
 		if (err) {
 			console.error('Error fetching blog items:', err);
-			return res.status(500).json({ error: 'Failed to fetch blog items' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.json({ items: results[0], totalRows: results[1][0].totalRows });
 	});
@@ -35,7 +35,7 @@ router.get('/show', (req, res) => {
 	db.query(sql, (err, results) => {
 		if (err) {
 			console.error('Error fetching blog items:', err);
-			return res.status(500).json({ error: 'Failed to fetch blog items' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.send(results);
 	});
@@ -49,7 +49,7 @@ router.get('/:id', (req, res) => {
 	db.query(sql, [itemId], (err, result) => {
 		if (err) {
 			console.error('Error fetching blog item:', err);
-			return res.status(500).json({ error: 'Failed to fetch blog item' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.json(result[0]);
 	});
@@ -96,7 +96,7 @@ router.post('/add', uploadFields, (req, res) => {
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error('Error adding blog item:', err);
-            res.status(500).json({ error: 'Failed to add blog item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Blog item added successfully', itemId: result.insertId });
@@ -134,7 +134,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
     db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating blog item:', err);
-            res.status(500).json({ error: 'Failed to update blog item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Blog item updated successfully' });
@@ -151,7 +151,7 @@ router.delete('/delete/:id', (req, res) => {
 	db.query(sql, [itemId], (err, result) => {
 		if (err) {
 			console.error('Error deleting blog item:', err);
-			res.status(500).json({ error: 'Failed to delete blog item' });
+			 res.status(500).json({ error: "Something is not working. Please Try again later." });
 			return;
 		}
 		res.json({ message: 'Blog item deleted successfully' });

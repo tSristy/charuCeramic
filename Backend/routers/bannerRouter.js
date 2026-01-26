@@ -18,7 +18,7 @@ router.post('/list', (req, res) => {
     db.query(sql, [searchVariable, searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching banner items:', err);
-            return res.status(500).json({ error: 'Failed to fetch banner items' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({ items: results[0], totalRows: results[1][0].totalRows });
     });
@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error fetching banner item:', err);
-            return res.status(500).json({ error: 'Failed to fetch banner item' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({
             id: result[0].id,
@@ -94,7 +94,7 @@ router.post('/add', uploadFields, (req, res) => {
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error('Error adding banner item:', err);
-            res.status(500).json({ error: 'Failed to add banner item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Banner item added successfully', itemId: result.insertId ? result.insertId :result[1].insertId});
@@ -131,7 +131,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
     db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating banner item:', err);
-            res.status(500).json({ error: 'Failed to update banner item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Banner item updated successfully' });
@@ -148,7 +148,7 @@ router.delete('/delete/:id', (req, res) => {
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error deleting banner item:', err);
-            res.status(500).json({ error: 'Failed to delete banner item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Banner item deleted successfully' });

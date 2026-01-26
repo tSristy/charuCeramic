@@ -1,0 +1,35 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# BLOCK ADMIN & PRIVATE PANELS (Security & SEO Cleanup)
+# We don't want these in Google Search results
+Disallow: /login
+Disallow: /dealer-panel
+Disallow: /dealer-list
+Disallow: /category-panel
+Disallow: /category-list
+Disallow: /blog-panel
+Disallow: /blog-list
+Disallow: /project-panel
+Disallow: /project-list
+Disallow: /product-panel
+Disallow: /product-list
+Disallow: /catalogue-panel
+Disallow: /catalogue-list
+Disallow: /career-list
+Disallow: /career-view
+Disallow: /buying-guide-panel
+Disallow: /buying-guide-list
+Disallow: /faq-panel
+Disallow: /faq-list
+Disallow: /policy-panel
+Disallow: /terms-condition-panel
+Disallow: /banner-panel
+Disallow: /banner-list
+Disallow: /meta-list
+Disallow: /meta-panel
+Disallow: /404-not-found
+
+# TELL GOOGLE WHERE THE MAP IS
+Sitemap: https://charuceramic.com/sitemap.xml

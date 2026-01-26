@@ -38,6 +38,7 @@ const Header = () => {
 
     const handleClick = (url) => {
         navigate(url);
+        window.scrollTo(0, 0);
         setSubMenuList([])
     }
 
@@ -101,7 +102,7 @@ const Header = () => {
             return (
                 <Box key={item.id}>
                     <ListItemButton component="box">
-                        <ListItemText primary={item.title} sx={{ fontWeight: hasChildren ? 'bold' : 'normal' }} onClick={(e)=>{setIsMobileOpen(false),navigate(item.link)}}/>
+                        <ListItemText primary={item.title} sx={{ fontWeight: hasChildren ? 'bold' : 'normal' }} onClick={(e)=>{setIsMobileOpen(false);navigate(item.link);window.scrollTo(0, 0);}}/>
                         {hasChildren && <KeyboardArrowDownIcon sx={{ width: "30%"}} onClick={(e)=>{subMenuList.length <1 ? setSubMenuList(menuList[2].children): setSubMenuList([])}}/>}
                     </ListItemButton>
                     {hasChildren && subMenuList && (
@@ -125,20 +126,21 @@ const Header = () => {
 
             <AppBar position="static" color="default" sx={{ backgroundColor: 'white', boxShadow: 1 }}>
                 <Container maxWidth="xl">
-                    <Toolbar disableGutters sx={{ p: 0, m: 0, justifyContent: 'space-between' }}>
+                    <Toolbar disableGutters sx={{ p: 0, m: 0, justifyContent: 'flex-start' }}>
 
                         <Box>
                             <Box component='img' src={logo} alt="Charu Ceramic Logo" sx={{ '&:hover': { cursor: "pointer"}, height: '50px' }} onClick={(e)=>handleClick('/')}/>
                         </Box>
 
                         {!isMobile && (
-                            <Stack direction="row" sx={{ width: 'auto', justifyContent: "center", alignItems: "center" }}>
+                            <Stack direction="row" sx={{ml: 'auto',mr:'auto', width: 'auto', justifyContent: "center", alignItems: "center" }}>
                                 <MenuItems items={menuList} />
                             </Stack>
                         )}
                         {/* <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ff0000', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button> */}
 
                         {isMobile && (
+                            <Box ml={'auto'}>
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
@@ -148,6 +150,7 @@ const Header = () => {
                             >
                                 <MenuIcon />
                             </IconButton>
+                            </Box>
                         )}
                     </Toolbar>
                 </Container>

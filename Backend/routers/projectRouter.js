@@ -27,7 +27,7 @@ router.post('/list', (req, res) => {
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Error fetching project items:', err);
-            return res.status(500).json({ error: 'Failed to fetch project items' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({ items: results[0], totalRows: results[1][0].totalRows });
     });
@@ -42,7 +42,7 @@ router.get('/:id', (req, res) => {
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error fetching project item:', err);
-            return res.status(500).json({ error: 'Failed to fetch project item' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json(result[0]);
     });
@@ -58,7 +58,7 @@ router.post('/add', upload.single('featured_image'), (req, res) => {
     db.query(sql, [title, slug, location, publish_date, content, featured_image], (err, result) => {
         if (err) {
             console.error('Error adding project item:', err);
-            res.status(500).json({ error: 'Failed to add project item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Project item added successfully', itemId: result.insertId });
@@ -82,7 +82,7 @@ router.put('/update/:id', upload.single('featured_image'), (req, res) => {
     db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating project item:', err);
-            res.status(500).json({ error: 'Failed to update project item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Project item updated successfully' });
@@ -99,7 +99,7 @@ router.delete('/delete/:id', (req, res) => {
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error deleting project item:', err);
-            res.status(500).json({ error: 'Failed to delete project item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Project item deleted successfully' });

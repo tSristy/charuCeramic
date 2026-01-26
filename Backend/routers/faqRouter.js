@@ -14,7 +14,7 @@ router.post('/list', (req, res) => {
     db.query(sql, [searchVariable, searchVariable, ((pageNo - 1) * 15), searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching faq:', err);
-            return res.status(500).json({ error: 'Failed to fetch faq' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({ items: results[0], totalRows: results[1][0].totalRows });
     });
@@ -29,7 +29,7 @@ router.post('/add', (req, res) => {
     db.query(sql, [question, answer], (err, result) => {
         if (err) {
             console.error('Error adding faq:', err);
-            res.status(500).json({ error: 'Failed to add faq' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'faq added successfully', faqId: result.insertId });
@@ -48,7 +48,7 @@ router.put('/update/:id', (req, res) => {
     db.query(sql, [question, answer, faqId], (err, result) => {
         if (err) {
             console.error('Error updating faq:', err);
-            res.status(500).json({ error: 'Failed to update faq' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'faq updated successfully' });
@@ -66,7 +66,7 @@ router.get('/:id', (req, res) => {
     db.query(sql, [faqId], (err, result) => {
         if (err) {
             console.error('Error fetching faq details:', err);
-            return res.status(500).json({ error: 'Failed to fetch faq details' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json(result[0]);
     });
@@ -81,7 +81,7 @@ router.delete('/delete/:id', (req, res) => {
     db.query(sql, [faqId], (err, result) => {
         if (err) {
             console.error('Error deleting faq:', err);
-            res.status(500).json({ error: 'Failed to delete faq' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'faq deleted successfully' });

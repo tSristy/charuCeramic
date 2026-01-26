@@ -1,7 +1,4 @@
-import { Box, Container, Divider, Grid, Stack, Typography } from "@mui/material";
-import bgImg from '../../img/bgDealer.jpg';
-import certificateImg from '../../img/certify.png';
-import awardImg from '../../img/award.png';
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 const Certification = () => {
@@ -15,7 +12,7 @@ const Certification = () => {
                 height: "350px",
                 objectFit: "cover"
             }}
-                component="img" src={bgImg} />
+                component="img" src={"bgImg"} />
 
             <Box sx={{ py: 10 }}>
                 <Container>

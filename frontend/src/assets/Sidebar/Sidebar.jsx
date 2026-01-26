@@ -21,6 +21,7 @@ import ImageIcon from '@mui/icons-material/Image';
 
 const Sidebar = () => {
     const menuList = [
+        { title: "Meta Tags", url: "/meta-list", icon: <DashboardIcon /> },
         { title: "Banner", url: "/banner-list", icon: <ImageIcon /> },
         { title: "Categories", url: "/category-list", icon: <CategoryIcon /> },
         { title: "Products", url: "/product-list", icon: <WarehouseIcon /> },

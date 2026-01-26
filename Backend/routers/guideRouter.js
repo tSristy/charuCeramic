@@ -18,7 +18,7 @@ router.post('/list', (req, res) => {
 	db.query(sql,[searchVariable, searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable, searchVariable], (err, results) => {
 		if (err) {
 			console.error('Error fetching buying guide items:', err);
-			return res.status(500).json({ error: 'Failed to fetch buying guide items' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.json({ items: results[0], totalRows: results[1][0].totalRows });
 	});
@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
 	db.query(sql, [itemId], (err, result) => {
 		if (err) {
 			console.error('Error fetching buying guide item:', err);
-			return res.status(500).json({ error: 'Failed to fetch buying guide item' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.json(result[0]);
 	});
@@ -70,14 +70,13 @@ router.post('/add', uploadFields, (req, res) => {
 
     const sql = `INSERT INTO buying_guide 
                 (title, slug, content, featured_image) 
-                VALUES (?, ?, ?, ?, ?)`;
-
+                VALUES (?, ?, ?, ?)`;
     const values = [title, slug, content, featured_image];
 
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error('Error adding buying guide item:', err);
-            res.status(500).json({ error: 'Failed to add buying guide item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Buying guide item added successfully', itemId: result.insertId });
@@ -107,7 +106,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
     db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating buying guide item:', err);
-            res.status(500).json({ error: 'Failed to update buying guide item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'Buying guide item updated successfully' });
@@ -124,7 +123,7 @@ router.delete('/delete/:id', (req, res) => {
 	db.query(sql, [itemId], (err, result) => {
 		if (err) {
 			console.error('Error deleting buying guide item:', err);
-			res.status(500).json({ error: 'Failed to delete buying guide item' });
+			 res.status(500).json({ error: "Something is not working. Please Try again later." });
 			return;
 		}
 		res.json({ message: 'Buying guide item deleted successfully' });

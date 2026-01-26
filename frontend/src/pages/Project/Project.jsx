@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Stack, TextField, Typography } from "@mui/material";
-import bgImg from '../../img/bg1.jpg';
+
 import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 
@@ -15,19 +15,19 @@ const Project = () => {
             })
     }, [searchVariable]);
 
-const [bannerImg, setBannerImg] = useState(null);
+    // const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => { 
-        ServerApi(`/banner?pageName=PROJECT&sectionValue=PT01`, "GET", null, null)
-                .then((res) => res.json())
-                .then((res) => {
-                    setBannerImg(res[0]);
-                });
-        }, [])
+    // useEffect(() => {
+    //     ServerApi(`/banner?pageName=PROJECT&sectionValue=PT01`, "GET", null, null)
+    //         .then((res) => res.json())
+    //         .then((res) => {
+    //             setBannerImg(res[0]);
+    //         });
+    // }, [])
 
     return (
         <>
-            <Box sx={{
+            {/* <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
@@ -39,32 +39,29 @@ const [bannerImg, setBannerImg] = useState(null);
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "bgImg"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-            </Box>
+            </Box> */}
 
-            <Box sx={{ py: 10 }}>
-                <Container>
-                    <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, mb: 5, textAlign: 'center' }}>
+            <Container>
+                <Box sx={{ px: { sm: 5, md: 10 } }}>
+                    <Typography sx={{ textAlign: 'center', fontSize: '3rem', fontWeight: 600, color: '#6c6c6c', my: 3 }}>
                         Mega Project Reference
                     </Typography>
 
                     <Box sx={{ my: 5 }}>
                         <TextField fullWidth size="small" onChange={(e) => { setPaginationDetails(prev => ({ ...prev, pageNo: 1 })); setSearchVariable(e.target.value) }} label="Search" />
                     </Box>
-                </Container>
 
-                <Container maxWidth='xl'>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3}  mb={3}>
                         {
                             projectList?.map((item, index) => (
-                                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={item.id} sx={{ mt: 4 }}>
-                                    <Stack direction='column' spacing={1} sx={{
-                                        position: 'relative', overflow: 'hidden'
-                                    }}>
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} direction="column" sx={{mt: 3, alignItems: 'stretch' }}>
+                                    <Box sx={{ 
+                                        position: 'relative', overflow: 'hidden', height: '100%', display: 'flex',    flexDirection: 'column'}}>
                                         <Box component='img' src={urlAPI + item.featured_image} alt={item.title} sx={{
                                             width: '100%', aspectRatio: '16/10', height: 'auto'
                                         }} />
@@ -80,18 +77,17 @@ const [bannerImg, setBannerImg] = useState(null);
                                                 </Box>
                                             )
                                         }
-                                        <Typography variant="h6">{item.title}</Typography>
-                                        <Box pt={2} pb={1}>
+                                        <Typography sx={{fontSize:'1rem', fontWeight: 500, mb:2}}>{item.title}</Typography>
+                                        <Box sx={{ pb:2, mt: 'auto' }}>
                                             <Typography variant="overline" sx={{ fontSize: '.9rem', border: 1, px: 2, py: 1, borderRadius: 10 }}>{item.location}</Typography>
                                         </Box>
-                                    </Stack>
+                                    </Box>
                                 </Grid>
                             ))
                         }
                     </Grid>
-                </Container>
-
-            </Box>
+                </Box>
+            </Container>
         </>
     );
 };

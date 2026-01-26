@@ -36,7 +36,7 @@ WHERE
     db.query(sql, [searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching items:', err);
-            return res.status(500).json({ error: 'Failed to fetch items' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({ items: results[0], totalRows: results[1][0].totalRows });
     });
@@ -72,7 +72,7 @@ router.get('/parent', (req, res) => {
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Error fetching parent items:', err);
-            return res.status(500).json({ error: 'Failed to fetch parent items' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json(results);
     });
@@ -104,7 +104,7 @@ router.post('/add', upload.single('featured_image'), (req, res) => {
     db.query(sql, [parent_id || null, name, slug, description, featured_image, add_menu, add_homepage, homepage_sequence, 1], (err, result) => {
         if (err) {
             console.error('Error adding category item:', err);
-            res.status(500).json({ error: 'Failed to add category item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'category item added successfully', itemId: result.insertId });
@@ -129,7 +129,7 @@ router.put('/update/:id', upload.single('featured_image'), (req, res) => {
     db.query(sql, params, (err, result) => {
         if (err) {
             console.error('Error updating category item:', err);
-            res.status(500).json({ error: 'Failed to update category item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'category item updated successfully' });
@@ -146,7 +146,7 @@ router.delete('/delete/:id', (req, res) => {
     db.query(sql, [itemId], (err, result) => {
         if (err) {
             console.error('Error deleting category item:', err);
-            res.status(500).json({ error: 'Failed to delete category item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.json({ message: 'category item deleted successfully' });

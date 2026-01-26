@@ -4,7 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Container } from '@mui/material';
-import bgImg from '../../img/bgDealer.jpg';
+
 import { useEffect, useState } from 'react';
 import { ServerApi } from '../../route/ServerAPI';
 
@@ -23,19 +23,19 @@ const FAQ = () => {
             })
     }, []);
 
-    const [bannerImg, setBannerImg] = useState(null);
+    // const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => {
-        ServerApi(`/banner?pageName=FAQ&sectionValue=FQ01`, "GET", null, null)
-            .then((res) => res.json())
-            .then((res) => {
-                setBannerImg(res[0]);
-            });
-    }, [])
+    // useEffect(() => {
+    //     ServerApi(`/banner?pageName=FAQ&sectionValue=FQ01`, "GET", null, null)
+    //         .then((res) => res.json())
+    //         .then((res) => {
+    //             setBannerImg(res[0]);
+    //         });
+    // }, [])
 
     return (
         <Box sx={{ bgcolor: "#fff" }}>
-            <Box sx={{
+            {/* <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
@@ -47,12 +47,12 @@ const FAQ = () => {
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "bgImg"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-            </Box>
+            </Box> */}
 
             <Box py={10} >
                 <Container>

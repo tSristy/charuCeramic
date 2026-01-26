@@ -1,5 +1,5 @@
 import { Box, Button, Container, Grid, Stack, Typography, Skeleton } from "@mui/material";
-import bgImg from '../../img/bg1.jpg';
+
 import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import BtnOpenInTab from "../../assets/Button/BtnDownload";
@@ -33,19 +33,19 @@ const Catalogue = () => {
             });
     }, [paginationDetails.pageNo]);
 
-    const [bannerImg, setBannerImg] = useState(null);
+    // const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => { 
-        ServerApi(`/banner?pageName=CATALOGUE&sectionValue=CL01`, "GET", null, null)
-                .then((res) => res.json())
-                .then((res) => {
-                    setBannerImg(res[0]);
-                });
-        }, [])
+    // useEffect(() => { 
+    //     ServerApi(`/banner?pageName=CATALOGUE&sectionValue=CL01`, "GET", null, null)
+    //             .then((res) => res.json())
+    //             .then((res) => {
+    //                 setBannerImg(res[0]);
+    //             });
+    //     }, [])
 
     return (
         <Box sx={{ bgcolor: "#fff" }}>
-            <Box sx={{
+            {/* <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
@@ -57,12 +57,12 @@ const Catalogue = () => {
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "bgImg"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-            </Box>
+            </Box> */}
 
             <Box sx={{ py: 10 }}>
                 <Container>
@@ -70,7 +70,7 @@ const Catalogue = () => {
                         Catalogue Collections
                     </Typography>
 
-                    <Box sx={{ mt: 5 }}>
+                    <Box>
                         <Grid container spacing={4}>
                             {loading ? (
                                <Skeleton variant="rectangular" width={210} height={60} />
@@ -125,7 +125,7 @@ const Catalogue = () => {
                         Product Series
                     </Typography>
 
-                    <Box sx={{ mt: 5 }}>
+                    <Box>
                         <Grid container spacing={4}>
                             {loading ? (
                                 <Skeleton variant="rectangular" width={210} height={60} />

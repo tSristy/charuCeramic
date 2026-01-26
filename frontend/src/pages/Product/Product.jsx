@@ -1,5 +1,5 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Container, Divider, Drawer, FormControlLabel, FormGroup, Grid, Pagination, Stack, TextField, Typography, useMediaQuery, useTheme, Skeleton } from '@mui/material';
-import bgImg from '../../img/bg3.jpg';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Container, Divider, Drawer, FormControlLabel, FormGroup, Grid, Stack, TextField, Typography, useMediaQuery, useTheme, Skeleton } from '@mui/material';
+
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -16,11 +16,21 @@ const Product = () => {
     const [categoryList, setCategoryList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
-    
+
     // Search & Debounce States
     const [searchVariable, setSearchVariable] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
-    
+
+    const sectionCodeFun = () => {
+        if (category === 'wash-basin' || category === 'above-counter-basin' || category === 'counter-top-basin' || category === 'pedestal-basin' || category === 'half-pedestal-basin' || category === 'under-counter-basin') return "PP02";
+        if (category === 'public-area' || category === 'wall-hung-toilet' || category === 'flush-valve-toilet' || category === 'concealed-tank' || category === 'urinal') return "PP03";
+        if (category === 'bathware' || category === 'faucet' || category === 'shower-mixer' || category === 'hand-shower' || category === 'fixed-shower-head' || category === 'accessories') return "PP04";
+        return "PP01";
+    };
+    const sectionCode = sectionCodeFun();
+
+    const [bannerImg, setBannerImg] = useState(null);
+
     const [selectBrand, setSelectedBrand] = useState('');
     const [paginationDetails, setPaginationDetails] = useState({
         pageNo: 1,
@@ -121,16 +131,14 @@ const Product = () => {
                 }));
                 setLoading(false);
             });
-    }, [category, debouncedSearch, paginationDetails.pageNo]);
-const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => { 
-        ServerApi(`/banner?pageName=PRODUCT&sectionValue=PP01`, "GET", null, null)
-                .then((res) => res.json())
-                .then((res) => {
-                    setBannerImg(res[0]);
-                });
-        }, [])
+        ServerApi(`/banner?pageName=PRODUCT&sectionValue=${sectionCode}`, "GET", null, null)
+            .then((res) => res.json())
+            .then((res) => {
+                setBannerImg(res[0]);
+            });
+
+    }, [category, debouncedSearch, paginationDetails.pageNo]);
 
     return (
         <>
@@ -146,7 +154,7 @@ const [bannerImg, setBannerImg] = useState(null);
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "https://via.placeholder.com/1500x500?text=No+Image"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -231,7 +239,7 @@ const [bannerImg, setBannerImg] = useState(null);
                                     ) : (
                                         productList.map(product => (
                                             <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                                                <Box onClick={() => navigate(`/${product.url_path}`)} sx={{ border: '1px solid #eee', cursor: 'pointer', transition: '0.3s', '&:hover': { boxShadow: 3 } }}>
+                                                <Box onClick={() => navigate(`/${product.url_path}`)} sx={{ border: '1px solid #eee', cursor: 'pointer', transition: '0.3s', p: 1, '&:hover': { boxShadow: 3 } }}>
                                                     <Box component="img" loading="lazy" decoding="async" src={urlAPI + product.image_url} alt={product.name} sx={{ display: 'block', width: '100%', aspectRatio: '1/1', objectFit: 'cover', bgcolor: '#f9f9f9' }} />
                                                     <Box p={2}>
                                                         <Typography sx={{ fontSize: '1.1rem', fontWeight: 500, textAlign: 'center' }}>{product.name}</Typography>

@@ -1,5 +1,5 @@
 import { Autocomplete, Box, Button, Container, Grid, Stack, TextField, Typography } from "@mui/material";
-import bgImg from '../../img/Dealer_page.png';
+
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useEffect, useState } from "react";
@@ -47,19 +47,19 @@ const Dealer = () => {
             })
     }, [searchVariable, paginationDetails.pageNo]);
 
-    const [bannerImg, setBannerImg] = useState(null);
+    // const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => {
-        ServerApi(`/banner?pageName=DEALER&sectionValue=DL01`, "GET", null, null)
-            .then((res) => res.json())
-            .then((res) => {
-                setBannerImg(res[0]);
-            });
-    }, [])
+    // useEffect(() => {
+    //     ServerApi(`/banner?pageName=DEALER&sectionValue=DL01`, "GET", null, null)
+    //         .then((res) => res.json())
+    //         .then((res) => {
+    //             setBannerImg(res[0]);
+    //         });
+    // }, [])
 
     return (
         <>
-            <Box sx={{
+            {/* <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
@@ -71,12 +71,12 @@ const Dealer = () => {
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "bgImg"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-            </Box>
+            </Box> */}
 
             <Box sx={{ py: 10 }}>
                 <Container>

@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Container, Divider, Grid, Stack, Typography } from "@mui/material";
-import bgImg from '../../img/bgDealer.jpg';
+
 import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI";
 import { useNavigate } from "react-router-dom";

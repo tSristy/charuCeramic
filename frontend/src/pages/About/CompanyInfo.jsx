@@ -1,8 +1,5 @@
 import { Box, Button, Collapse, Container, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
-import bgImg from '../../img/bg2.png';
 import bgInfo from '../../img/bgInfo.jpg';
-import infoImg from '../../img/infoImg.jpg';
-import bannerVideo from '../../img/dummyVideo.mp4';
 import { useEffect, useState } from 'react';
 
 import imgCard1 from '../../img/Image-01.png';
@@ -52,7 +49,7 @@ const CompanyInfo = () => {
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "bgImg"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -134,7 +131,7 @@ const CompanyInfo = () => {
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 3 }}>
-                            <Box component='img' src={sideImg ? urlAPI + sideImg.featured_image : infoImg} sx={{ width: "100%" }} loading='eager' decoding="async" />
+                            <Box component='img' src={sideImg ? urlAPI + sideImg.featured_image : "infoImg"} sx={{ width: "100%" }} loading='eager' decoding="async" />
                         </Grid>
                     </Grid>
                 </Container>

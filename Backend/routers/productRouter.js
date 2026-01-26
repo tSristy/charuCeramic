@@ -45,7 +45,7 @@ WHERE A.is_active = 1
     db.query(sql, [searchVariable, searchVariable, searchVariable, searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable, searchVariable, searchVariable, searchVariable], (err, results) => {
         if (err) {
             console.error('Error fetching blog items:', err);
-            return res.status(500).json({ error: 'Failed to fetch blog items' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
         res.json({ items: results[0], totalRows: results[1][0].totalRows });
     });
@@ -92,7 +92,7 @@ router.post('/list-by-cat', (req, res) => {
     db.query(sql, finalParams, (err, results) => {
         if (err) {
             console.error('Error fetching search items:', err);
-            return res.status(500).json({ error: 'Failed to fetch items' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
 
         res.json({
@@ -125,7 +125,7 @@ const getDataFunc = (itemId, res) => {
     db.query(sql, [itemId, itemId, itemId], (err, result) => {
         if (err) {
             console.error('Error fetching blog item:', err);
-            return res.status(500).json({ error: 'Failed to fetch blog item' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
 
         if (!result[0] || result[0].length === 0) {
@@ -206,7 +206,7 @@ router.post('/add', uploadFields, (req, res) => {
     db.query(productSql, [category_id, name, description, model_number, SKU, url_path, pdfFile || "", brand_name, single_image, first_image, drawing_image], (err, result) => {
         if (err) {
             console.error('Error adding product:', err);
-            return res.status(500).json({ error: 'Failed to add product' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
 
         const productId = result.insertId;
@@ -240,7 +240,7 @@ router.post('/add', uploadFields, (req, res) => {
                     completed++;
                     if (completed === images.length) {
                         if (hasError) {
-                            return res.status(500).json({ error: 'Product added but some images failed to upload' });
+                            return res.status(500).json({ error: "Something is not working. Please Try again later." });
                         }
                         res.status(200).json({ message: 'Product and images added successfully', productId: productId });
                     }
@@ -313,7 +313,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
     db.query(productSql, [category_id, name, description, model_number, SKU, url_path, finalPdf, brand_name, single_image, first_image, drawing_image, productId], (err) => {
         if (err) {
             console.error('Error updating product:', err);
-            return res.status(500).json({ error: 'Failed to update product' });
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
         }
 
         let imageOperationsCompleted = 0;
@@ -360,7 +360,7 @@ router.put('/update/:id', uploadFields, (req, res) => {
         function checkCompletion() {
             if (imageOperationsCompleted === imageOperationsTotal) {
                 if (hasImageError) {
-                    return res.status(500).json({ error: 'Product updated but some images failed' });
+                    return res.status(500).json({ error: "Something is not working. Please Try again later." });
                 }
                 res.status(200).json({ message: 'Product updated successfully' });
             }
@@ -383,7 +383,7 @@ router.delete('/delete/:id', (req, res) => {
     db.query(sql, [itemId, itemId], (err, result) => {
         if (err) {
             console.error('Error deleting product item:', err);
-            res.status(500).json({ error: 'Failed to delete product item' });
+             res.status(500).json({ error: "Something is not working. Please Try again later." });
             return;
         }
         res.status(200).json({ message: 'Product item deleted successfully' });

@@ -8,10 +8,6 @@ import Carousel from "../../assets/Slide/Carousel.jsx";
 
 import bannerImg from '../../img/bg1.jpg';
 
-import img3in1 from '../../img/3img1.jpg';
-import img3in2 from '../../img/3img2.jpg';
-import img3in3 from '../../img/3img3.jpg';
-
 import imgOt1 from '../../img/hpicon1.png';
 import imgOt2 from '../../img/hpicon2.png';
 import imgOt3 from '../../img/hpicon3.png';
@@ -147,7 +143,7 @@ const Homepage = () => {
             {/* ABOUTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT */}
             <Box sx={{
                 bgcolor: '#c5c5c5',
-                backgroundImage: bgImg ? `url(${urlAPI + bgImg.featured_image})` : `url(${bannerImg})`,
+                backgroundImage: bgImg ? `url(${urlAPI + bgImg.featured_image})` : null,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
@@ -190,7 +186,7 @@ const Homepage = () => {
                                         filter: 'grayscale(0%)',
                                         transform: 'scale(1.02)',
                                     }
-                                }} onClick={(e) => navigate(`/product/${product.slug}`)}>
+                                }} onClick={(e) => {navigate(`/product/${product.slug}`);window.scrollTo(0, 0);}}>
                                     <Box component="img" loading="lazy" decoding="async" src={urlAPI + product.featured_image} alt={product.name} className="hoverEffect" sx={{
                                         display: 'block', filter: 'grayscale(100%)', width: '100%', aspectRatio: '4/3', height: { sm: 'auto', md: '180px' }, objectFit: 'cover',
                                         transition: "all .3s ease", borderBottom: '5px solid #ffffffff'
@@ -345,7 +341,7 @@ const Homepage = () => {
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
                             Read About CHARU
                         </Typography>
-                        <Button variant="none" onClick={(e) => navigate('/news-article')} sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ff0000" }} />}>Explore All</Button>
+                        <Button variant="none" onClick={(e) =>{ navigate('/news-article');window.scrollTo(0, 0);}} sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ff0000" }} />}>Explore All</Button>
                     </Stack>
 
                     <Grid container spacing={4}>

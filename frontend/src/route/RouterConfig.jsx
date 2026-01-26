@@ -6,6 +6,8 @@ import PublicLayout from "../pages/Layout/PublicLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import NoPage from "../pages/NoPage";
 import { Box, CircularProgress } from "@mui/material";
+import CreateMetaTag from "../pages/Home/CreateMetaTag";
+import MetaTagList from "../pages/Home/MetaTagList";
 
 // 2. Lazy Loaded Pages (Public)
 const Homepage = lazy(() => import("../pages/Home/Homepage"));
@@ -76,7 +78,7 @@ export const RouterConfig = createBrowserRouter([
             { path: "product/:category", element: <Product /> },
             { path: ":number", element: <SingleProduct /> },
             { path: "catalogues", element: <Catalogue /> },
-            { path: "dealer", element: <Dealer /> },
+            { path: "/find-a-store", element: <Dealer /> },
             { path: "contact", element: <Contact /> },
             { path: "project", element: <Project /> },
             { path: "career", element: <Career /> },
@@ -122,6 +124,8 @@ export const RouterConfig = createBrowserRouter([
                 { path: "terms-condition-panel", element: <CreateTerms /> },
                 { path: "banner-panel", element: <CreateBanner /> },
                 { path: "banner-list", element: <BannerList /> },
+                { path: "meta-panel", element: <CreateMetaTag /> },
+                { path: "meta-list", element: <MetaTagList /> },
             ]
         }],
     },

@@ -31,7 +31,7 @@ router.post('/list', (req, res) => {
 	db.query(sql, (err, results) => {
 		if (err) {
 			console.error('Error fetching blog items:', err);
-			return res.status(500).json({ error: 'Failed to fetch blog items' });
+			return res.status(500).json({ error: "Something is not working. Please Try again later." });
 		}
 		res.json({ items: results[0], totalRows: results[1][0].totalRows });
 	});

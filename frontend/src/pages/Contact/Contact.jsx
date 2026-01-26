@@ -1,5 +1,4 @@
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
-import bgImg from '../../img/bgContact.jpg';
 import { useEffect, useState } from 'react';
 import { ServerApi, urlAPI } from '../../route/ServerAPI';
 
@@ -9,20 +8,20 @@ const Contact = () => {
     const handleSubjectChange = (event) => {
         setSubject(event.target.value);
     };
-    const [bannerImg, setBannerImg] = useState(null);
+    // const [bannerImg, setBannerImg] = useState(null);
 
-    useEffect(() => {
-        ServerApi(`/banner?pageName=CONTACT&sectionValue=CT01`, "GET", null, null)
-            .then((res) => res.json())
-            .then((res) => {
-                console.log()
-                setBannerImg(res[0]);
-            });
-    }, [])
+    // useEffect(() => {
+    //     ServerApi(`/banner?pageName=CONTACT&sectionValue=CT01`, "GET", null, null)
+    //         .then((res) => res.json())
+    //         .then((res) => {
+    //             console.log()
+    //             setBannerImg(res[0]);
+    //         });
+    // }, [])
 
     return (
         <>
-            <Box sx={{
+            {/* <Box sx={{
                 borderBottom: 4,
                 borderColor: "#ff0000",
                 display: 'block',
@@ -34,12 +33,12 @@ const Contact = () => {
             }}>
                 <Box
                     component="img"
-                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : bgImg}
+                    src={bannerImg?.featured_image ? urlAPI + bannerImg.featured_image : "bgImg"}
                     fetchPriority="high"
                     loading="eager"
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-            </Box>
+            </Box> */}
 
 
             <Box sx={{ py: 10 }}>
