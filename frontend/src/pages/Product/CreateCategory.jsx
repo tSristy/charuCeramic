@@ -83,9 +83,25 @@ const CreateCategory = () => {
             ServerApi(`/category/add`, "POST", null, formData, true)
                 .then((res) => res.json())
                 .then((res) => {
-                   setOpenAlert(true);
-                setLoading(false);
-                setMsgText(res);
+                    setOpenAlert(true);
+                    setLoading(false);
+                    setMsgText(res);
+                    if (res && res.itemId) {
+                        setCategory({
+                            name: "",
+                            slug: "",
+                            add_menu: 0,
+                            add_homepage: 0,
+                            homepage_sequence: null,
+                            featured_image: "",
+                            description: "",
+                            parent_id: null,
+                            parentCategory: {
+                                parent_id: null,
+                                parent_name: ""
+                            }
+                        })
+                    }
                 })
                 .catch((err) => console.error(err));
         }
@@ -183,7 +199,7 @@ const CreateCategory = () => {
                         <Box sx={{ bgcolor: "#fff", border: 1, borderColor: "#e2e8f0", borderRadius: 2 }}>
                             <Stack direction="row" sx={{ p: 3, justifyContent: "space-between", alignItems: "center" }}>
                                 <Typography fontSize={"1.12rem"} fontWeight={600}>{ID ? "Update Category" : "Register New Category"}</Typography>
-                                <IconButton onClick={(e)=>window.location.reload()}>
+                                <IconButton onClick={(e) => window.location.reload()}>
                                     <SyncIcon color="disabled" />
                                 </IconButton>
                             </Stack>
@@ -348,7 +364,7 @@ const CreateCategory = () => {
                             <Typography sx={{ color: "#fff", fontSize: '1.12rem', fontWeight: 500 }} color="">Pro Tip</Typography>
                             <Typography sx={{ color: "#fff", fontSize: '.85rem' }}>Ensuring the category name is unique and Add image or homepage sequence only when you turn on add to homepage options.</Typography>
                         </Box>
-                        
+
                         {/* --------------------------Image Preview------------------------- */}
                         <Box>
                             {previewSrc ? (
@@ -361,10 +377,7 @@ const CreateCategory = () => {
                                 </Box>
                             )}
                         </Box>
-                        
                     </Grid>
-
-
                 </Grid>
             </Container>
         </Box>

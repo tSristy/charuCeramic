@@ -30,6 +30,7 @@ const Sidebar = () => {
         { title: "Blogs", url: "/blog-list", icon: <NewspaperIcon /> },
         { title: "Buying Guide", url: "/buying-guide-list", icon: <MenuBookIcon /> },
         { title: "Projects", url: "/project-list", icon: <ApartmentIcon /> },
+        { title: "Clients", url: "/client-list", icon: <DashboardIcon /> },
         { title: "Resume", url: "/career-list", icon: <WorkHistoryIcon /> },
         { title: "Policy", url: "/policy-panel", icon: <PolicyIcon /> },
         { title: "Terms & Condition", url: "/terms-condition-panel", icon: <GavelIcon /> },

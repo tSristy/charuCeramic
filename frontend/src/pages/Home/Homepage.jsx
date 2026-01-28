@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { ServerApi, urlAPI } from "../../route/ServerAPI.js";
 import { useNavigate } from "react-router-dom";
 import { homePagePropsList } from "../../Data.jsx";
+import ClientCarousel from "../Client/ClientCarousel.jsx";
 
 
 const Homepage = () => {
@@ -28,6 +29,18 @@ const Homepage = () => {
     const [imgList, setImgList] = useState([]);
     const [primeVideo, setPrimeVideo] = useState("");
     const [bgImg, setBgImg] = useState("");
+    const [clientList, setClientList] = useState([]);
+
+    useEffect(() => {
+        const body = {
+            searchVariable: "",
+        };
+        ServerApi(`/client/list`, 'POST', null, body)
+            .then(res => res.json())
+            .then(res => {
+                setClientList(res.items);
+            })
+    }, []);
 
     useEffect(() => {
         ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
@@ -186,7 +199,7 @@ const Homepage = () => {
                                         filter: 'grayscale(0%)',
                                         transform: 'scale(1.02)',
                                     }
-                                }} onClick={(e) => {navigate(`/product/${product.slug}`);window.scrollTo(0, 0);}}>
+                                }} onClick={(e) => { navigate(`/product/${product.slug}`); window.scrollTo(0, 0); }}>
                                     <Box component="img" loading="lazy" decoding="async" src={urlAPI + product.featured_image} alt={product.name} className="hoverEffect" sx={{
                                         display: 'block', filter: 'grayscale(100%)', width: '100%', aspectRatio: '4/3', height: { sm: 'auto', md: '180px' }, objectFit: 'cover',
                                         transition: "all .3s ease", borderBottom: '5px solid #ffffffff'
@@ -334,14 +347,37 @@ const Homepage = () => {
             </Box>)}
 
 
+            {/* CLIENTSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS */}
+            <Box sx={{ py: 5 }}>
+                <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'center', mb: 10 }}>
+                    Meet Our Honorable Clients
+                </Typography>
+
+                <ClientCarousel>
+                    {clientList.length > 0 && clientList.map(item => (
+                        <Box component="img" key={item.id} src={urlAPI + item.featured_image} loading="lazy"
+                            decoding="async" alt={item.title} sx={{
+                                width: 'auto',
+                                aspectRatio: '1/1', height: '120px', objectFit: 'contain',
+                                "&:hover": { bgcolor: '#f8f8f8', borderRadius: 2 }
+                            }} />
+                    ))}
+                </ClientCarousel>
+                <Container>
+                    <Typography sx={{ fontSize: '.9rem', fontWeight: 400, textAlign: 'center', mt: 5 }}>
+                        We sincerely thank our clients for their continued trust and support. Your confidence in our work motivates us to deliver our best every day. We value each partnership and look forward to building lasting relationships through quality, commitment, and shared success.
+                    </Typography>
+                </Container>
+            </Box>
+
             {/* BLOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG */}
-            <Box sx={{ py: 10 }}>
+            <Box sx={{ py: { md: 4, lg: 10 } }}>
                 <Container>
                     <Stack direction="row" sx={{ justifyContent: "space-between", mb: 10 }}>
                         <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
                             Read About CHARU
                         </Typography>
-                        <Button variant="none" onClick={(e) =>{ navigate('/news-article');window.scrollTo(0, 0);}} sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ff0000" }} />}>Explore All</Button>
+                        <Button variant="none" onClick={(e) => { navigate('/news-article'); window.scrollTo(0, 0); }} sx={{ textTransform: 'capitalize' }} endIcon={<AddBoxIcon sx={{ color: "#ff0000" }} />}>Explore All</Button>
                     </Stack>
 
                     <Grid container spacing={4}>

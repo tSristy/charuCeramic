@@ -78,6 +78,9 @@ app.use('/api', loginRouter);
 const metaRouter = require('./routers/metaRouter');
 app.use('/api/meta', metaRouter);
 
+const clientRouter = require('./routers/clientRouter');
+app.use('/api/client', clientRouter);
+
 const authCheck = require('./Service/authCheck');
 app.get("/api/auth-check", authCheck, (req, res) => {
   res.status(200).json({ auth: true });

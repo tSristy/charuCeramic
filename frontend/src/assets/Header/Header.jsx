@@ -1,20 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ServerApi } from '../../route/ServerAPI';
 import {
-    Box,
-    AppBar,
-    Toolbar, // Re-included for proper alignment
-    Button,
-    List,
-    ListItemButton,
-    ListItemText,
-    Container,
-    Stack,
-    IconButton, // For hamburger icon
-    Drawer,     // For mobile menu
-    useMediaQuery, // For responsiveness
-    useTheme,    // To access breakpoints
-    Typography
+    Box, AppBar, Toolbar, Button, List, ListItemButton, ListItemText,
+    Container, Stack, IconButton, Drawer, useMediaQuery, useTheme, Typography, Collapse
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -24,201 +12,166 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const navigate = useNavigate();
-    const [menuList, setMenuList] = useState([]);
-    const [subMenuList, setSubMenuList] = useState([]);
-    const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-    // --- Responsive Hooks ---
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-    const handleHover = (index) => {
-        setSubMenuList(menuList[index].children || null);
-    }
+    const [menuList, setMenuList] = useState(tempMenuList); // Main hardcoded menu
+    const [subMenuList, setSubMenuList] = useState([]);    // Tree-structured API data
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [showSubMenu, setShowSubMenu] = useState(false);
+    const [mobileSubMenuOpen, setMobileSubMenuOpen] = useState(false);
 
-    const handleClick = (url) => {
-        navigate(url);
-        window.scrollTo(0, 0);
-        setSubMenuList([])
-    }
-
-    const buildTree = (data, parentID = null) => {
-        const tree = [];
-        const dataCopy = JSON.parse(JSON.stringify(data));
-
-        for (const item of dataCopy) {
-            if (item.parentId === parentID) {
-                const children = buildTree(dataCopy, item.id);
-                if (children.length > 0) {
-                    item.children = children;
-                }
-                tree.push(item);
-            }
-        }
-        return tree;
-    }
+    // Helper to build tree using correct backend keys (parent_id, name)
+    const buildTree = (data, parentID = 0) => {
+        return data
+            .filter(item => item.parent_id === parentID)
+            .map(item => ({
+                ...item,
+                title: item.name, // Mapping 'name' to 'title' for consistency
+                link: `/product/${item.slug}`,
+                children: buildTree(data, item.id)
+            }));
+    };
 
     useEffect(() => {
-       ServerApi(`/category/show?displayVar=add_homepage`, "GET", null, null)
+        ServerApi(`/category/show?displayVar=add_menu`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
-                // console.log(res)
-                if (res.data && res.data.length > 0) {
-                    setMenuList(buildTree(res.data));
-                } else {
-                    setMenuList(buildTree(tempMenuList));
+                console.log(res)
+                if (res && res.length > 0) {
+                    setSubMenuList(buildTree(res));
                 }
             })
-            .catch(err => {
-                console.error("API Failed, using temp data", err);
-                setMenuList(buildTree(tempMenuList));
-            })
+            .catch(err => console.error("API Failed, using temp data", err));
     }, []);
 
+    const handleNavigate = (url) => {
+        navigate(url);
+        window.scrollTo(0, 0);
+        setIsMobileOpen(false);
+        setShowSubMenu(false);
+    };
 
-    // --- Reusable Menu Component for Mobile and Desktop ---
-    const MenuItems = ({ items }) => (
-        items.map((item, index) => {
-            const hasChildren = item.children && item.children.length > 0;
-            // Desktop Mega Menu Logic
-            if (!isMobile) {
+    // --- Desktop Menu Item ---
+    const DesktopMenu = () => (
+        <Stack direction="row" sx={{ ml: 'auto', mr: 'auto', alignItems: "center" }}>
+            {menuList.map((item) => {
+                const isProduct = item.title === 'Product';
                 return (
-                        <Box
-                            key={item.id}
+                    <Box 
+                        key={item.id} 
+                        onMouseOver={() => isProduct && setShowSubMenu(true)}
+                        onMouseLeave={() => isProduct && setShowSubMenu(false)}
+                    >
+                        <Button
+                            onClick={() => handleNavigate(item.link)}
+                            color="inherit"
+                            endIcon={isProduct ? <KeyboardArrowDownIcon /> : null}
+                            sx={{ textTransform: 'uppercase', fontWeight: 500, color: '#2b2b2b', px: 2, py: 2, fontSize: '.9em' }}
                         >
-                            <Button onMouseOver={(e) => handleHover(index)}
-                                onClick={(e) => handleClick(item.link)}
-                                color="inherit"
-                                endIcon={hasChildren ? <KeyboardArrowDownIcon /> : null}
-                                sx={{ textTransform: 'uppercase', fontWeight: 500, color: '#2b2b2b', px: 2, py: 2, fontSize: '.9em', '&:hover': { backgroundColor: '#f5f5f5' } }}
-                            >
-                                {item.title}
-                            </Button>
-                        </Box>
+                            {item.title}
+                        </Button>
+                    </Box>
                 );
-            }
-
-            // Mobile Menu Logic (simpler nested list items)
-            return (
-                <Box key={item.id}>
-                    <ListItemButton component="box">
-                        <ListItemText primary={item.title} sx={{ fontWeight: hasChildren ? 'bold' : 'normal' }} onClick={(e)=>{setIsMobileOpen(false);navigate(item.link);window.scrollTo(0, 0);}}/>
-                        {hasChildren && <KeyboardArrowDownIcon sx={{ width: "30%"}} onClick={(e)=>{subMenuList.length <1 ? setSubMenuList(menuList[2].children): setSubMenuList([])}}/>}
-                    </ListItemButton>
-                    {hasChildren && subMenuList && (
-                        <List component="div" disablePadding sx={{ pl: 2, borderLeft: '2px solid #eee' }}>
-                            {subMenuList.map((child) => (
-                                <ListItemButton key={child.id} component="a" href={child.link} onClick={() => {setSubMenuList([]); setIsMobileOpen(false)}}>
-                                    <ListItemText primary={child.title} sx={{ fontSize: '.87rem'}}/>
-                                </ListItemButton>
-                            ))}
-                        </List>
-                    )}
-                </Box>
-            );
-        })
+            })}
+        </Stack>
     );
 
-
     return (
-        <Box sx={{ position: "sticky", top:0, lefy:0, zIndex: 888}}>
-        {/* <Box sx={{ position: "relative" }}> */}
-
+        <Box sx={{ position: "sticky", top: 0, zIndex: 888 }}>
             <AppBar position="static" color="default" sx={{ backgroundColor: 'white', boxShadow: 1 }}>
                 <Container maxWidth="xl">
-                    <Toolbar disableGutters sx={{ p: 0, m: 0, justifyContent: 'flex-start' }}>
+                    <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+                        <Box component='img' src={logo} alt="Logo" 
+                             sx={{ cursor: "pointer", height: '50px' }} 
+                             onClick={() => handleNavigate('/')} />
 
-                        <Box>
-                            <Box component='img' src={logo} alt="Charu Ceramic Logo" sx={{ '&:hover': { cursor: "pointer"}, height: '50px' }} onClick={(e)=>handleClick('/')}/>
-                        </Box>
-
-                        {!isMobile && (
-                            <Stack direction="row" sx={{ml: 'auto',mr:'auto', width: 'auto', justifyContent: "center", alignItems: "center" }}>
-                                <MenuItems items={menuList} />
-                            </Stack>
-                        )}
-                        {/* <Button variant='contained'   sx={{ fontSize: ".87rem", bgcolor: '#ff0000', textTransform: "uppercase", py: 1, '&:hover': { bgcolor: '#f0141bff' } }} >3D Visualizer</Button> */}
+                        {!isMobile && <DesktopMenu />}
 
                         {isMobile && (
-                            <Box ml={'auto'}>
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                edge="start"
-                                onClick={() => setIsMobileOpen(true)}
-                                sx={{ color: '#333' }}
-                            >
+                            <IconButton onClick={() => setIsMobileOpen(true)}>
                                 <MenuIcon />
                             </IconButton>
-                            </Box>
                         )}
                     </Toolbar>
                 </Container>
 
-                {subMenuList?.length > 0 && !isMobile &&
-                    <Box onMouseOver={(e) => handleHover(index)}
-                                onMouseLeave={(e) => setSubMenuList([])}
+                {/* --- DESKTOP MEGA MENU --- */}
+                {!isMobile && showSubMenu && (
+                    <Box
+                        onMouseEnter={() => setShowSubMenu(true)}
+                        onMouseLeave={() => setShowSubMenu(false)}
                         sx={{
-                            bgcolor: "white",
-                            position: "absolute",
-                            top: 64,
-                            left: 0,
-                            width: "100%",
-                            zIndex: 25,
-                            // px:5,
-                            // py:3,
-                            borderRadius: '0 0 8px 8px',
-                            borderTop: '1px solid #c3c3c3ff',
-                            boxShadow: 2,
+                            position: "absolute", top: 64, left: 0, width: "100%",
+                            bgcolor: "white", zIndex: 10, boxShadow: 1,
+                            borderTop: '1px solid #eee',
                         }}
                     >
-                        <Stack direction="row" sx={{ justifyContent: "space-evenly"}}>
 
-                            {subMenuList.map((child) => (
-                                <Box key={child.id}>
-                                    <Typography sx={{ py:1.5, fontWeight: 500, textTransform: "uppercase", fontSize: '.87rem', '&:hover': {
-                                            cursor: "pointer"
-                                        }
-                                    }} onClick={(e)=>handleClick(child.link)}>
-                                    {child.title}
+                        <Stack direction="row" sx={{ justifyContent: "space-evenly"}}>
+                            {subMenuList.map((parent) => (
+                                <Box key={parent.id} sx={{ minWidth: '170px' }}>
+                                    <Typography
+                                        
+                                        sx={{ fontWeight: 500, fontSize: '.87rem', textTransform: 'uppercase', py: 1.5, cursor: 'pointer', '&:hover': { color: '#c00202', transition: '0.2s' } }}
+                                        onClick={() => handleNavigate(parent.link)}
+                                    >
+                                        {parent.name}
                                     </Typography>
-                                    
-                                    { child.children.map(item=>(
-                                    <Box key={item.id} sx={{
-                                        py:1.5,
-                                        '&:hover': {
-                                            cursor: "pointer"
-                                        }
-                                    }} onClick={(e)=>handleClick(item.link)}>
-                                    <Typography sx={{ fontSize: '.87rem', textTransform: 'uppercase'}}>{item.title}</Typography>
-                                    </Box>
+                                    {parent.children?.map(child => (
+                                        <Typography
+                                            key={child.id}
+                                            sx={{ py: 1.5, fontSize: '.87rem', textTransform: 'uppercase', cursor: 'pointer', '&:hover': { ml: .5, transition: '0.2s' } }}
+                                            onClick={() => handleNavigate(child.link)}
+                                        >
+                                            {child.name}
+                                        </Typography>
                                     ))}
                                 </Box>
-                            ))
-                            }
+                            ))}
                         </Stack>
                     </Box>
-                }
+                )}
 
-                <Drawer
-                    anchor="right"
-                    open={isMobileOpen}
-                    onClose={() => setIsMobileOpen(false)}
-                >
-                    <Box
-                        sx={{ width: 250 }}
-                        role="presentation"
-                        onClick={() => { }} // Keep the drawer open on item click to handle submenu
-                        onKeyDown={() => setIsMobileOpen(false)}
-                    >
+                {/* --- MOBILE DRAWER --- */}
+                <Drawer anchor="right" open={isMobileOpen} onClose={() => setIsMobileOpen(false)}>
+                    <Box sx={{ width: 220, p: 2 }}>
                         <List>
-                            <MenuItems items={menuList} />
+                            {menuList.map((item) => {
+                                const isProduct = item.title === 'Product';
+                                return (
+                                    <Box key={item.id}>
+                                        <ListItemButton onClick={() => isProduct ? setMobileSubMenuOpen(!mobileSubMenuOpen) : handleNavigate(item.link)}>
+                                            <ListItemText primary={item.title} />
+                                            {isProduct && <KeyboardArrowDownIcon sx={{ transform: mobileSubMenuOpen ? 'rotate(180deg)' : 'none' }} />}
+                                        </ListItemButton>
+                                        
+                                        {isProduct && (
+                                            <Collapse in={mobileSubMenuOpen} timeout="auto" unmountOnExit>
+                                                <List component="div" disablePadding sx={{ pl: 3 }}>
+                                                    {subMenuList.map((sub) => (
+                                                        <Box key={sub.id}>
+                                                            <ListItemButton onClick={() => handleNavigate(sub.link)}>
+                                                                <Typography sx={{pb:1.5}} >{sub.name}</Typography>
+                                                            </ListItemButton>
+                                                            {/* {sub.children?.map(child => (
+                                                                <ListItemButton key={child.id} sx={{ pl: 4 }} onClick={() => handleNavigate(child.link)}>
+                                                                    <Typography sx={{ fontSize: '.85rem', textTransform: 'uppercase' }}>{child.name}</Typography> 
+                                                                </ListItemButton>
+                                                            ))} */}
+                                                        </Box>
+                                                    ))}
+                                                </List>
+                                            </Collapse>
+                                        )}
+                                    </Box>
+                                );
+                            })}
                         </List>
                     </Box>
                 </Drawer>
             </AppBar>
         </Box>
-        // </Box>
     );
 };
 

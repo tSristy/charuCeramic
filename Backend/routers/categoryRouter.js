@@ -53,6 +53,9 @@ router.get('/show', (req, res) => {
     else if ( displayVar === "child") {
         queryExtended = "SELECT A.id AS cID, A.name AS cName, A.slug FROM category_details AS A WHERE is_active = 1 AND (parent_id IS NOT NULL AND parent_id NOT IN (0))";
     }
+    else if ( displayVar === "add_menu") {
+        queryExtended = `SELECT * FROM category_details WHERE is_active = 1 AND ${displayVar} = 1 ORDER BY id ASC`;
+    }
     else queryExtended = `SELECT * FROM category_details WHERE is_active = 1 AND ${displayVar} = 1 ORDER BY homepage_sequence ASC`;
 
     db.query(queryExtended, (err, results) => {
@@ -100,7 +103,7 @@ router.get('/:id', (req, res) => {
 router.post('/add', upload.single('featured_image'), (req, res) => {
     const { parent_id, name, slug, description, add_menu, add_homepage, homepage_sequence } = req.body;
     const featured_image = req.file ? `/images/${req.file.filename}` : null;
-    const sql = 'INSERT INTO category_details (parent_id, name, slug, description, featured_image, add_menu, add_homepage,homepage_sequence, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO category_details (parent_id, name, slug, description, featured_image, add_menu, add_homepage,homepage_sequence, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [parent_id || null, name, slug, description, featured_image, add_menu, add_homepage, homepage_sequence, 1], (err, result) => {
         if (err) {
             console.error('Error adding category item:', err);

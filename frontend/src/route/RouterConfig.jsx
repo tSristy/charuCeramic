@@ -6,8 +6,6 @@ import PublicLayout from "../pages/Layout/PublicLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import NoPage from "../pages/NoPage";
 import { Box, CircularProgress } from "@mui/material";
-import CreateMetaTag from "../pages/Home/CreateMetaTag";
-import MetaTagList from "../pages/Home/MetaTagList";
 
 // 2. Lazy Loaded Pages (Public)
 const Homepage = lazy(() => import("../pages/Home/Homepage"));
@@ -52,6 +50,11 @@ const CreatePolicy = lazy(() => import("../pages/FAQ/CreatePolicy"));
 const CreateTerms = lazy(() => import("../pages/FAQ/CreateTerms"));
 const CreateBanner = lazy(() => import("../pages/Banner/CreateBanner"));
 const BannerList = lazy(() => import("../pages/Banner/BannerList"));
+const CreateMetaTag = lazy(()=> import("../pages/Home/CreateMetaTag"));
+const MetaTagList = lazy(()=> import("../pages/Home/MetaTagList"));
+const ClientList = lazy(()=> import("../pages/Client/ClientList"));
+const CreateClient = lazy(()=> import("../pages/Client/CreateClient"));
+
 
 const Loader = () => <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress /></Box>
 
@@ -126,6 +129,8 @@ export const RouterConfig = createBrowserRouter([
                 { path: "banner-list", element: <BannerList /> },
                 { path: "meta-panel", element: <CreateMetaTag /> },
                 { path: "meta-list", element: <MetaTagList /> },
+                { path: "client-list", element: <ClientList /> },
+                { path: "client-panel", element: <CreateClient /> },
             ]
         }],
     },

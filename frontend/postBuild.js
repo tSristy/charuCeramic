@@ -13,7 +13,7 @@ $db_pass = 'ceramic_shetu';
 // --- DEFAULT METADATA (Home Page) ---
 $title = "Charu Ceramic | Premium Sanitaryware for Stylish Living";
 $description = "At Charu Ceramic, our brand purpose is to enhance the quality of life by providing innovative and reliable ceramic solutions that combine functionality with aesthetic appeal.";
-$image = "https://charuceramic.com/assets/charu_logo-gWkycjHv.png";
+$image = "./logo.png";
 $url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 try {
