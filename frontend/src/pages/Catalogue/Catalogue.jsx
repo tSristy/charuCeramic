@@ -6,32 +6,37 @@ import BtnOpenInTab from "../../assets/Button/BtnDownload";
 
 const Catalogue = () => {
     const [catalogueList, setCatalogueList] = useState([]);
+    const [productList, setProductList] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [paginationDetails, setPaginationDetails] = useState({
-        pageNo: 1,
-        totalRows: 0,
-        totalPages: 0
-    });
+    
 
     useEffect(() => {
         setLoading(true);
-        const body = { pageNo: paginationDetails.pageNo };
-        ServerApi(`/catalogue/list`, 'POST', null, body)
+         ServerApi(`/catalogue/list-by-catalogue`, 'GET', null, null)
             .then(res => res.json())
             .then(res => {
                 setCatalogueList(res.items || []);
-                setPaginationDetails(prev => ({
-                    ...prev,
-                    totalRows: res.totalRows,
-                    totalPages: Math.ceil(res.totalRows / 10)
-                }));
                 setLoading(false);
             })
             .catch(err => {
                 console.error(err);
                 setLoading(false);
             });
-    }, [paginationDetails.pageNo]);
+    }, []);
+
+    useEffect(() => {
+        setLoading(true);
+         ServerApi(`/catalogue/list-by-product`, 'GET', null, null)
+            .then(res => res.json())
+            .then(res => {
+                setProductList(res.items || []);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+            });
+    }, []);
 
     // const [bannerImg, setBannerImg] = useState(null);
 
@@ -76,7 +81,6 @@ const Catalogue = () => {
                                <Skeleton variant="rectangular" width={210} height={60} />
                             ) : (
                                 catalogueList.length !== 0 && catalogueList
-                                    .filter(general => parseInt(general.summary) === 0)
                                     .map(item => (
                                         <Grid key={item.id} size={{ xs: 12, sm: 6, md: 4 }}>
                                             <BtnOpenInTab fileUrl={item.file_path}>
@@ -121,7 +125,7 @@ const Catalogue = () => {
 
             <Box sx={{ pb: 10, bgcolor: '#ffffff' }}>
                 <Container>
-                    <Typography sx={{ fontSize: { xs: '1.8rem', md: '2.5rem' }, fontWeight: 600, mb: 5, textAlign: 'center' }}>
+                    <Typography sx={{ fontSize: { xs: '1.8rem', md: '2.5rem' }, fontWeight: 600, mb: 10, textAlign: 'center' }}>
                         Product Series
                     </Typography>
 
@@ -130,9 +134,8 @@ const Catalogue = () => {
                             {loading ? (
                                 <Skeleton variant="rectangular" width={210} height={60} />
                             ) : (
-                                catalogueList
-                                    .filter(products => parseInt(products.summary) === 1)
-                                    .map(item => (
+                                productList.length !== 0 && productList
+                                   .map(item => (
                                         <Grid key={item.id} size={{ xs: 12, sm: 6, md: 3 }}>
                                             <BtnOpenInTab fileUrl={item.file_path}>
                                                 <Box sx={{

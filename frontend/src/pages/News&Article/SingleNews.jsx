@@ -47,6 +47,7 @@ const SingleNews = () => {
                             objectFit: 'cover'
                         }} />}
 
+
                     <Box sx={{ mt: 5, fontSize: '.925rem', textAlign: 'justify', fontWeight: 500, color: '#454545' }}>
                         <div className="rendered-content" dangerouslySetInnerHTML={{ __html: newsDetail.content?.split('.').slice(3).join('.') }} />
                     </Box>

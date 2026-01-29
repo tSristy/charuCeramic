@@ -23,17 +23,30 @@ const ClientCarousel = ({ children }) => {
             </style>
             <Swiper
                 modules={[Autoplay]}
-                slidesPerView={8} // Adjusted for better visibility, change back to 10 if needed
+                slidesPerView={2} 
                 spaceBetween={30}
                 loop={true}
                 allowTouchMove={false}
-                speed={5000} // Increase this for a slower, more professional glide
+                speed={5000} 
                 autoplay={{
-                    delay: 0, // CRITICAL: Set to 0 for continuous motion
+                    delay: 0, 
                     disableOnInteraction: false,
                 }}
-                // This helps Swiper handle the "0 delay" transition better
                 freeMode={true} 
+                breakpoints={{
+                    480: {
+                        slidesPerView: 3,
+                        spaceBetween: 20
+                    },
+                    768: {
+                        slidesPerView: 5,
+                        spaceBetween: 30
+                    },
+                    1024: {
+                        slidesPerView: 8,
+                        spaceBetween: 30
+                    }
+                }}
             >
                 {React.Children.map(children, (child, index) => (
                     <SwiperSlide key={index}>

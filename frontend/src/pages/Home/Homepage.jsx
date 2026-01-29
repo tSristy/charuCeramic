@@ -365,7 +365,7 @@ const Homepage = () => {
                 </ClientCarousel>
                 <Container>
                     <Typography sx={{ fontSize: '.9rem', fontWeight: 400, textAlign: 'center', mt: 5 }}>
-                        We sincerely thank our clients for their continued trust and support. Your confidence in our work motivates us to deliver our best every day. We value each partnership and look forward to building lasting relationships through quality, commitment, and shared success.
+                        We sincerely thank our partners for their continued trust and support. Your confidence in our work motivates us to deliver our best every day. We value each partnership and look forward to building lasting relationships through quality, commitment, and shared success.
                     </Typography>
                 </Container>
             </Box>
@@ -385,7 +385,7 @@ const Homepage = () => {
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} onClick={(e) => navigate(`/news-article/${item.slug}`)} sx={{ '&:hover': { cursor: 'pointer' } }}>
                                 <Box>
                                     <Box component="img" src={urlAPI + item.featured_image} loading="lazy"
-                                        decoding="async" alt="Blog Image" sx={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                                        decoding="async" alt="Blog Image" sx={{ width: '100%', aspectRatio: '86/64' ,height: 'auto', objectFit: 'cover' }} />
                                     <Typography sx={{ fontSize: '1rem', fontWeight: 600, textAlign: 'left', my: 2 }}>
                                         {item.title}
                                     </Typography>

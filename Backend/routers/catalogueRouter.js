@@ -8,7 +8,7 @@ router.post('/list', (req, res) => {
     const { pageNo, searchVariable } = req.body;
     const sql = `SELECT * FROM catalogue_details WHERE is_active = 1 AND (
         ? IS NULL OR title LIKE CONCAT('%', ?, '%')
-    ) LIMIT 10 OFFSET ?;
+    ) ORDER BY id DESC LIMIT 10 OFFSET ?;
     SELECT COUNT(*) AS totalRows FROM catalogue_details WHERE is_active = 1 AND (
         ? IS NULL OR title LIKE CONCAT('%', ?, '%'));`;
     db.query(sql,[searchVariable, searchVariable, ((pageNo - 1) * 10), searchVariable, searchVariable], (err, results) => {
@@ -20,6 +20,32 @@ router.post('/list', (req, res) => {
     });
 });
 
+
+
+// ------------------------- Get catalogue Items -------------------------------------
+router.get('/list-by-catalogue', (req, res) => {
+    const sql = `SELECT * FROM catalogue_details WHERE is_active = 1 AND summary = 0 ORDER BY id DESC`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching catalogue items:', err);
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
+        }
+        res.json({ items: results });
+    });
+});
+
+
+// ------------------------- Get PRODUCT Items -------------------------------------
+router.get('/list-by-product', (req, res) => {
+    const sql = `SELECT * FROM catalogue_details WHERE is_active = 1 AND summary = 1 ORDER BY id DESC`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching catalogue items:', err);
+            return res.status(500).json({ error: "Something is not working. Please Try again later." });
+        }
+        res.json({ items: results });
+    });
+});
 
 
 //-------------------------- Get item details by id -----------------------------

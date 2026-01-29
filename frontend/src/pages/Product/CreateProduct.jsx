@@ -92,7 +92,7 @@ const CreateProduct = () => {
     };
 
     const getCategoryList = () => {
-        ServerApi(`/category/show?displayVar=all`, "GET", null, null)
+        ServerApi(`/category/show?displayVar=child`, "GET", null, null)
             .then((res) => res.json())
             .then((res) => {
                 setCategoryList(res);

@@ -1,1 +1,1 @@
-userCode admin passCode charu@admin
+userCode admin@ passCode AdminAvenue@123
