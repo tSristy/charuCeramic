@@ -350,7 +350,7 @@ const Homepage = () => {
             {/* CLIENTSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS */}
             <Box sx={{ py: 5 }}>
                 <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, textAlign: 'center', mb: 10 }}>
-                    Meet Our Honorable Clients
+                    Meet Our Trusted Partners
                 </Typography>
 
                 <ClientCarousel>

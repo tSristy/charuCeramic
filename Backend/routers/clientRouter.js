@@ -15,8 +15,9 @@ router.post('/list', (req, res) => {
     is_active
 FROM
     client
-WHERE
-    ? IS NULL OR title LIKE CONCAT('%', ?, '%')`;
+WHERE is_active = 1 AND (
+    ? IS NULL OR title LIKE CONCAT('%', ?, '%')
+    )`;
 
     db.query(sql, [searchVariable, searchVariable], (err, results) => {
         if (err) {
