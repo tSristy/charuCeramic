@@ -168,7 +168,7 @@ const Homepage = () => {
                 }}>
                     <Container sx={{ py: 10 }}>
                         <Typography sx={{ color: 'white', fontSize: '2.5rem', fontWeight: 600, textAlign: 'left' }}>
-                            Brand Purpose
+                            Brand Philosophy
                         </Typography>
                         <Typography sx={{ color: 'white', fontSize: '.9rem', fontWeight: 400, textAlign: 'left', my: 2, width: { xs: '100%', md: '60%' } }}>
                             At Charu Ceramic, our brand purpose is to enhance the quality of life by providing innovative and reliable ceramic solutions that combine functionality with aesthetic appeal. We are committed to sustainability, customer satisfaction, and continuous improvement, striving to create products that not only meet but exceed the expectations of our diverse clientele.
@@ -382,7 +382,7 @@ const Homepage = () => {
 
                     <Grid container spacing={4}>
                         {blogList.length > 0 && blogList.map(item => (
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} onClick={(e) => navigate(`/news-article/${item.slug}`)} sx={{ '&:hover': { cursor: 'pointer' } }}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.id} onClick={(e) => { window.scrollTo(0, 0); navigate(`/news-article/${item.slug}`)}} sx={{ '&:hover': { cursor: 'pointer' } }}>
                                 <Box>
                                     <Box component="img" src={urlAPI + item.featured_image} loading="lazy"
                                         decoding="async" alt="Blog Image" sx={{ width: '100%', aspectRatio: '86/64' ,height: 'auto', objectFit: 'cover' }} />

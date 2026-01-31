@@ -61,7 +61,7 @@ router.put('/update/:id', upload.single('featured_image'), (req, res) => {
     const itemId = req.params.id;
     const { title, description, is_active } = req.body;
     let sql = 'UPDATE client SET title = ?, description = ?, is_active = ?';
-    const params = [title, description, is_active];
+    const params = [title, description, 1];
     if (req.file) {
         sql += ', featured_image = ?';
         params.push(`/images/${req.file.filename}`);

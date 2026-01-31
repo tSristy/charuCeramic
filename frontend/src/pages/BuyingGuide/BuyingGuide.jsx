@@ -51,7 +51,7 @@ const BuyingGuide = () => {
                                 display: "flex", // 1. Make the Grid item a flex container
                                 '&:hover': { cursor: 'pointer' }
                             }}
-                            onClick={() => navigate(item.slug)}
+                            onClick={() => { window.scrollTo(0, 0); navigate(`/buying-guide/${item.slug}`); }}
                         >
                             <Card
                                 sx={{

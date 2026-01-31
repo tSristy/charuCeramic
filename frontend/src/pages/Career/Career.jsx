@@ -107,7 +107,8 @@ const Career = () => {
 
             <Box sx={{ py: 10 }}>
                 <Container>
-                    <Typography sx={{ fontSize: '2.5rem', fontWeight: 600, mb: 5, textAlign: 'center' }}>
+                      <Box px={{ sm: 5, md: 10 }}>
+                    <Typography sx={{ fontSize: '3rem', fontWeight: 600, mb: 5, textAlign: 'center', color: '#6c6c6c', }}>
                         Join Us & Grow Fast
                     </Typography>
 
@@ -221,6 +222,7 @@ const Career = () => {
 
                         </Grid>
                     </form>
+                    </Box>
                 </Container>
             </Box>
         </>

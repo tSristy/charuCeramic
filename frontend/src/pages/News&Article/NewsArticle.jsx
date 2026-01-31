@@ -44,7 +44,7 @@ const NewsArticle = () => {
 
                 <Grid container spacing={4}>
                     <Grid size={{ sm: 12, md: 8 }}>
-                        <Card onClick={(e) => navigate(`/news-article/${blogList[0]?.slug}`)}
+                        <Card onClick={(e) => { window.scrollTo(0, 0); navigate(`/news-article/${blogList[0]?.slug}`) }}
                             sx={{
                                 display: "flex",
                                 flexDirection: { xs: "column", md: "row" },
@@ -160,7 +160,7 @@ const NewsArticle = () => {
                                             px: 2, pt: 2, '&:hover': {
                                                 cursor: 'pointer'
                                             }
-                                        }} key={index} onClick={(e) => navigate(`/news-article/${item.slug}`)}>
+                                        }} key={index} onClick={(e) => { window.scrollTo(0, 0);navigate(`/news-article/${item.slug}`)}}>
                                             <Typography sx={{ fontSize: '1rem', fontWeight: 500 }}>
                                                 {item.title}
                                             </Typography>
@@ -191,7 +191,7 @@ const NewsArticle = () => {
                     {
                         blogList?.filter((_, index) => index > 3)
                             .map((item, index) => (
-                                <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }} onClick={(e) => navigate(`/news-article/${item.slug}`)} sx={{
+                                <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }} onClick={(e) => { window.scrollTo(0, 0);navigate(`/news-article/${item.slug}`)}} sx={{
                                     '&:hover': {
                                         cursor: 'pointer'
                                     }

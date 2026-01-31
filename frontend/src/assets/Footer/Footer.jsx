@@ -81,7 +81,7 @@ const Footer = () => {
                                 <Button onClick={(e) => handleBtn("/company-information")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>About Us</Button>
                                 <Button onClick={(e) => handleBtn("/project")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Project</Button>
                                 <Button onClick={(e) => handleBtn("/career")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Careers</Button>
-                                {/* <Button onClick={(e) => handleBtn("/certification")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Certifications</Button> */}
+                                <Button onClick={(e) => handleBtn("/certification")} variant="none" sx={{ fontSize: '.8rem', textTransform: 'none' }}>Certifications</Button>
                             </Stack>
                         </Grid>
                         <Grid size={{ xs: 6, sm: 3, md: 2 }}>

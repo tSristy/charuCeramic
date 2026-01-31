@@ -24,6 +24,7 @@ const CTA = () => {
                         }
                     }} />
                     <Button variant="none" onClick={(e)=>{
+                        window.scrollTo(0,0);
                         navigate("/contact")
                     }} sx={{
                         ml: 4,
